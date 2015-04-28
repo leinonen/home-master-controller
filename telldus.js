@@ -26,5 +26,8 @@ function createCORSRequest(url, params) {
 
 exports.doCall = function(path, params) {
 	var url = config.endpoint + path;
-	return createCORSRequest(url, generateOAuth(url, params));
+	return createCORSRequest(url, generateOAuth(url, params))
+		.then(function(response) {
+			return response.query.results;
+		});
 };
