@@ -9,9 +9,7 @@
   "author": "Peter Leinonen",
   "license": "ISC",
   "dependencies": {
-    "crypto": "0.0.3",
     "oauth": "^0.9.12",
-    "qs": "^2.4.1",
     "request-promise-json": "^1.0.4"
   }
 }
