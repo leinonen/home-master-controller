@@ -1,0 +1,17 @@
+{
+  "name": "ptc-telldus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Leinonen",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "0.0.3",
+    "oauth": "^0.9.12",
+    "qs": "^2.4.1",
+    "request-promise-json": "^1.0.4"
+  }
+}
