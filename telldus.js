@@ -3,7 +3,7 @@ var OAuth = require('oauth');
 var http = require('request-promise-json');
 var config = require('./config');
 
-function doCall(path, params) {
+function apiCall(path, params) {
   var url = config.endpoint + path;
   var oauth = new OAuth.OAuth(null, null, config.publicKey, config.privateKey, '1.0', null, 'HMAC-SHA1');
   var oauthParameters = oauth._prepareParameters(config.accessToken, config.accessTokenSecret, 'GET', url, params);
@@ -16,17 +16,17 @@ function doCall(path, params) {
 
 
 exports.listDevices = function() {
-  return doCall('devices/list', {supportedMethods: 1}).then(function(response){
+  return apiCall('devices/list', {supportedMethods: 1}).then(function(response){
     return response.device;
   });
 };
 
 exports.listSensors = function () {
-  return doCall('sensors/list', {supportedMethods: 1}).then(function(response){
+  return apiCall('sensors/list', {supportedMethods: 1}).then(function(response){
     return response.sensor;
   });
 };
 
 exports.getSensor = function(id) {
-  return doCall('sensor/info', {supportedMethods: 1, id: id});
+  return apiCall('sensor/info', {supportedMethods: 1, id: id});
 };
