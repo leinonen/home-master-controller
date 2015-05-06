@@ -13,7 +13,7 @@ var Sensor = mongoose.model('Sensor', mongoose.Schema({
   }]
 }));
 
-function createSensorData(sensor){
+function createSensorData(sensor) {
   return {
     date: new Date(),
     data: sensor.data[0].name,
@@ -36,27 +36,28 @@ function createSensor(sensor) {
   console.log('saved new sensor to database');
 }
 
-telldus.doCall(
-  'sensors/list',
-  {supportedMethods: 1}
-).then(function (response) {
-    response.sensor.forEach(function (currentSensor) {
-      //console.log('%s : %s', sensor.name, sensor.id);
-      telldus.doCall(
-        'sensor/info',
-        {supportedMethods: 1, id: currentSensor.id}
-      ).then(function (sensor) {
-          Sensor.findOne({name: sensor.name})
-            .exec(function (err, sens) {
-              if (err) {
-                console.error(err);
-              } else if (sens) {
-                updateSensor(sens, sensor);
-              } else {
-                createSensor(sensor);
-              }
-            });
-        }).fail(function (error) {
+function handleSensor(sensor) {
+  Sensor.findOne({name: sensor.name})
+    .exec(function (err, sens) {
+      if (err) {
+        console.error(err);
+      } else if (sens) {
+        updateSensor(sens, sensor);
+      } else {
+        createSensor(sensor);
+      }
+    });
+}
+
+telldus
+  .listSensors()
+  .then(function (sensors) {
+
+    sensors.forEach(function (sensor) {
+      telldus
+        .getSensor(sensor.id)
+        .then(handleSensor)
+        .fail(function (error) {
           console.log(error);
         });
     });
