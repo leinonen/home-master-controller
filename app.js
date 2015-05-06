@@ -24,9 +24,7 @@ function showDevices() {
       });
 
     })
-    .fail(function (error) {
-      console.log(error);
-    });
+    .fail(console.error);
 }
 
 function showSensors() {
@@ -39,9 +37,7 @@ function showSensors() {
         getSensor(sensor.id);
       });
     })
-    .fail(function (error) {
-      console.log(error);
-    });
+    .fail(console.error);
 }
 
 function getSensor(id) {
@@ -51,9 +47,7 @@ function getSensor(id) {
       var sensor = response;
       console.log('%s -> %s : %s', sensor.name, sensor.data[0].name, sensor.data[0].value);
     })
-    .fail(function (error) {
-      console.log(error);
-    });
+    .fail(console.error);
 }
 
 

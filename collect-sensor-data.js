@@ -57,11 +57,7 @@ telldus
       telldus
         .getSensor(sensor.id)
         .then(handleSensor)
-        .fail(function (error) {
-          console.log(error);
-        });
+        .fail(console.error);
     });
 
-  }).fail(function (error) {
-    console.log(error);
-  });
+  }).fail(console.error);
