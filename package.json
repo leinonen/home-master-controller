@@ -9,6 +9,7 @@
   "author": "Peter Leinonen",
   "license": "ISC",
   "dependencies": {
+    "mongoose": "^4.0.2",
     "oauth": "^0.9.12",
     "request-promise-json": "^1.0.4"
   }
