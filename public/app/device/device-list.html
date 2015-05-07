@@ -1,0 +1,21 @@
+<ul class="list-group">
+
+  <li class="list-group-item" ng-show="ctrl.devices.length === 0">
+    <h4>Loading devices..</h4>
+  </li>
+
+  <li class="list-group-item" ng-repeat="device in ctrl.devices">
+    <h4>{{device.name}}</h4>
+
+    <div>
+    <button ng-show="ctrl.isOff(device)"
+            ng-click="ctrl.turnOn($index, device.id)"
+            type="button"
+            class="btn btn-primary">Turn On</button>
+    <button ng-show="ctrl.isOn(device)"
+            ng-click="ctrl.turnOff($index, device.id)"
+            type="button"
+            class="btn btn-primary">Turn Off</button>
+    </div>
+  </li>
+</ul>

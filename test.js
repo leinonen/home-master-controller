@@ -1,4 +1,6 @@
-var telldus = require('./telldus');
+var telldus = require('./server/telldus');
+
+// Testing the api without any gui
 
 function showDevices() {
   telldus
@@ -20,6 +22,7 @@ function showDevices() {
 
       console.log('--- Hardware ---');
       hardware.forEach(function (device) {
+        console.log(device);
         console.log(device.name);
       });
 
@@ -52,4 +55,14 @@ function getSensor(id) {
 
 
 showDevices();
-showSensors();
+/*showSensors();
+*/
+
+/*telldus.turnOn(530514).then(function(response){
+  console.log(response);
+}); */
+//telldus.turnOff(530514);
+/*
+telldus.getDevice(530514).then(function(response){
+  console.log(response);
+}); */

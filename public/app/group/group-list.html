@@ -1,0 +1,10 @@
+<ul class="list-group">
+
+  <li class="list-group-item" ng-show="ctrl.groups.length === 0">
+    <h4>Loading groups..</h4>
+  </li>
+
+  <li class="list-group-item" ng-repeat="group in ctrl.groups">
+    <h4>{{group.name}}</h4>
+  </li>
+</ul>

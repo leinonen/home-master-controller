@@ -1,17 +1,5 @@
 var telldus = require('./telldus');
-var mongoose = require('mongoose');
-var config = require('./config');
-
-mongoose.connect(config.mongo.url, config.mongo.opts);
-
-var Sensor = mongoose.model('Sensor', mongoose.Schema({
-  name: String,
-  readings: [{
-    date: Date,
-    data: String,
-    value: Number
-  }]
-}));
+var Sensor = require('./../models/sensor');
 
 function createSensorData(sensor) {
   return {
@@ -49,15 +37,17 @@ function handleSensor(sensor) {
     });
 }
 
-telldus
-  .listSensors()
-  .then(function (sensors) {
+exports.populateSensors = function() {
+  telldus
+    .listSensors()
+    .then(function (sensors) {
 
-    sensors.forEach(function (sensor) {
-      telldus
-        .getSensor(sensor.id)
-        .then(handleSensor)
-        .fail(console.error);
-    });
+      sensors.forEach(function (sensor) {
+        telldus
+          .getSensor(sensor.id)
+          .then(handleSensor)
+          .fail(console.error);
+      });
 
-  }).fail(console.error);
+    }).fail(console.error);
+};

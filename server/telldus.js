@@ -21,6 +21,10 @@ exports.listDevices = function() {
   });
 };
 
+exports.getDevice = function(id) {
+  return apiCall('device/info', {supportedMethods: 1, id: id});
+};
+
 exports.listSensors = function () {
   return apiCall('sensors/list', {supportedMethods: 1}).then(function(response){
     return response.sensor;
@@ -29,4 +33,12 @@ exports.listSensors = function () {
 
 exports.getSensor = function(id) {
   return apiCall('sensor/info', {supportedMethods: 1, id: id});
+};
+
+exports.turnOn = function(id) {
+  return apiCall('device/turnOn', {supportedMethods: 1, id: id});
+};
+
+exports.turnOff = function(id) {
+  return apiCall('device/turnOff', {supportedMethods: 1, id: id});
 };
