@@ -66,7 +66,7 @@ exports.device = function (req, res) {
     });
 };
 
-exports.groups = function (req, res) {
+exports.lights = function (req, res) {
   telldus
     .listDevices()
     .then(function (devices) {
@@ -103,18 +103,28 @@ exports.goDown = function (req, res) {
 };
 
 
-exports.hueGroups = function(req, res) {
-  hue.getGroups().then(function(groups){
+exports.hueGroups = function (req, res) {
+  hue.getGroups().then(function (groups) {
     res.json(groups);
-  }).fail(function(err){
+  }).fail(function (err) {
     res.sendStatus(400).json(err);
   });
 };
 
-exports.hueLights = function(req, res) {
-  hue.getLights().then(function(lights){
+exports.hueLights = function (req, res) {
+  hue.getLights().then(function (lights) {
     res.json(lights);
-  }).fail(function(err){
+  }).fail(function (err) {
+    res.sendStatus(400).json(err);
+  });
+};
+
+exports.hueLightState = function (req, res) {
+  var id = req.params.id;
+  var state = req.body;
+  hue.setLightState(id, state).then(function (response) {
+    res.json(response);
+  }).fail(function (err) {
     res.sendStatus(400).json(err);
   });
 };

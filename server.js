@@ -14,23 +14,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, '/public')));
 
-app.use('/api/sensors', controller.sensors);
-app.use('/api/sensors/:id', controller.sensor);
+app.get('/api/sensors', controller.sensors);
+app.get('/api/sensors/:id', controller.sensor);
 
-app.use('/api/devices', controller.devices);
+app.get('/api/devices', controller.devices);
 
-app.use('/api/device/:id', controller.device);
+app.get('/api/device/:id', controller.device);
 
-app.use('/api/groups', controller.groups);
+app.get('/api/groups', controller.lights);
 
-app.use('/api/turnOn/:id', controller.turnOn);
-app.use('/api/turnOff/:id', controller.turnOff);
+app.get('/api/turnOn/:id', controller.turnOn);
+app.get('/api/turnOff/:id', controller.turnOff);
 
-app.use('/api/up/:id', controller.goUp);
-app.use('/api/down/:id', controller.goDown);
+app.get('/api/up/:id', controller.goUp);
+app.get('/api/down/:id', controller.goDown);
 
-app.use('/api/hue/groups', controller.hueGroups);
-app.use('/api/hue/lights', controller.hueLights);
+app.get('/api/hue/groups', controller.hueGroups);
+app.get('/api/hue/lights', controller.hueLights);
+
+app.put('/api/hue/lights/:id/state', controller.hueLightState);
 
 app.listen(config.port);
 console.log('server listening on port %d', config.port);

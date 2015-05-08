@@ -4,7 +4,7 @@
 
   module.service('MasterApi', function ($http) {
 
-    function unwrap(response){
+    function unwrap(response) {
       return response.data;
     }
 
@@ -29,30 +29,30 @@
     };
 
     this.turnOn = function (id) {
-      return $http.get('/api/turnOn/' + id).then(unwrap).then(function(status){
+      return $http.get('/api/turnOn/' + id).then(unwrap).then(function (status) {
         return status.status;
       });
     };
 
     this.turnOff = function (id) {
-      return $http.get('/api/turnOff/' + id).then(unwrap).then(function(status){
+      return $http.get('/api/turnOff/' + id).then(unwrap).then(function (status) {
         return status.status;
       });
     };
 
     this.goUp = function (id) {
-      return $http.get('/api/up/' + id).then(unwrap).then(function(status){
+      return $http.get('/api/up/' + id).then(unwrap).then(function (status) {
         return status.status;
       });
     };
 
     this.goDown = function (id) {
-      return $http.get('/api/down/' + id).then(unwrap).then(function(status){
+      return $http.get('/api/down/' + id).then(unwrap).then(function (status) {
         return status.status;
       });
     };
 
-
+    // Philips HUE stuff
 
     this.getHueGroups = function () {
       return $http.get('/api/hue/groups').then(unwrap);
@@ -60,6 +60,16 @@
 
     this.getHueLights = function () {
       return $http.get('/api/hue/lights').then(unwrap);
+    };
+
+    this.hueOn = function (id) {
+      var data = {on: true};
+      return $http.put('/api/hue/lights/' + id + '/state', data).then(unwrap);
+    };
+
+    this.hueOff = function (id) {
+      var data = {on: false};
+      return $http.put('/api/hue/lights/' + id + '/state', data).then(unwrap);
     };
 
   });

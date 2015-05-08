@@ -4,11 +4,11 @@
 
   module.controller('GroupListCtrl', function (MasterApi, DeviceHelper) {
     var ctrl = this;
-    this.groups = [];
+    this.lights = [];
 
     function updateGroups() {
       MasterApi.getGroups().then(function (groups) {
-        ctrl.groups = groups;
+        ctrl.lights = groups;
       });
     }
 

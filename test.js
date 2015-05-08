@@ -7,8 +7,6 @@ var hue = require('./server/hue');
 
  */
 
-
-hue.getLights().then(function (lights) {
-
-  console.log(a);
+hue.setLightState(1, {on: false}).then(function(response){
+  console.log(response);
 });

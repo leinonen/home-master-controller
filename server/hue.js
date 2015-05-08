@@ -20,3 +20,9 @@ exports.getLights = function () {
     });
   });
 };
+
+exports.setLightState = function (id, state) {
+  return http.put(config.hueEndpoind + '/lights/' + id + '/state', state).then(function (response) {
+    return response;
+  });
+};
