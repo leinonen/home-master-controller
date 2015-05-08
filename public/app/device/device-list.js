@@ -1,8 +1,8 @@
 (function () {
 
-  var module = angular.module('device', ['hmc']);
+  var module = angular.module('device');
 
-  module.controller('DeviceListCtrl', function (MasterApi) {
+  module.controller('DeviceListCtrl', function (MasterApi, DeviceHelper) {
     var ctrl = this;
     this.devices = [];
 
@@ -22,34 +22,88 @@
 
     fetchDevices();
 
+    ctrl.getSupportedMethods = function (device) {
+      return DeviceHelper.getSupportedMethods(device);
+    };
+
+    ctrl.getStates = function (device) {
+      return DeviceHelper.getStates(device);
+    };
+
+
+    ctrl.toggleDevice = function (index, device) {
+      if (ctrl.isOn(device)) {
+        ctrl.turnOff(index, device);
+      } else {
+        ctrl.turnOn(index, device);
+      }
+    };
+
+
     ctrl.isOff = function (device) {
-      return device.state === 0 || device.state === '0'
+      return DeviceHelper.isOff(device);
     };
 
     ctrl.isOn = function (device) {
-      return device.state === 1 || device.state === '1'
+      return DeviceHelper.isOn(device);
     };
 
-    ctrl.turnOn = function (index, id) {
-      MasterApi.turnOn(id).then(function (status) {
-        if (status === 'success') {
-          console.log('device turned on successfully!');
-          updateDevice(index, id);
-        } else {
-          console.log(status);
-        }
-      });
+    ctrl.isMotorized = function (device) {
+      return DeviceHelper.isMotorized(device);
     };
 
-    ctrl.turnOff = function (index, id) {
-      MasterApi.turnOff(id).then(function (status) {
-        if (status === 'success') {
-          console.log('device turned off successfully!');
-          updateDevice(index, id);
-        } else {
-          console.log(status);
-        }
-      });
+    ctrl.getButtonText = function (device) {
+      if (DeviceHelper.isMotorized(device)) {
+        return DeviceHelper.isOn(device) ? 'Bring Down' : 'Bring Up';
+      } else {
+        return DeviceHelper.isOn(device) ? 'Turn Off' : 'Turn On';
+      }
+    };
+
+    ctrl.turnOn = function (index, device) {
+      if (DeviceHelper.isMotorized(device)) {
+        MasterApi.goUp(device.id).then(function (status) {
+          if (status === 'success') {
+            console.log('device.turnOn successful');
+            updateDevice(index, device.id);
+          } else {
+            console.log(status);
+          }
+        });
+      } else {
+        MasterApi.turnOn(device.id).then(function (status) {
+          if (status === 'success') {
+            console.log('device. turned on successfully!');
+            updateDevice(index, device.id);
+          } else {
+            console.log(status);
+          }
+        });
+      }
+
+    };
+
+    ctrl.turnOff = function (index, device) {
+      if (DeviceHelper.isMotorized(device)) {
+        MasterApi.goDown(device.id).then(function (status) {
+          if (status === 'success') {
+            console.log('device turned DOWN successfully!');
+            updateDevice(index, device.id);
+          } else {
+            console.log(status);
+          }
+        });
+      } else {
+        MasterApi.turnOff(device.id).then(function (status) {
+          if (status === 'success') {
+            console.log('device turned off successfully!');
+            updateDevice(index, device.id);
+          } else {
+            console.log(status);
+          }
+        });
+      }
+
     }
   });
 

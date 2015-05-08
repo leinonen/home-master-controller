@@ -7,15 +7,16 @@
   <li class="list-group-item" ng-repeat="device in ctrl.devices">
     <h4>{{device.name}}</h4>
 
+  <!--  <p>Supported methods: {{ctrl.getSupportedMethods(device)}}</p>
+    <p>States: {{ctrl.getStates(device)}}</p>
+    <p>Is On?: {{ctrl.isOn(device)}}</p>
+    <p>Motorized: {{ctrl.isMotorized(device)}}</p>-->
+
     <div>
-    <button ng-show="ctrl.isOff(device)"
-            ng-click="ctrl.turnOn($index, device.id)"
+    <button ng-click="ctrl.toggleDevice($index, device)"
             type="button"
-            class="btn btn-primary">Turn On</button>
-    <button ng-show="ctrl.isOn(device)"
-            ng-click="ctrl.turnOff($index, device.id)"
-            type="button"
-            class="btn btn-primary">Turn Off</button>
+            class="btn btn-primary">{{ctrl.getButtonText(device)}}</button>
+
     </div>
   </li>
 </ul>

@@ -40,6 +40,18 @@
       });
     };
 
+    this.goUp = function (id) {
+      return $http.get('/api/up/' + id).then(unwrap).then(function(status){
+        return status.status;
+      });
+    };
+
+    this.goDown = function (id) {
+      return $http.get('/api/down/' + id).then(unwrap).then(function(status){
+        return status.status;
+      });
+    };
+
   });
 
 })();

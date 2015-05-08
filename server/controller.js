@@ -88,3 +88,15 @@ exports.turnOff = function (req, res) {
     res.json(status);
   });
 };
+
+exports.goUp = function (req, res) {
+  telldus.goUp(req.params.id).then(function (status) {
+    res.json(status);
+  });
+};
+
+exports.goDown = function (req, res) {
+  telldus.goDown(req.params.id).then(function (status) {
+    res.json(status);
+  });
+};
