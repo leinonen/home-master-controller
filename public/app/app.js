@@ -4,7 +4,8 @@
     'hmc',
     'sensor',
     'device',
-    'group'
+    'group',
+    'hue'
   ]);
 
 })();

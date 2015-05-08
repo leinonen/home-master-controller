@@ -6,7 +6,7 @@
 
   <li class="list-group-item" ng-repeat="group in ctrl.groups">
     <h4>{{group.name}}</h4>
-    <p>Supported methods: {{ctrl.getSupportedMethods(group)}}</p>
-    <p>States: {{ctrl.getStates(group)}}</p>
+    <button ng-click="ctrl.turnOn($index, group)" type="button"  class="btn btn-primary">Turn On</button>
+    <button ng-click="ctrl.turnOff($index, group)" type="button"  class="btn btn-primary">Turn Off</button>
   </li>
 </ul>

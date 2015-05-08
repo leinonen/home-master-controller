@@ -1,13 +1,18 @@
 (function () {
 
-  var module = angular.module('group', ['hmc','device']);
+  var module = angular.module('group', ['hmc', 'device']);
 
   module.controller('GroupListCtrl', function (MasterApi, DeviceHelper) {
     var ctrl = this;
     this.groups = [];
-    MasterApi.getGroups().then(function (groups) {
-      ctrl.groups = groups;
-    });
+
+    function updateGroups() {
+      MasterApi.getGroups().then(function (groups) {
+        ctrl.groups = groups;
+      });
+    }
+
+    updateGroups();
 
     ctrl.getSupportedMethods = function (group) {
       return DeviceHelper.getSupportedMethods(group);
@@ -17,21 +22,28 @@
       return DeviceHelper.getStates(group);
     };
 
-    ctrl.toggleDevice = function (index, device) {
-      if (ctrl.isOn(device)) {
-        ctrl.turnOff(index, device);
+    function updateSuccess(status) {
+      if (status === 'success') {
+        updateGroups();
       } else {
-        ctrl.turnOn(index, device);
+        console.log(status);
+      }
+    }
+
+    ctrl.turnOn = function (index, group) {
+      if (DeviceHelper.isMotorized(group)) {
+        MasterApi.goUp(group.id).then(updateSuccess);
+      } else {
+        MasterApi.turnOn(group.id).then(updateSuccess);
       }
     };
 
-    ctrl.isOff = function (device) {
-      //return DeviceHelper.isOff(device);
-      return DeviceHelper.getStates(device) === 'off' || DeviceHelper.getStates(device) === 'down';
-    };
-
-    ctrl.isOn = function (device) {
-      return DeviceHelper.getStates(device) === 'on' || DeviceHelper.getStates(device) === 'up';
+    ctrl.turnOff = function (index, group) {
+      if (DeviceHelper.isMotorized(group)) {
+        MasterApi.goDown(group.id).then(updateSuccess);
+      } else {
+        MasterApi.turnOff(group.id).then(updateSuccess);
+      }
     };
 
   });

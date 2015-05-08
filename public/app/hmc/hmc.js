@@ -52,6 +52,16 @@
       });
     };
 
+
+
+    this.getHueGroups = function () {
+      return $http.get('/api/hue/groups').then(unwrap);
+    };
+
+    this.getHueLights = function () {
+      return $http.get('/api/hue/lights').then(unwrap);
+    };
+
   });
 
 })();

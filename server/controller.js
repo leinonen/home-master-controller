@@ -1,6 +1,7 @@
 var Sensor = require('./../models/sensor');
 var telldus = require('./telldus');
 var Q = require('q');
+var hue = require('./hue');
 
 exports.sensors = function (req, res) {
   /*Sensor
@@ -98,5 +99,22 @@ exports.goUp = function (req, res) {
 exports.goDown = function (req, res) {
   telldus.goDown(req.params.id).then(function (status) {
     res.json(status);
+  });
+};
+
+
+exports.hueGroups = function(req, res) {
+  hue.getGroups().then(function(groups){
+    res.json(groups);
+  }).fail(function(err){
+    res.sendStatus(400).json(err);
+  });
+};
+
+exports.hueLights = function(req, res) {
+  hue.getLights().then(function(lights){
+    res.json(lights);
+  }).fail(function(err){
+    res.sendStatus(400).json(err);
   });
 };

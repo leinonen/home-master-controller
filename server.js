@@ -29,6 +29,9 @@ app.use('/api/turnOff/:id', controller.turnOff);
 app.use('/api/up/:id', controller.goUp);
 app.use('/api/down/:id', controller.goDown);
 
+app.use('/api/hue/groups', controller.hueGroups);
+app.use('/api/hue/lights', controller.hueLights);
+
 app.listen(config.port);
 console.log('server listening on port %d', config.port);
 

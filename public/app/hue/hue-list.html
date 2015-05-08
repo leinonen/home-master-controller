@@ -1,0 +1,13 @@
+<ul class="list-group">
+
+  <li class="list-group-item" ng-show="ctrl.lights.length === 0">
+    <h4>Loading HUE lights</h4>
+  </li>
+
+  <li class="list-group-item" ng-repeat="light in ctrl.lights">
+    <h4>{{light.name}}</h4>
+    <p>on: {{light.state.on}}</p>
+    <p>brightness: {{light.state.bri}}</p>
+    <p>model: {{light.modelid}}</p>
+  </li>
+</ul>
