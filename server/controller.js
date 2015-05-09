@@ -2,7 +2,8 @@ var Master = require('./master');
 
 exports.sensors = function (req, res) {
   Master
-    .sensors().then(function (sensors) {
+    .sensors()
+    .then(function (sensors) {
       res.json(sensors);
     })
     .fail(function (err) {
@@ -12,7 +13,8 @@ exports.sensors = function (req, res) {
 
 exports.sensor = function (req, res) {
   Master
-    .sensor(req.params.id).then(function (sensor) {
+    .sensor(req.params.id)
+    .then(function (sensor) {
       res.json(sensor);
     })
     .fail(function (err) {

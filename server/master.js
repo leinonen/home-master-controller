@@ -56,7 +56,10 @@ exports.device = function (id, type) {
   if (type === 'telldus-device') {
     return telldus.getDevice(id).then(transformTelldusDevice);
   } else if (type === 'hue-device') {
-    return hue.getLight(id).then(transformHueDevice);
+    return hue.getLight(id).then(function(device){
+      device.id = id;
+      return transformHueDevice(device);
+    });
   } else {
     var deferred = Q.defer();
     deferred.reject('Not implemented');
