@@ -3,7 +3,7 @@
   var module = angular.module('hue');
 
 
-  module.controller('HueLightsCtrl', function (MasterApi) {
+  module.controller('HueLightsCtrl', function ($rootScope, MasterApi) {
 
     var ctrl = this;
     ctrl.lights = [];
@@ -16,13 +16,17 @@
 
     getLights();
 
+    $rootScope.$on('update.lights', getLights);
+
     ctrl.toggleLight = function (light) {
       if (light.state.on === true) {
         MasterApi.hueOff(light.id).then(function (response) {
+          $rootScope.$emit('light.off', light.id);
           getLights();
         });
       } else {
         MasterApi.hueOn(light.id).then(function (response) {
+          $rootScope.$emit('light.on', light.id);
           getLights();
         });
       }

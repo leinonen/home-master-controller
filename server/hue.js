@@ -26,3 +26,9 @@ exports.setLightState = function (id, state) {
     return response;
   });
 };
+
+exports.setGroupAction = function (id, action) {
+  return http.put(config.hueEndpoind + '/groups/' + id + '/action', action).then(function (response) {
+    return response;
+  });
+};

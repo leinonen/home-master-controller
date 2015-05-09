@@ -128,3 +128,13 @@ exports.hueLightState = function (req, res) {
     res.sendStatus(400).json(err);
   });
 };
+
+exports.groupAction = function (req, res) {
+  var id = req.params.id;
+  var action = req.body;
+  hue.setGroupAction(id, action).then(function (response) {
+    res.json(response);
+  }).fail(function (err) {
+    res.sendStatus(400).json(err);
+  });
+};

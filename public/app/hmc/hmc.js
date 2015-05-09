@@ -72,6 +72,15 @@
       return $http.put('/api/hue/lights/' + id + '/state', data).then(unwrap);
     };
 
+    this.hueGroupOn = function (id) {
+      var data = {on: true};
+      return $http.put('/api/hue/groups/' + id + '/action', data).then(unwrap);
+    };
+
+    this.hueGroupOff = function (id) {
+      var data = {on: false};
+      return $http.put('/api/hue/groups/' + id + '/action', data).then(unwrap);
+    };
   });
 
 })();

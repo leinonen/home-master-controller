@@ -33,6 +33,7 @@ app.get('/api/hue/groups', controller.hueGroups);
 app.get('/api/hue/lights', controller.hueLights);
 
 app.put('/api/hue/lights/:id/state', controller.hueLightState);
+app.put('/api/hue/groups/:id/action', controller.groupAction);
 
 app.listen(config.port);
 console.log('server listening on port %d', config.port);

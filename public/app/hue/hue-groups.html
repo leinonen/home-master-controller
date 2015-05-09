@@ -6,5 +6,6 @@
 
   <li class="list-group-item" ng-repeat="group in ctrl.lights">
     <h4>{{group.name}}</h4>
+    <button type="button" class="btn btn-primary" ng-click="ctrl.toggleGroup(group)">{{ctrl.getButtonText(group)}}</button>
   </li>
 </ul>
