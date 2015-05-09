@@ -42,6 +42,14 @@
       return group.action.on ? 'Turn Off' : 'Turn On';
     };
 
+    ctrl.setBrightness = function (index, group) {
+      console.log(group.id + ' ' + group.state.bri);
+      MasterApi.hueGroupBrightness(group.id, group.state.bri).then(function (response) {
+        console.log('updated brightness for group ' + group.id + ' with value ' + group.state.bri);
+        getGroups();
+      });
+    };
+
   });
 
 

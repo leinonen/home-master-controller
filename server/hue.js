@@ -23,12 +23,14 @@ exports.getLights = function () {
 
 exports.setLightState = function (id, state) {
   return http.put(config.hueEndpoind + '/lights/' + id + '/state', state).then(function (response) {
+    console.log(response);
     return response;
   });
 };
 
 exports.setGroupAction = function (id, action) {
   return http.put(config.hueEndpoind + '/groups/' + id + '/action', action).then(function (response) {
+    console.log(response);
     return response;
   });
 };
