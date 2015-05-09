@@ -1,5 +1,10 @@
+/**
+ * Philips Hue API wrapper
+ * @type {exports}
+ */
+
 var http = require('request-promise-json');
-var config = require('./config');
+var config = require('./../config');
 
 exports.getGroups = function () {
   return http.get(config.hueEndpoind + '/groups').then(function (groups) {
@@ -18,6 +23,12 @@ exports.getLights = function () {
       light.id = key;
       return light;
     });
+  });
+};
+
+exports.getLight = function (id) {
+  return http.get(config.hueEndpoind + '/lights/' + id).then(function (light) {
+    return light;
   });
 };
 

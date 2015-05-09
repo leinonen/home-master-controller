@@ -2,11 +2,11 @@
  * Master API - Control everything! :D
  * @type {exports}
  */
-var telldus = require('./telldus');
-var hue = require('./hue');
-var Q = require('q');
+var telldus = require('./api/telldus');
+var telldusHelper = require('./api/telldus-helper');
 
-var telldusHelper = require('./telldus-helper');
+var hue = require('./api/hue');
+var Q = require('q');
 
 
 /**
@@ -28,11 +28,9 @@ exports.sensor = function (id) {
  * Get all groups
  */
 exports.groups = function () {
-  var telldusGroups = telldus.listGroups().then(transformTelldusGroups);
-  var hueGroups = hue.getGroups().then(transformHueGroups);
-  return telldusGroups.then(function (td) {
-    return hueGroups.then(function (hd) {
-      return td.concat(hd);
+  return telldus.listGroups().then(transformTelldusGroups).then(function (telldusGroups) {
+    return hue.getGroups().then(transformHueGroups).then(function (hueGroups) {
+      return telldusGroups.concat(hueGroups);
     });
   });
 };
@@ -41,11 +39,9 @@ exports.groups = function () {
  * Get all devices
  */
 exports.devices = function () {
-  var telldusDevices = telldus.listDevices().then(transformTelldusDevices);
-  var hueDevices = hue.getLights().then(transformHueDevices);
-  return telldusDevices.then(function (td) {
-    return hueDevices.then(function (hd) {
-      return td.concat(hd);
+  return telldus.listDevices().then(transformTelldusDevices).then(function (telldusDevices) {
+    return hue.getLights().then(transformHueDevices).then(function (hueDevices) {
+      return telldusDevices.concat(hueDevices);
     });
   });
 };
@@ -53,14 +49,14 @@ exports.devices = function () {
 /**
  * Get a specific device.
  * @param id
- * @param deviceType
+ * @param type
  * @returns {*}
  */
-exports.device = function (id, deviceType) {
-  if (deviceType === 'telldus-device') {
-    return telldus.getDevice(id);
-  } else if (deviceType === 'hue-device') {
-    //return hue.getLight(id);
+exports.device = function (id, type) {
+  if (type === 'telldus-device') {
+    return telldus.getDevice(id).then(transformTelldusDevice);
+  } else if (type === 'hue-device') {
+    return hue.getLight(id).then(transformHueDevice);
   } else {
     var deferred = Q.defer();
     deferred.reject('Not implemented');
@@ -154,29 +150,33 @@ function transformHueGroups(groups) {
   });
 }
 
+function transformTelldusDevice(device) {
+  var item = {};
+  item.id = device.id;
+  item.name = device.name;
+  item.type = 'telldus-device';
+  item.motorized = telldusHelper.isMotorized(device);
+  item.methods = telldusHelper.getSupportedMethods(device);
+  item.state = {};
+  item.state.on = telldusHelper.isOn(device);
+  return item;
+}
+
 function transformTelldusDevices(devices) {
-  return devices.map(function (device) {
-    var item = {};
-    item.id = device.id;
-    item.name = device.name;
-    item.type = 'telldus-device';
-    item.motorized = telldusHelper.isMotorized(device);
-    item.methods = telldusHelper.getSupportedMethods(device);
-    item.state = {};
-    item.state.on = telldusHelper.isOn(device);
-    return item;
-  });
+  return devices.map(transformTelldusDevice);
+}
+
+function transformHueDevice(device) {
+  var item = {};
+  item.id = device.id;
+  item.name = device.name;
+  item.type = 'hue-device';
+  item.modelid = device.modelid;
+  item.manufacturername = device.manufacturername;
+  item.state = device.state;
+  return item;
 }
 
 function transformHueDevices(devices) {
-  return devices.map(function (device) {
-    var item = {};
-    item.id = device.id;
-    item.name = device.name;
-    item.type = 'hue-device';
-    item.modelid = device.modelid;
-    item.manufacturername = device.manufacturername;
-    item.state = device.state;
-    return item;
-  });
+  return devices.map(transformHueDevice);
 }

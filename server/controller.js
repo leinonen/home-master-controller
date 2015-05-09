@@ -51,9 +51,11 @@ exports.groups = function (req, res) {
 };
 
 exports.control = function (req, res) {
-  Master.control(req.params.id, req.body).then(function (response) {
-    res.json(response);
-  }).fail(function (err) {
-    res.sendStatus(400).json(err);
-  })
+  Master
+    .control(req.params.id, req.body)
+    .then(function (response) {
+      res.json(response);
+    }).fail(function (err) {
+      res.sendStatus(400).json(err);
+    });
 };
