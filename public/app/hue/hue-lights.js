@@ -34,7 +34,17 @@
 
     ctrl.getButtonText = function (light) {
       return light.state.on === true ? 'Turn Off' : 'Turn On';
-    }
+    };
+
+
+    ctrl.setBrightness = function (index, light) {
+      console.log(light.id + ' ' + light.state.bri);
+      MasterApi.hueLightBrightness(light.id, light.state.bri).then(function(response){
+        console.log('updated brightness for light ' + light.id + ' with value ' + light.state.bri);
+        //ctrl.lights[index].state.bri = light.state.bri;
+        getLights();
+      });
+    };
 
   });
 

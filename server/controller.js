@@ -123,6 +123,7 @@ exports.hueLightState = function (req, res) {
   var id = req.params.id;
   var state = req.body;
   hue.setLightState(id, state).then(function (response) {
+    console.log('set light state: ' + state.bri);
     res.json(response);
   }).fail(function (err) {
     res.sendStatus(400).json(err);

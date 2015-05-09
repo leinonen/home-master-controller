@@ -10,5 +10,7 @@
     <p>brightness: {{light.state.bri}}</p>
     <p>model: {{light.modelid}}</p>
     <button type="button" class="btn btn-primary" ng-click="ctrl.toggleLight(light)">{{ctrl.getButtonText(light)}}</button>
+
+    <input type='range' min='0' max='254' ng-model="light.state.bri" ng-change="ctrl.setBrightness($index, light)"/>
   </li>
 </ul>

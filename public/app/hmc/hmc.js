@@ -81,6 +81,16 @@
       var data = {on: false};
       return $http.put('/api/hue/groups/' + id + '/action', data).then(unwrap);
     };
+
+    this.hueLightBrightness = function (id, bri) {
+      var data = {bri: bri};
+      return $http.put('/api/hue/lights/' + id + '/state', data).then(unwrap);
+    };
+
+    this.hueGroupBrightness = function (id, bri) {
+      var data = {bri: bri};
+      return $http.put('/api/hue/groups/' + id + '/action', data).then(unwrap);
+    };
   });
 
 })();
