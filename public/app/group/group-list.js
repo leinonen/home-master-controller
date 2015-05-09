@@ -2,48 +2,31 @@
 
   var module = angular.module('group', ['hmc', 'device']);
 
-  module.controller('GroupListCtrl', function (MasterApi, DeviceHelper) {
+  module.controller('GroupListCtrl', function (MasterApi) {
     var ctrl = this;
-    this.lights = [];
+    this.groups = [];
 
     function updateGroups() {
       MasterApi.getGroups().then(function (groups) {
-        ctrl.lights = groups;
+        ctrl.groups = groups;
       });
     }
 
     updateGroups();
 
-    ctrl.getSupportedMethods = function (group) {
-      return DeviceHelper.getSupportedMethods(group);
-    };
-
-    ctrl.getStates = function (group) {
-      return DeviceHelper.getStates(group);
-    };
-
-    function updateSuccess(status) {
-      if (status === 'success') {
-        updateGroups();
-      } else {
+    function control(id, params){
+      MasterApi.control(id, params).then(function (status) {
         console.log(status);
-      }
+        setTimeout(updateGroups, 100);
+      }).catch(console.error);
     }
 
-    ctrl.turnOn = function (index, group) {
-      if (DeviceHelper.isMotorized(group)) {
-        MasterApi.goUp(group.id).then(updateSuccess);
-      } else {
-        MasterApi.turnOn(group.id).then(updateSuccess);
-      }
+    ctrl.turnOn = function (group) {
+      control(group.id, { type: group.type, action: group.motorized ? 'up' : 'on' });
     };
 
-    ctrl.turnOff = function (index, group) {
-      if (DeviceHelper.isMotorized(group)) {
-        MasterApi.goDown(group.id).then(updateSuccess);
-      } else {
-        MasterApi.turnOff(group.id).then(updateSuccess);
-      }
+    ctrl.turnOff = function (group) {
+      control(group.id, { type: group.type, action: group.motorized ? 'down' : 'off' });
     };
 
   });

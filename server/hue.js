@@ -28,6 +28,7 @@ exports.setLightState = function (id, state) {
   });
 };
 
+// var data = {bri: Number(bri)};
 exports.setGroupAction = function (id, action) {
   return http.put(config.hueEndpoind + '/groups/' + id + '/action', action).then(function (response) {
     console.log(response);

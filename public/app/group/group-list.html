@@ -1,12 +1,20 @@
-<ul class="list-group">
-
-  <li class="list-group-item" ng-show="ctrl.lights.length === 0">
-    <h4>Loading groups..</h4>
-  </li>
-
-  <li class="list-group-item" ng-repeat="group in ctrl.lights">
-    <h4>{{group.name}}</h4>
-    <button ng-click="ctrl.turnOn($index, group)" type="button"  class="btn btn-primary">Bring Up</button>
-    <button ng-click="ctrl.turnOff($index, group)" type="button"  class="btn btn-primary">Bring Down</button>
-  </li>
-</ul>
+<div class="group-list">
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr ng-repeat="group in ctrl.groups | orderBy:'name'">
+      <td>{{group.name}}</td>
+      <td>{{group.type}}</td>
+      <td>
+        <button ng-click="ctrl.turnOn(group)" type="button" class="btn btn-primary pull-right">On</button>
+      </td>
+      <td>
+        <button ng-click="ctrl.turnOff(group)" type="button" class="btn btn-primary pull-right">Off</button>
+      </td>
+    </tr>
+  </table>
+</div>

@@ -36,7 +36,17 @@ function apiCall(path, params) {
 
 exports.listDevices = function() {
   return apiCall('devices/list', {supportedMethods: METHODS}).then(function(response){
-    return response.device;
+    return response.device.filter(function(device){
+      return device.type === 'device';
+    })
+  });
+};
+
+exports.listGroups = function() {
+  return apiCall('devices/list', {supportedMethods: METHODS}).then(function(response){
+    return response.device.filter(function(device){
+      return device.type === 'group';
+    })
   });
 };
 

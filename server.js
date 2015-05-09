@@ -18,11 +18,14 @@ app.get('/api/sensors', controller.sensors);
 app.get('/api/sensors/:id', controller.sensor);
 
 app.get('/api/devices', controller.devices);
-
 app.get('/api/device/:id', controller.device);
 
-app.get('/api/groups', controller.lights);
+app.get('/api/groups', controller.groups);
+//app.get('/api/groups/:id', controller.group);
 
+app.post('/api/control/:id', controller.control);
+
+/*
 app.get('/api/turnOn/:id', controller.turnOn);
 app.get('/api/turnOff/:id', controller.turnOff);
 
@@ -34,6 +37,8 @@ app.get('/api/hue/lights', controller.hueLights);
 
 app.put('/api/hue/lights/:id/state', controller.hueLightState);
 app.put('/api/hue/groups/:id/action', controller.groupAction);
+*/
+
 
 app.listen(config.port);
 console.log('server listening on port %d', config.port);

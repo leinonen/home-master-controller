@@ -1,16 +1,10 @@
-<ul class="list-group">
-
-  <li class="list-group-item" ng-show="ctrl.sensors.length === 0">
-    <h4>Loading sensors..</h4>
-  </li>
-
-  <li class="list-group-item" ng-repeat="sensor in ctrl.sensors">
-    <h4>{{sensor.name}}</h4>
-    <p>{{sensor.data[0].name}}: {{sensor.data[0].value}} degrees</p>
-    <!--<ul>
-      <li ng-repeat="reading in sensor.readings | orderBy:reading.date | limitTo:1">
-        {{reading.date | date: 'fullDate'}}: {{reading.data}}: {{reading.value}} degrees
-      </li>
-    </ul>-->
-  </li>
-</ul>
+<div class="sensor-list">
+  <table class="table">
+    <tr ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
+      <td>{{sensor.name}}</td>
+      <td>{{sensor.type}}</td>
+      <td>{{sensor.data[0].name}}</td>
+      <td><span class="pull-right">{{sensor.data[0].value}} degrees</span></td>
+    </tr>
+  </table>
+</div>

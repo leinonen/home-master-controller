@@ -1,22 +1,38 @@
-<ul class="list-group">
+<div class="device-list">
 
-  <li class="list-group-item" ng-show="ctrl.devices.length === 0">
-    <h4>Loading devices..</h4>
-  </li>
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Id</th>
+      <th>Type</th>
+      <th>State</th>
+      <th> </th>
+    </tr>
 
-  <li class="list-group-item" ng-repeat="device in ctrl.devices">
-    <h4>{{device.name}}</h4>
+    <tbody ng-repeat="device in ctrl.devices | orderBy:'name'">
+    <tr>
+      <td>{{device.name}}</td>
+      <td>{{device.id}}</td>
+      <td>{{device.type}}</td>
+      <td>{{device.state.on?'on':'off'}}</td>
 
-  <!--  <p>Supported methods: {{ctrl.getSupportedMethods(device)}}</p>
-    <p>States: {{ctrl.getStates(device)}}</p>
-    <p>Is On?: {{ctrl.isOn(device)}}</p>
-    <p>Motorized: {{ctrl.isMotorized(device)}}</p>-->
+      <td>
+        <button ng-show="device.state.on" ng-click="ctrl.turnOff(device)" type="button"
+                class="btn btn-primary pull-right">off
+        </button>
+        <button ng-hide="device.state.on" ng-click="ctrl.turnOn(device)" type="button"
+                class="btn btn-primary pull-right">on
+        </button>
+      </td>
+    </tr>
 
-    <div>
-    <button ng-click="ctrl.toggleDevice($index, device)"
-            type="button"
-            class="btn btn-primary">{{ctrl.getButtonText(device)}}</button>
+    <tr ng-show="device.type === 'hue-device'">
+      <td>Brightness: {{device.state.bri}}</td>
+      <td colspan="4"><input type='range' min='0' max='254' ng-model="device.state.bri"
+                             ng-change="ctrl.setBrightness(device)"
+                             ng-disabled="device.state.on === false"/></td>
+    </tr>
 
-    </div>
-  </li>
-</ul>
+    </tbody>
+  </table>
+</div>
