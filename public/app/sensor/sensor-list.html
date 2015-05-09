@@ -1,4 +1,7 @@
 <div class="sensor-list">
+
+  <p ng-show="ctrl.sensors.length === 0">Loading sensors..</p>
+
   <table class="table">
     <tr ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
       <td>{{sensor.name}}</td>
