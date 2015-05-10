@@ -48,6 +48,7 @@ exports.groups = function (req, res) {
     .then(function (groups) {
       res.json(groups);
     }).fail(function (err) {
+      console.log(err);
       res.sendStatus(400).json(err);
     });
 };

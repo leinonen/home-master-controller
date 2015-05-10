@@ -4,10 +4,10 @@
  */
 
 var http = require('request-promise-json');
-var config = require('./../config');
+var config = require('./../config').integrations.hue;
 
 exports.getGroups = function () {
-  return http.get(config.hueEndpoind + '/groups').then(function (groups) {
+  return http.get(config.endpoint + '/groups').then(function (groups) {
     return Object.keys(groups).map(function (key) {
       var group = groups[key];
       group.id = key;
@@ -17,7 +17,7 @@ exports.getGroups = function () {
 };
 
 exports.getLights = function () {
-  return http.get(config.hueEndpoind + '/lights').then(function (lights) {
+  return http.get(config.endpoint + '/lights').then(function (lights) {
     return Object.keys(lights).map(function (key) {
       var light = lights[key];
       light.id = key;
@@ -27,13 +27,13 @@ exports.getLights = function () {
 };
 
 exports.getLight = function (id) {
-  return http.get(config.hueEndpoind + '/lights/' + id).then(function (light) {
+  return http.get(config.endpoint + '/lights/' + id).then(function (light) {
     return light;
   });
 };
 
 exports.setLightState = function (id, state) {
-  return http.put(config.hueEndpoind + '/lights/' + id + '/state', state).then(function (response) {
+  return http.put(config.endpoint + '/lights/' + id + '/state', state).then(function (response) {
     console.log(response);
     return response;
   });
@@ -41,7 +41,7 @@ exports.setLightState = function (id, state) {
 
 // var data = {bri: Number(bri)};
 exports.setGroupAction = function (id, action) {
-  return http.put(config.hueEndpoind + '/groups/' + id + '/action', action).then(function (response) {
+  return http.put(config.endpoint + '/groups/' + id + '/action', action).then(function (response) {
     console.log(response);
     return response;
   });

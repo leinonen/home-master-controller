@@ -20,6 +20,11 @@ app.get('/api/groups', controller.groups);
 
 app.post('/api/control/:id', controller.control);
 
+app.use(function (err, req, res, next) {
+  console.error(err.message);
+  res.send(err.status || 500);
+});
+
 app.listen(config.port);
 console.log('server listening on port %d', config.port);
 
