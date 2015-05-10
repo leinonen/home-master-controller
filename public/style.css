@@ -1,3 +1,9 @@
 body {
     font-family: "Play", Helvetica, Arial, sans-serif;
 }
+
+
+.hue-device-row {
+
+    background-color: #f4f4f4;
+}

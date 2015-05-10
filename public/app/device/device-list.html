@@ -16,24 +16,51 @@
       <td>{{device.name}}</td>
       <td><a ng-href="/api/device/{{device.id}}?type={{device.type}}">{{device.id}}</a></td>
       <td>{{device.type}}</td>
-      <td>{{device.state.on?'on':'off'}}</td>
+      <td>{{device.state.on?'On':'Off'}}</td>
 
       <td>
         <button ng-show="device.state.on" ng-click="ctrl.turnOff(device)" type="button"
-                class="btn btn-primary pull-right">off
+                class="btn btn-primary pull-right">Turn Off
         </button>
         <button ng-hide="device.state.on" ng-click="ctrl.turnOn(device)" type="button"
-                class="btn btn-primary pull-right">on
+                class="btn btn-primary pull-right">Turn On
         </button>
       </td>
     </tr>
 
-    <tr ng-show="device.type === 'hue-device'">
-      <td>Brightness: {{device.state.bri}}</td>
-      <td colspan="4"><input type='range' min='0' max='254' ng-model="device.state.bri"
-                             ng-change="ctrl.setBrightness(device)"
-                             ng-disabled="device.state.on === false"/></td>
+    <tr ng-show="device.type === 'hue-device'" class="hue-device-row">
+      <td></td>
+      <td colspan="4">
+        <table class="table">
+          <tr>
+            <td>Brightness: {{device.state.bri}}</td>
+            <td colspan="4"><input type='range' min='0' max='254' ng-model="device.state.bri"
+                                   ng-change="ctrl.setBrightness(device)"
+                                   ng-disabled="device.state.on === false"/></td>
+          </tr>
+          <tr>
+            <td>Saturation: {{device.state.sat}}</td>
+            <td colspan="4"><input type='range' min='0' max='254' ng-model="device.state.sat"
+                                   ng-change="ctrl.setSaturation(device)"
+                                   ng-disabled="device.state.on === false"/></td>
+          </tr>
+          <tr>
+            <td>Hue: {{device.state.hue}}</td>
+            <td colspan="4">
+              <select ng-model="device.state.hue" ng-change="ctrl.setHue(device)"
+                      ng-disabled="device.state.on === false">
+                <option value="12750">Yellow</option>
+                <option value="25500">Green</option>
+                <option value="46920">Blue</option>
+                <option value="56100">Pink</option>
+                <option value="65280">Red</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </td>
     </tr>
+
 
     </tbody>
   </table>

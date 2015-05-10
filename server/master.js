@@ -56,7 +56,7 @@ exports.device = function (id, type) {
   if (type === 'telldus-device') {
     return telldus.getDevice(id).then(transformTelldusDevice);
   } else if (type === 'hue-device') {
-    return hue.getLight(id).then(function(device){
+    return hue.getLight(id).then(function (device) {
       device.id = id;
       return transformHueDevice(device);
     });
@@ -76,10 +76,12 @@ exports.control = function (id, params) {
 
   if (params.type === 'telldus-device') {
     return controlTelldus(id, params);
-
   } else if (params.type === 'hue-device') {
-
     return controlHue(id, params);
+  } else {
+    var deferred = Q.defer();
+    deferred.reject('Not implemented');
+    return deferred.promise;
   }
 };
 
@@ -110,13 +112,27 @@ function controlTelldus(id, params) {
  */
 function controlHue(id, params) {
   if (params.action === 'on') {
+    console.log('turn light on');
     return hue.setLightState(id, {on: true});
+
   } else if (params.action === 'off') {
+    console.log('turn light off');
     return hue.setLightState(id, {on: false});
+
   } else if (params.action === 'bri') {
     console.log('set brightness to ' + params.value);
-    return hue.setLightState(id, {bri: Number(params.value)})
+    return hue.setLightState(id, {bri: Number(params.value)});
+
+  } else if (params.action === 'sat') {
+    console.log('set saturation to ' + params.value);
+    return hue.setLightState(id, {sat: Number(params.value)});
+
+  } else if (params.action === 'hue') {
+    console.log('set hue to ' + params.value);
+    return hue.setLightState(id, {hue: Number(params.value)});
+
   }
+
 }
 
 

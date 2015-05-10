@@ -2,7 +2,7 @@
 
   var module = angular.module('device');
 
-  module.controller('DeviceListCtrl', function (MasterApi) {
+  module.controller('DeviceListCtrl', function ($timeout, MasterApi) {
     var ctrl = this;
     this.devices = [];
 
@@ -15,23 +15,31 @@
 
     fetchDevices();
 
-    function control(id, params){
+    function control(id, params) {
       MasterApi.control(id, params).then(function (status) {
         console.log(status);
-        setTimeout(fetchDevices, 100);
+        $timeout(fetchDevices, 100);
       }).catch(console.error);
     }
 
     ctrl.turnOn = function (device) {
-      control(device.id, { type: device.type, action: device.motorized ? 'up' : 'on' });
+      control(device.id, {type: device.type, action: device.motorized ? 'up' : 'on'});
     };
 
     ctrl.turnOff = function (device) {
-      control(device.id, { type: device.type, action: device.motorized ? 'down' : 'off' });
+      control(device.id, {type: device.type, action: device.motorized ? 'down' : 'off'});
     };
 
     ctrl.setBrightness = function (device) {
-      control(device.id, { type: device.type, action: 'bri', value: device.state.bri });
+      control(device.id, {type: device.type, action: 'bri', value: device.state.bri});
+    };
+
+    ctrl.setSaturation = function (device) {
+      control(device.id, {type: device.type, action: 'sat', value: device.state.sat});
+    };
+
+    ctrl.setHue = function (device) {
+      control(device.id, {type: device.type, action: 'hue', value: device.state.hue});
     };
 
   });
