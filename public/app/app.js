@@ -11,7 +11,7 @@
     'navbar'
   ]);
 
-  app.config(function ($stateProvider, $urlRouterProvider) {
+  app.config(function ($stateProvider, $urlRouterProvider, RoutesProvider) {
 
     $urlRouterProvider.otherwise('/');
 
@@ -28,36 +28,8 @@
       }
     });
 
-    var routes = [
-      {
-        state: 'devices',
-        url: '/devices',
-        templateUrl: 'app/views/devices.html'
-      },
-      {
-        state: 'groups',
-        url: '/groups',
-        templateUrl: 'app/views/groups.html'
-      },
-      {
-        state: 'sensors',
-        url: '/sensors',
-        templateUrl: 'app/views/sensors.html'
-      },
-      {
-        state: 'about',
-        url: '/about',
-        templateUrl: 'app/views/about.html'
-      },
-      {
-        state: 'configuration',
-        url: '/config',
-        templateUrl: 'app/views/configuration.html'
-      }
-    ];
-
-    angular.forEach(routes, function (route) {
-      $stateProvider.state('root.' + route.state, {
+    angular.forEach(RoutesProvider.$get().routes, function (route) {
+      $stateProvider.state(route.state, {
         url: route.url,
         views: {
           'container@': {
