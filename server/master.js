@@ -12,8 +12,8 @@ function errorHandler(error) {
   var deferred = Q.defer();
   var msg = {};
   msg.statusCode = error.statusCode;
-  msg.message = error.statusCode === 404 ? 'Not found':'error';
-  if (error.hasOwnProperty('request')){
+  msg.message = error.statusCode === 404 ? 'Not found' : 'error';
+  if (error.hasOwnProperty('request')) {
     msg.url = error.request.url;
   }
   deferred.reject(msg);
@@ -87,9 +87,9 @@ exports.device = function (id, type) {
 exports.control = function (id, params) {
   console.log('control %d : %s -> action: %s', id, params.type, params.action);
 
-  if (params.type === 'telldus-device') {
+  if (params.type === 'telldus-device' || params.type === 'telldus-group') {
     return controlTelldus(id, params);
-  } else if (params.type === 'hue-device') {
+  } else if (params.type === 'hue-device' || params.type === 'hue-group') {
     return controlHue(id, params);
   } else {
     var deferred = Q.defer();
@@ -166,6 +166,7 @@ function transformTelldusGroups(groups) {
     item.state = {};
     item.state.on = telldusHelper.isOn(group);
     item.devices = group.devices.split(',');
+    item.motorized = telldusHelper.isMotorized(group);
     return item;
   });
 }
@@ -178,6 +179,7 @@ function transformHueGroups(groups) {
     item.type = 'hue-group';
     item.state = group.action;
     item.devices = group.lights;
+    item.motorized = false;
     return item;
   });
 }
