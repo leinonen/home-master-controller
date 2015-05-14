@@ -15,7 +15,7 @@
 
     <tbody ng-repeat="device in ctrl.devices | orderBy:'name'">
     <tr>
-      <td>{{device.name}}, motorized:{{device.motorized}} </td>
+      <td>{{device.name}}</td>
       <td><a ng-href="/api/device/{{device.id}}?type={{device.type}}">{{device.id}}</a></td>
       <td>{{device.type}}</td>
       <td>{{device.state.on?'On':'Off'}}</td>
