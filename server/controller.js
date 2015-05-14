@@ -1,4 +1,10 @@
 var Master = require('./master');
+var Configuration = require('../models/configuration');
+
+function errorHandler(response, error) {
+  console.log(error);
+  response.status(error.statusCode || 400).json(error);
+}
 
 exports.sensors = function (req, res) {
   Master
@@ -6,8 +12,8 @@ exports.sensors = function (req, res) {
     .then(function (sensors) {
       res.json(sensors);
     })
-    .fail(function (err) {
-      res.json(err);
+    .catch(function (err) {
+      errorHandler(res, err);
     });
 };
 
@@ -17,8 +23,8 @@ exports.sensor = function (req, res) {
     .then(function (sensor) {
       res.json(sensor);
     })
-    .fail(function (err) {
-      res.status(400).json(err);
+    .catch(function (err) {
+      errorHandler(res, err);
     });
 };
 
@@ -27,8 +33,8 @@ exports.devices = function (req, res) {
     .devices()
     .then(function (devices) {
       res.json(devices);
-    }).fail(function (err) {
-      res.status(400).json(err);
+    }).catch(function (err) {
+      errorHandler(res, err);
     });
 };
 
@@ -37,8 +43,8 @@ exports.device = function (req, res) {
     .device(req.params.id, req.query.type)
     .then(function (device) {
       res.json(device);
-    }).fail(function (err) {
-      res.status(400).json(err);
+    }).catch(function (err) {
+      errorHandler(res, err);
     });
 };
 
@@ -47,9 +53,8 @@ exports.groups = function (req, res) {
     .groups()
     .then(function (groups) {
       res.json(groups);
-    }).fail(function (err) {
-      console.log(err);
-      res.status(400).json(err);
+    }).catch(function (err) {
+      errorHandler(res, err);
     });
 };
 
@@ -58,7 +63,44 @@ exports.control = function (req, res) {
     .control(req.params.id, req.body)
     .then(function (response) {
       res.json(response);
-    }).fail(function (err) {
-      res.status(400).json(err);
+    }).catch(function (err) {
+      errorHandler(res, err);
+    });
+};
+
+
+exports.readConfiguration = function (req, res) {
+  Configuration
+    .findOne()
+    .exec(function (err, cfg) {
+      if (err) {
+        errorHandler(res, err);
+      }
+      if (cfg) {
+        res.json(cfg);
+      } else {
+        errorHandler(res, 'Missing configuration');
+      }
+    });
+};
+
+exports.saveConfiguration = function (req, res) {
+  var data = req.body;
+  Configuration
+    .findOne(data._id)
+    .exec(function (err, cfg) {
+      if (err) {
+        errorHandler(res, err);
+      }
+      if (cfg) {
+        cfg.hue = data.hue;
+        cfg.telldus = data.telldus;
+        cfg.save();
+        res.json(cfg);
+      } else {
+        var c = new Configuration({hue: data.hue, telldus: data.telldus});
+        c.save();
+        return res.json(c);
+      }
     });
 };

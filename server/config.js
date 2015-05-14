@@ -1,18 +1,5 @@
 module.exports = {
 
-  integrations: {
-    telldus: {
-      endpoint: 'https://api.telldus.com/json/',
-      publicKey: '',
-      privateKey: '',
-      accessToken: '',
-      accessTokenSecret: ''
-    },
-    hue: {
-      endpoint: 'http://192.168.83.140/api/hurricaneb'
-    }
-  },
-
   port: 8080,
 
   mongo: {

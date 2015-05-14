@@ -2,6 +2,8 @@
 
   var app = angular.module('app', [
     'ui.router',
+
+    'configuration',
     'hmc',
     'sensor',
     'device',
@@ -46,6 +48,11 @@
         state: 'about',
         url: '/about',
         templateUrl: 'app/views/about.html'
+      },
+      {
+        state: 'configuration',
+        url: '/config',
+        templateUrl: 'app/views/configuration.html'
       }
     ];
 

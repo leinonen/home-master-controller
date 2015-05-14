@@ -7,19 +7,27 @@
     var ctrl = this;
     ctrl.title = 'Home Master Controller';
 
-    ctrl.items = [{
-      title: 'Devices',
-      state: 'root.devices'
-    }, {
-      title: 'Groups',
-      state: 'root.groups'
-    }, {
-      title: 'Sensors',
-      state: 'root.sensors'
-    }, {
-      title: 'About',
-      state: 'root.about'
-    }
+    ctrl.items = [
+      {
+        title: 'Devices',
+        state: 'root.devices'
+      },
+      {
+        title: 'Groups',
+        state: 'root.groups'
+      },
+      {
+        title: 'Sensors',
+        state: 'root.sensors'
+      },
+      {
+        title: 'About',
+        state: 'root.about'
+      },
+      {
+        title: 'Configuration',
+        state: 'root.configuration'
+      }
     ];
 
   });

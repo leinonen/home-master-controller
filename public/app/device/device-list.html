@@ -1,8 +1,10 @@
 <div class="device-list">
 
-  <p ng-show="ctrl.devices.length === 0">Loading devices..</p>
+  <p ng-show="!ctrl.showDevices()">Loading devices..</p>
 
-  <table class="table">
+  <div class="alert-info" ng-show="ctrl.message.length > 0">{{ctrl.message}}</div>
+
+  <table class="table" ng-show="ctrl.showDevices()">
     <tr>
       <th>Name</th>
       <th>Id</th>

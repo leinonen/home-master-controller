@@ -1,20 +1,25 @@
-var hue = require('./server/hue');
-var telldus = require('./server/telldus');
+var mongoose = require('mongoose-q')();
+var Configuration = require('./models/configuration');
+var conf = require('./server/config');
+
+var hue = require('./server/api/hue');
+
+mongoose.connect(conf.mongo.url, conf.mongo.opts);
 
 /*
- hue.getGroups().then(function(groups){
- console.log(groups);
- });
-
- */
-
-/*
-hue.setLightState(1, {on: false}).then(function(response){
-  console.log(response);
-});
-*/
+function getConfig(){
+  return Configuration.findOne().execQ();
+}
 
 
-telldus.listDevices().then(function(groups){
-  console.log(groups);
+getConfig().then(function(cfg){
+  console.log(cfg);
+}).catc;*/
+
+hue.getLights().then(function(lights){
+  console.log('success');
+  console.log(lights);
+}).catch(function(err){
+  console.log('error');
+  console.log(err);
 });

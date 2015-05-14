@@ -8,6 +8,17 @@ var telldusHelper = require('./api/telldus-helper');
 var hue = require('./api/hue');
 var Q = require('q');
 
+function errorHandler(error) {
+  var deferred = Q.defer();
+  var msg = {};
+  msg.statusCode = error.statusCode;
+  msg.message = error.statusCode === 404 ? 'Not found':'error';
+  if (error.hasOwnProperty('request')){
+    msg.url = error.request.url;
+  }
+  deferred.reject(msg);
+  return deferred.promise;
+}
 
 /**
  * Get all sensors
@@ -42,6 +53,8 @@ exports.devices = function () {
   return telldus.listDevices().then(transformTelldusDevices).then(function (telldusDevices) {
     return hue.getLights().then(transformHueDevices).then(function (hueDevices) {
       return telldusDevices.concat(hueDevices);
+    }).catch(function (err) {
+      return errorHandler(err);
     });
   });
 };

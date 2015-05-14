@@ -1,0 +1,38 @@
+<div>
+
+    <div class="alert-info" ng-show="ctrl.message.length > 0"><p>{{ctrl.message}}</p></div>
+
+    <form ng-submit="ctrl.saveConfiguration()">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Telldus</h2>
+
+                <div class="form-group">
+
+
+                    <input class="form-control" type="text" ng-model="ctrl.config.telldus.publicKey"
+                           placeholder="public key"/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" ng-model="ctrl.config.telldus.privateKey"
+                           placeholder="private key"/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" ng-model="ctrl.config.telldus.accessToken"
+                           placeholder="access token"/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" ng-model="ctrl.config.telldus.accessTokenSecret"
+                           placeholder="access token secret"/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <h2>Philips Hue</h2>
+                <input class="form-control" type="text" ng-model="ctrl.config.hue.endpoint" placeholder="hue endpoint"/>
+
+            </div>
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Save</button>
+    </form>
+
+</div>

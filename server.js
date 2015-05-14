@@ -2,17 +2,18 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose-q')();
 var config = require('./server/config');
 var controller = require('./server/controller');
 
-if (config.integrations.telldus.publicKey === ''){
-  console.log('Missing public key for telldus');
-  process.exit();
-}
+mongoose.connect(config.mongo.url, config.mongo.opts);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, '/public')));
+
+app.get('/api/configuration', controller.readConfiguration);
+app.post('/api/configuration', controller.saveConfiguration);
 
 app.get('/api/sensors', controller.sensors);
 app.get('/api/sensors/:id', controller.sensor);

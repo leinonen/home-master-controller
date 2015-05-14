@@ -5,7 +5,8 @@
 var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
-var config = require('./../config').integrations.telldus;
+//var config = require('./../config').integrations.telldus;
+var Configuration = require('../../models/configuration');
 
 var TELLSTICK_TURNON = 1;
 var TELLSTICK_TURNOFF = 2;
@@ -26,19 +27,26 @@ var TELLSTICK_TYPE_SCENE = 3;
 
 var TELLSTICK_TEMPERATURE = 1;
 
+function getConfig(callback){
+  return Configuration.findOne().execQ();
+}
+
+
 function apiCall(path, params) {
-  var url = config.endpoint + path;
-  var oauth = new OAuth.OAuth(null, null,
-    config.publicKey,
-    config.privateKey, '1.0', null, 'HMAC-SHA1');
-  var oauthParameters = oauth._prepareParameters(
-    config.accessToken,
-    config.accessTokenSecret, 'GET', url, params);
-  var messageParameters = {};
-  oauthParameters.forEach(function (params) {
-    messageParameters[params[0]] = params[1];
+  return getConfig().then(function(config){
+    var url = config.telldus.endpoint + path;
+    var oauth = new OAuth.OAuth(null, null,
+      config.telldus.publicKey,
+      config.telldus.privateKey, '1.0', null, 'HMAC-SHA1');
+    var oauthParameters = oauth._prepareParameters(
+      config.telldus.accessToken,
+      config.telldus.accessTokenSecret, 'GET', url, params);
+    var messageParameters = {};
+    oauthParameters.forEach(function (params) {
+      messageParameters[params[0]] = params[1];
+    });
+    return http.get(url + '?' + Qs.stringify(messageParameters));
   });
-  return http.get(url + '?' + Qs.stringify(messageParameters));
 }
 
 
