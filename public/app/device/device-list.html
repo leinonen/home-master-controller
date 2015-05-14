@@ -1,66 +1,10 @@
 <div class="device-list">
-
   <p ng-show="!ctrl.showDevices()">Loading devices..</p>
 
   <div class="alert-info" ng-show="ctrl.message.length > 0">{{ctrl.message}}</div>
 
-  <table class="table" ng-show="ctrl.showDevices()">
-    <tr>
-      <th>Name</th>
-      <th>Id</th>
-      <th>Type</th>
-      <th>State</th>
-      <th></th>
-    </tr>
-
-    <tbody ng-repeat="device in ctrl.devices | orderBy:'name'">
-    <tr>
-      <td>{{device.name}}</td>
-      <td><a ng-href="/api/device/{{device.id}}?type={{device.type}}">{{device.id}}</a></td>
-      <td>{{device.type}}</td>
-      <td>{{ctrl.getState(device)}}</td>
-
-      <td>
-        <button ng-click="ctrl.toggleDevice(device)" type="button"
-                class="btn btn-primary pull-right">{{ctrl.buttonText(device)}}
-        </button>
-      </td>
-    </tr>
-
-    <tr ng-show="device.type === 'hue-device'" class="hue-device-row">
-      <td></td>
-      <td colspan="4">
-        <table class="table">
-          <tr>
-            <td>Brightness: {{device.state.bri}}</td>
-            <td colspan="4"><input type='range' min='0' max='254' ng-model="device.state.bri"
-                                   ng-change="ctrl.setBrightness(device)"
-                                   ng-disabled="device.state.on === false"/></td>
-          </tr>
-          <tr>
-            <td>Saturation: {{device.state.sat}}</td>
-            <td colspan="4"><input type='range' min='0' max='254' ng-model="device.state.sat"
-                                   ng-change="ctrl.setSaturation(device)"
-                                   ng-disabled="device.state.on === false"/></td>
-          </tr>
-          <tr>
-            <td>Hue: {{device.state.hue}}</td>
-            <td colspan="4">
-              <select ng-model="device.state.hue" ng-change="ctrl.setHue(device)"
-                      ng-disabled="device.state.on === false">
-                <option value="12750">Yellow</option>
-                <option value="25500">Green</option>
-                <option value="46920">Blue</option>
-                <option value="56100">Pink</option>
-                <option value="65280">Red</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-
-    </tbody>
-  </table>
+  <div ng-repeat="device in ctrl.devices | orderBy:'name'">
+    <telldus-device device="device"></telldus-device>
+    <hue-device device="device"></hue-device>
+  </div>
 </div>

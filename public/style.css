@@ -4,7 +4,31 @@ body {
 }
 
 
-.hue-device-row {
+/*
+ Telldus device layout
+*/
 
-    background-color: #f4f4f4;
+.telldus-device {
+}
+
+.telldus-device .device-row  td {
+}
+
+/*
+ Hue device layout
+*/
+.hue-device {
+
+}
+
+.hue-device .device-row  td {
+    border-bottom: none;
+}
+
+.hue-device .hue-device-row td {
+    border-top: none;
+}
+
+.hue-controls {
+    border: #eee 1px solid;
 }

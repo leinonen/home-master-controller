@@ -1,0 +1,68 @@
+<table class="table hue-device" ng-show="ctrl.device.type === 'hue-device'">
+  <tr>
+    <th class="col-sm-4">Name</th>
+    <th class="col-sm-2">Id</th>
+    <th class="col-sm-2">Type</th>
+    <th class="col-sm-2">State</th>
+    <th class="col-sm-2"></th>
+  </tr>
+
+  <tr class="device-row">
+    <td>{{ctrl.device.name}}</td>
+    <td><a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a></td>
+    <td>{{ctrl.device.type}}</td>
+    <td>{{ctrl.getState()}}</td>
+    <td>
+      <button ng-click="ctrl.toggleDevice()" type="button"
+              class="btn btn-primary pull-right">{{ctrl.buttonText()}}
+      </button>
+    </td>
+  </tr>
+
+  <tr class="hue-device-row">
+    <td></td>
+    <td colspan="4">
+      <table class="table hue-controls">
+        <tr>
+          <td>Model</td>
+          <td colspan="4">{{ctrl.device.modelid}}</td>
+        </tr>
+        <tr>
+          <td>Manufacturer</td>
+          <td colspan="4">{{ctrl.device.manufacturername}}</td>
+        </tr>
+        <tr>
+          <td>Brightness: {{ctrl.device.state.bri}}</td>
+          <td colspan="4">
+            <input type='range' min='0' max='254'
+                   ng-model="ctrl.device.state.bri"
+                   ng-change="ctrl.setBrightness()"
+                   ng-disabled="ctrl.device.state.on === false"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Saturation: {{ctrl.device.state.sat}}</td>
+          <td colspan="4">
+            <input type='range' min='0' max='254'
+                   ng-model="ctrl.device.state.sat"
+                   ng-change="ctrl.setSaturation()"
+                   ng-disabled="ctrl.device.state.on === false"/>
+          </td>
+        </tr>
+        <tr>
+          <td>Hue: {{ctrl.device.state.hue}}</td>
+          <td colspan="4">
+            <select class="form-control" ng-model="ctrl.device.state.hue" ng-change="ctrl.setHue()"
+                    ng-disabled="ctrl.device.state.on === false">
+              <option value="12750">Yellow</option>
+              <option value="25500">Green</option>
+              <option value="46920">Blue</option>
+              <option value="56100">Pink</option>
+              <option value="65280">Red</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
