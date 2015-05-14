@@ -104,3 +104,16 @@ exports.saveConfiguration = function (req, res) {
       }
     });
 };
+
+
+exports.getGenericGroups = function (req, res) {
+  Master.getGenericGroups().then(function (groups) {
+    res.json(groups);
+  });
+};
+
+exports.createGenericGroup = function (req, res) {
+  console.log(req.body);
+  var group = Master.createGenericGroup(req.body);
+  res.json(group);
+};

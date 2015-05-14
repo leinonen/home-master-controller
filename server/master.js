@@ -8,6 +8,8 @@ var telldusHelper = require('./api/telldus-helper');
 var hue = require('./api/hue');
 var Q = require('q');
 
+var Group = require('../models/group');
+
 function errorHandler(error) {
   var deferred = Q.defer();
   var msg = {};
@@ -35,13 +37,47 @@ exports.sensor = function (id) {
   return telldus.getSensor(id);
 };
 
+
+function getGenericGroups() {
+  return Group.find().execQ();
+}
+exports.getGenericGroups = getGenericGroups;
+
+function createGenericGroup(group){
+  var g = new Group(group);
+  g.save();
+  return g;
+}
+
+exports.createGenericGroup = createGenericGroup;
+
+function transformGenericGroups(groups){
+  return groups.map(function(group){
+    var item = {};
+    item.name = group.name;
+    item.id = group._id;
+    item.items = [];
+    group.items.forEach(function(a){
+      item.items.push(a);
+    });
+    item.type = 'generic-group';
+    item.state = {
+      on: false
+    };
+    item.motorized = false;
+    return item;
+  });
+}
+
 /**
  * Get all groups
  */
 exports.groups = function () {
   return telldus.listGroups().then(transformTelldusGroups).then(function (telldusGroups) {
     return hue.getGroups().then(transformHueGroups).then(function (hueGroups) {
-      return telldusGroups.concat(hueGroups);
+      return getGenericGroups().then(transformGenericGroups).then(function(genericGroups){
+        return telldusGroups.concat(hueGroups).concat(genericGroups);
+      });
     });
   });
 };

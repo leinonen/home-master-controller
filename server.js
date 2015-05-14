@@ -15,6 +15,9 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.get('/api/configuration', controller.readConfiguration);
 app.post('/api/configuration', controller.saveConfiguration);
 
+app.get('/api/genericGroups', controller.getGenericGroups);
+app.post('/api/genericGroups', controller.createGenericGroup);
+
 app.get('/api/sensors', controller.sensors);
 app.get('/api/sensors/:id', controller.sensor);
 
