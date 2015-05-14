@@ -3,32 +3,32 @@ body {
     padding-top: 70px;
 }
 
-
-/*
- Telldus device layout
-*/
-
-.telldus-device {
+.device-list-header,
+.group-list-header,
+.sensor-list-header{
+    font-weight: bold;
 }
 
-.telldus-device .device-row  td {
+.hue-device     .row,
+.telldus-device .row {
+    padding: 10px 0;
 }
 
-/*
- Hue device layout
-*/
-.hue-device {
-
+.hue-device     .row > div,
+.telldus-device .row > div,
+.group-list     .row > div,
+.sensor-list    .row > div {
+    border-top: #eee 1px solid;
+    line-height: 25px;
+    padding-top: 10px;
 }
 
-.hue-device .device-row  td {
-    border-bottom: none;
-}
-
-.hue-device .hue-device-row td {
+.hue-device .hue-controls .row > div {
     border-top: none;
+    line-height: 15px;
+    padding-top: 5px;
 }
 
 .hue-controls {
-    border: #eee 1px solid;
+    color: #337AB7;
 }

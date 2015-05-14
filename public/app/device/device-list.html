@@ -3,6 +3,14 @@
 
   <div class="alert-info" ng-show="ctrl.message.length > 0">{{ctrl.message}}</div>
 
+  <div class="row device-list-header">
+    <div class="col-sm-4">Name</div>
+    <div class="col-sm-2">ID</div>
+    <div class="col-sm-2">Type</div>
+    <div class="col-sm-2">State</div>
+    <div class="col-sm-2"></div>
+  </div>
+
   <div ng-repeat="device in ctrl.devices | orderBy:'name'">
     <telldus-device device="device"></telldus-device>
     <hue-device device="device"></hue-device>

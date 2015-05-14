@@ -2,12 +2,18 @@
 
   <p ng-show="ctrl.sensors.length === 0">Loading sensors..</p>
 
-  <table class="table">
-    <tr ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
-      <td>{{sensor.name}}</td>
-      <td>{{sensor.type}}</td>
-      <td>{{sensor.data[0].name}}</td>
-      <td><span class="pull-right">{{sensor.data[0].value}} degrees</span></td>
-    </tr>
-  </table>
+  <div class="row sensor-list-header">
+    <div class="col-sm-3">Name</div>
+    <div class="col-sm-3">Type</div>
+    <div class="col-sm-3">Kind</div>
+    <div class="col-sm-3"><span class="pull-right">Value</span></div>
+  </div>
+
+
+  <div class="row sensor-list" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
+    <div class="col-sm-3">{{sensor.name}}</div>
+    <div class="col-sm-3">{{sensor.type}}</div>
+    <div class="col-sm-3">{{sensor.data[0].name}}</div>
+    <div class="col-sm-3"><span class="pull-right">{{sensor.data[0].value}} degrees</span></div>
+  </div>
 </div>

@@ -1,21 +1,13 @@
-<table class="table telldus-device"  ng-show="ctrl.device.type === 'telldus-device'">
-  <tr>
-    <th class="col-sm-4">Name</th>
-    <th class="col-sm-2">Id</th>
-    <th class="col-sm-2">Type</th>
-    <th class="col-sm-2">State</th>
-    <th class="col-sm-2"></th>
-  </tr>
-
-  <tr class="device-row">
-    <td>{{ctrl.device.name}}</td>
-    <td><a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a></td>
-    <td>{{ctrl.device.type}}</td>
-    <td>{{ctrl.getState()}}</td>
-    <td>
+<div class="telldus-device"  ng-show="ctrl.device.type === 'telldus-device'">
+  <div class="row">
+    <div class="col-sm-4">{{ctrl.device.name}}</div>
+    <div class="col-sm-2"><a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a></div>
+    <div class="col-sm-2">{{ctrl.device.type}}</div>
+    <div class="col-sm-2">{{ctrl.getState()}}</div>
+    <div class="col-sm-2">
       <button ng-click="ctrl.toggleDevice()" type="button"
               class="btn btn-primary pull-right">{{ctrl.buttonText()}}
       </button>
-    </td>
-  </tr>
-</table>
+    </div>
+  </div>
+</div>

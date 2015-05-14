@@ -2,20 +2,21 @@
 
   <p ng-show="ctrl.groups.length === 0">Loading groups..</p>
 
-  <table class="table">
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>State</th>
-      <th></th>
-    </tr>
-    <tr ng-repeat="group in ctrl.groups | orderBy:'name'">
-      <td>{{group.name}}</td>
-      <td>{{group.type}}</td>
-      <td>{{ctrl.getState(group)}}</td>
-      <td>
-        <button ng-click="ctrl.toggleGroup(group)" type="button" class="btn btn-primary pull-right">{{ctrl.buttonText(group)}}</button>
-      </td>
-    </tr>
-  </table>
+  <div class="row group-list-header">
+    <div class="col-sm-3">Name</div>
+    <div class="col-sm-3">Type</div>
+    <div class="col-sm-3">State</div>
+    <div class="col-sm-3"></div>
+  </div>
+  <div class="row" ng-repeat="group in ctrl.groups | orderBy:'name'">
+    <div class="col-sm-3">{{group.name}}</div>
+    <div class="col-sm-3">{{group.type}}</div>
+    <div class="col-sm-3">{{ctrl.getState(group)}}</div>
+    <div class="col-sm-3">
+      <button ng-click="ctrl.toggleGroup(group)" type="button" class="btn btn-primary pull-right">
+        {{ctrl.buttonText(group)}}
+      </button>
+    </div>
+  </div>
 </div>
+
