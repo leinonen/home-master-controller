@@ -4,15 +4,15 @@
 
   module.controller('DeviceListCtrl', function ($timeout, MasterApi) {
     var ctrl = this;
-    this.devices = [];
+    ctrl.devices = [];
     ctrl.message = '';
 
     function fetchDevices() {
       MasterApi.getDevices().then(function (devices) {
         ctrl.devices = devices;
         console.log('got device list');
-      }).catch(function(err){
-        ctrl.message = err.data.statusCode +' : '+err.data.message + ' : ' + err.data.url;
+      }).catch(function (err) {
+        ctrl.message = err.data.statusCode + ' : ' + err.data.message + ' : ' + err.data.url;
       });
     }
 
@@ -25,16 +25,24 @@
       }).catch(console.error);
     }
 
-    ctrl.showDevices = function(){
+    ctrl.showDevices = function () {
       return ctrl.devices.length > 0;
     };
 
-    ctrl.turnOn = function (device) {
-      control(device.id, {type: device.type, action: device.motorized ? 'up' : 'on'});
+    ctrl.buttonText = function (device) {
+      if (device.motorized) {
+        return device.state.on ? 'Bring Down' : 'Bring Up';
+      } else {
+        return device.state.on ? 'Turn Off' : 'Turn On';
+      }
     };
 
-    ctrl.turnOff = function (device) {
-      control(device.id, {type: device.type, action: device.motorized ? 'down' : 'off'});
+    ctrl.toggleDevice = function (device) {
+      if (device.state.on) {
+        control(device.id, {type: device.type, action: device.motorized ? 'down' : 'off'});
+      } else {
+        control(device.id, {type: device.type, action: device.motorized ? 'up' : 'on'});
+      }
     };
 
     ctrl.setBrightness = function (device) {
