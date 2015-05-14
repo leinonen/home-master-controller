@@ -17,6 +17,12 @@
         templateUrl: 'app/views/groups.html'
       },
       {
+        title: 'Create Group',
+        state: 'root.groups.create',
+        url: '/create',
+        templateUrl: 'app/views/groups-create.html'
+      },
+      {
         title: 'Sensors',
         state: 'root.sensors',
         url: '/sensors',

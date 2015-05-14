@@ -113,7 +113,6 @@ exports.getGenericGroups = function (req, res) {
 };
 
 exports.createGenericGroup = function (req, res) {
-  console.log(req.body);
   var group = Master.createGenericGroup(req.body);
   res.json(group);
 };

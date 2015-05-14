@@ -1,0 +1,32 @@
+<div class="group-create">
+
+  <div class="alert-info" ng-show="ctrl.message.length > 0">{{ctrl.message}}</div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <input class="form-control" type="text" ng-model="ctrl.group.name" placeholder="Name" ng-required="true"/>
+
+        <p>Select devices to add to the group</p>
+        <select class="form-control" ng-model="ctrl.selectedDevice">
+          <option ng-repeat="device in ctrl.devices track by device.id" value="{{device}}">{{device.name}}</option>
+        </select>
+        <button ng-click="ctrl.addDevice()" class="btn btn-default">Add</button>
+
+        <p>Select groups to add to the group</p>
+        <select class="form-control" ng-model="ctrl.selectedGroup">
+          <option ng-repeat="group in ctrl.groups track by group.id" value="{{group}}">{{group.name}}</option>
+        </select>
+        <button ng-click="ctrl.addGroup()" class="btn btn-default">Add</button>
+      </div>
+      <div class="col-sm-6">
+        <h3>Devices</h3>
+
+        <p ng-repeat="dev in ctrl.selectedDevices track by dev.id">{{dev.name}}</p>
+
+        <h3>Groups</h3>
+
+        <p ng-repeat="grp in ctrl.selectedGroups track by grp.id">{{grp.name}}</p>
+      </div>
+    </div>
+    <button type="button" ng-click="ctrl.saveGroup()" class="btn btn-primary">Create group</button>
+</div>

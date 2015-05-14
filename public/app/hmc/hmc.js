@@ -32,6 +32,10 @@
       return $http.post('/api/control/' + id, params).then(unwrap);
     };
 
+    this.saveGroup = function(group){
+      return $http.post('/api/genericGroups', group).then(unwrap);
+    };
+
   });
 
 })();

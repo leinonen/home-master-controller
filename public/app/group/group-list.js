@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('group', ['hmc', 'device']);
+  var module = angular.module('group');
 
   module.controller('GroupListCtrl', function (MasterApi) {
     var ctrl = this;
