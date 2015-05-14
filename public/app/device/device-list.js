@@ -29,6 +29,14 @@
       return ctrl.devices.length > 0;
     };
 
+    ctrl.getState = function (device) {
+      if (device.motorized) {
+        return device.state.on ? 'Up' : 'Down';
+      } else {
+        return device.state.on ? 'On' : 'Off';
+      }
+    };
+
     ctrl.buttonText = function (device) {
       if (device.motorized) {
         return device.state.on ? 'Bring Down' : 'Bring Up';

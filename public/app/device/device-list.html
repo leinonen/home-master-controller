@@ -18,7 +18,7 @@
       <td>{{device.name}}</td>
       <td><a ng-href="/api/device/{{device.id}}?type={{device.type}}">{{device.id}}</a></td>
       <td>{{device.type}}</td>
-      <td>{{device.state.on?'On':'Off'}}</td>
+      <td>{{ctrl.getState(device)}}</td>
 
       <td>
         <button ng-click="ctrl.toggleDevice(device)" type="button"
