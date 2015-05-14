@@ -44,13 +44,6 @@
         control(group.id, {type: group.type, action: group.motorized ? 'up' : 'on'});
       }
     };
-    /*    ctrl.turnOn = function (group) {
-     control(group.id, { type: group.type, action: group.motorized ? 'up' : 'on' });
-     };
-
-     ctrl.turnOff = function (group) {
-     control(group.id, { type: group.type, action: group.motorized ? 'down' : 'off' });
-     };*/
 
   });
 
