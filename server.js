@@ -5,6 +5,11 @@ var bodyParser = require('body-parser');
 var config = require('./server/config');
 var controller = require('./server/controller');
 
+if (config.integrations.telldus.publicKey === ''){
+  console.log('Missing public key for telldus');
+  process.exit();
+}
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, '/public')));

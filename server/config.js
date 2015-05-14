@@ -3,10 +3,10 @@ module.exports = {
   integrations: {
     telldus: {
       endpoint: 'https://api.telldus.com/json/',
-      publicKey: '',
-      privateKey: '',
-      accessToken: '',
-      accessTokenSecret: ''
+      publicKey: 'FEHUVEW84RAFR5SP22RABURUPHAFRUNU',
+      privateKey: 'ZUXEVEGA9USTAZEWRETHAQUBUR69U6EF',
+      accessToken: '441ff4dd3e4465db02e6f75e21ccade3055075761',
+      accessTokenSecret: 'ec697a4ecf7ee6f91902c800e26fdc9c'
     },
     hue: {
       endpoint: 'http://192.168.83.140/api/hurricaneb'

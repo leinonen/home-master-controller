@@ -7,7 +7,7 @@ exports.sensors = function (req, res) {
       res.json(sensors);
     })
     .fail(function (err) {
-      res.sendStatus(400).json(err);
+      res.json(err);
     });
 };
 
@@ -18,7 +18,7 @@ exports.sensor = function (req, res) {
       res.json(sensor);
     })
     .fail(function (err) {
-      res.sendStatus(400).json(err);
+      res.status(400).json(err);
     });
 };
 
@@ -28,7 +28,7 @@ exports.devices = function (req, res) {
     .then(function (devices) {
       res.json(devices);
     }).fail(function (err) {
-      res.sendStatus(400).json(err);
+      res.status(400).json(err);
     });
 };
 
@@ -38,7 +38,7 @@ exports.device = function (req, res) {
     .then(function (device) {
       res.json(device);
     }).fail(function (err) {
-      res.sendStatus(400).json(err);
+      res.status(400).json(err);
     });
 };
 
@@ -49,7 +49,7 @@ exports.groups = function (req, res) {
       res.json(groups);
     }).fail(function (err) {
       console.log(err);
-      res.sendStatus(400).json(err);
+      res.status(400).json(err);
     });
 };
 
@@ -59,6 +59,6 @@ exports.control = function (req, res) {
     .then(function (response) {
       res.json(response);
     }).fail(function (err) {
-      res.sendStatus(400).json(err);
+      res.status(400).json(err);
     });
 };
