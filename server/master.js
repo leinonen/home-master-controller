@@ -125,12 +125,24 @@ function controlTelldus(id, params) {
  */
 function controlHue(id, params) {
   if (params.action === 'on') {
-    console.log('turn light on');
-    return hue.setLightState(id, {on: true});
+
+    if (params.type === 'hue-device'){
+      console.log('turn light on');
+      return hue.setLightState(id, {on: true});
+    } else if (params.type === 'hue-group') {
+      console.log('turn group on');
+      return hue.setGroupAction(id, {on: true});
+    }
 
   } else if (params.action === 'off') {
-    console.log('turn light off');
-    return hue.setLightState(id, {on: false});
+
+    if (params.type === 'hue-device'){
+      console.log('turn light off');
+      return hue.setLightState(id, {on: false});
+    } else if (params.type === 'hue-group'){
+      console.log('turn group off');
+      return hue.setGroupAction(id, {on: false});
+    }
 
   } else if (params.action === 'bri') {
     console.log('set brightness to ' + params.value);
