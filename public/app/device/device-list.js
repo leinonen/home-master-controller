@@ -9,7 +9,6 @@
     function fetchDevices() {
       MasterApi.getDevices().then(function (devices) {
         ctrl.devices = devices;
-        console.log('got device list');
       }).catch(function (err) {
         Message.danger(err.data.statusCode + ' : ' + err.data.message + ' : ' + err.data.url);
       });

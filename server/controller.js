@@ -59,11 +59,8 @@ exports.groups = function (req, res) {
 };
 
 exports.group = function (req, res) {
-  var id = req.params.id;
-  var type = req.query.type;
-
   Master
-    .group(id, type)
+    .group(req.params.id, req.query.type)
     .then(function (group) {
       res.json(group);
     }).catch(function (err) {
