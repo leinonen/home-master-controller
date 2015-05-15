@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col-sm-4">
-      {{ctrl.device.name}}
+      <a ng-click="ctrl.toggleControls()" class="hue-toggle">{{ctrl.device.name}}</a>
     </div>
     <div class="col-sm-2">
       <a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a>
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="hue-controls">
+  <div class="hue-controls" ng-show="ctrl.showControls">
     <div class="row">
       <div class="col-sm-4">Model</div>
       <div class="col-sm-8">{{ctrl.device.modelid}}</div>

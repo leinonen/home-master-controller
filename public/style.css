@@ -31,3 +31,7 @@ body {
 
 .hue-controls {
 }
+
+.hue-toggle {
+    cursor: pointer;
+}

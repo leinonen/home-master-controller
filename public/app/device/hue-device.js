@@ -5,6 +5,7 @@
   module.controller('HueDeviceCtrl', function ($scope, $rootScope, $timeout, MasterApi) {
     var ctrl = this;
     ctrl.device = $scope.device;
+    ctrl.showControls = false;
 
     function fetchDevices() {
       $rootScope.$emit('fetchDevices');
@@ -15,6 +16,10 @@
         $timeout(fetchDevices, 100);
       }).catch(console.error);
     }
+
+    ctrl.toggleControls = function(){
+      ctrl.showControls = !ctrl.showControls;
+    };
 
     ctrl.getState = function () {
       if (ctrl.device.motorized) {
