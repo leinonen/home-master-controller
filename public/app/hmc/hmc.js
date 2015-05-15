@@ -32,6 +32,10 @@
       return $http.get('/api/group/' + id + '?type=' + type).then(unwrap);
     };
 
+    this.getGroupDevices = function (id, type) {
+      return $http.get('/api/group/' + id + '/devices?type=' + type).then(unwrap);
+    };
+
     this.control = function (id, params) {
       return $http.post('/api/control/' + id, params).then(unwrap);
     };

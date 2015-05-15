@@ -1,6 +1,7 @@
 /**
  * Master API - Control everything! :D
  * @type {exports}
+ * @author Peter Leinonen
  */
 var telldus = require('./api/telldus');
 var telldusHelper = require('./api/telldus-helper');
@@ -11,6 +12,10 @@ var Q = require('q');
 var Group = require('../models/group');
 
 
+/**
+ * Get all sensors.
+ * @returns {*}
+ */
 exports.sensors = function () {
   return telldus.listSensors().then(function (sensors) {
     return Q.all(sensors.map(function (sensor) {
@@ -19,28 +24,40 @@ exports.sensors = function () {
   });
 };
 
+/**
+ * Get a specific sensor.
+ * @param id
+ * @returns {*}
+ */
 exports.sensor = function (id) {
   return telldus.getSensor(id);
 };
 
-
+/**
+ * Get all generic groups.
+ * @returns {*}
+ */
 function getGenericGroups() {
   return Group.find().execQ();
 }
 exports.getGenericGroups = getGenericGroups();
 
 
+/**
+ * Create a generic group.
+ * @param group
+ * @returns {Group}
+ */
 function createGenericGroup(group) {
   var g = new Group(group);
   g.save();
   return g;
 }
-
 exports.createGenericGroup = createGenericGroup;
 
 
 /**
- * Get all groups
+ * Get all groups.
  */
 exports.groups = function () {
   return telldus.listGroups().then(transformTelldusGroups).then(function (telldusGroups) {
@@ -72,7 +89,7 @@ exports.group = function (id, type) {
 
 
 /**
- * Get all devices
+ * Get all devices.
  */
 exports.devices = function () {
   return telldus.listDevices().then(transformTelldusDevices).then(function (telldusDevices) {
@@ -104,11 +121,34 @@ exports.device = function (id, type) {
 };
 
 /**
- * Control a device or group
+ * Get all devices for a specific group.
+ * @param id
+ * @param type
+ * @returns {*}
+ */
+exports.groupDevices = function (id, type) {
+  if (type === 'generic-group') {
+    return getDevicesForGenericGroup(id).then(function (devices) {
+      var promises = devices.map(function (device) {
+        if (device.type === 'telldus-device') {
+          return telldus.getDevice(device.id).then(transformTelldusDevice);
+        } else if (device.type === 'hue-device') {
+          return hue.getLight(device.id).then(transformHueDevice);
+        }
+      });
+      return Q.all(promises);
+    });
+  } else {
+    return errorHandler('Not implemented');
+  }
+};
+
+/**
+ * Control a device or group.
  * @param device
  */
 exports.control = function (id, params) {
-  console.log('control ' + id + ' : %s -> action: %s', params.type, params.action);
+  console.log('Control ' + id + ' : %s -> action: %s', params.type, params.action);
 
   if (isTelldus(params)) {
     return controlTelldus(id, params);
@@ -117,13 +157,46 @@ exports.control = function (id, params) {
   } else if (isGeneric(params)) {
     return controlGenericGroup(id, params);
   } else {
-    var deferred = Q.defer();
-    deferred.reject('Not implemented');
-    return deferred.promise;
+    return errorHandler('Not implemented');
   }
 };
 
 
+// Helper functions!
+
+
+/**
+ * Check if item is a telldus-device or telldus-group.
+ * @param item
+ * @returns {boolean}
+ */
+function isTelldus(item) {
+  return item.type === 'telldus-device' || item.type === 'telldus-group';
+}
+
+/**
+ * Check if item is a hue-device or hue-group.
+ * @param item
+ * @returns {boolean}
+ */
+function isHue(item) {
+  return item.type === 'hue-device' || item.type === 'hue-group';
+}
+
+/**
+ * Check if item is a generic-group
+ * @param item
+ * @returns {boolean}
+ */
+function isGeneric(item) {
+  return item.type === 'generic-group';
+}
+
+/**
+ * Get list of VALID devices for a generic group.
+ * @param id
+ * @returns {*}
+ */
 function getDevicesForGenericGroup(id) {
   return Group.findOne({_id: id}).execQ().then(function (group) {
     return group.items.filter(function (item) {
@@ -132,24 +205,24 @@ function getDevicesForGenericGroup(id) {
   });
 }
 
-function isTelldus(item) {
-  return item.type === 'telldus-device' || item.type === 'telldus-group';
-}
-
-function isHue(item) {
-  return item.type === 'hue-device' || item.type === 'hue-group';
-}
-
-function isGeneric(item) {
-  return item.type === 'generic-group';
-}
-
+/**
+ * Control a generic group.
+ * @param id
+ * @param params
+ * @returns {*}
+ */
 function controlGenericGroup(id, params) {
   if (params.action === 'on' || params.action === 'off') {
     return controlDevicesInGroup(id, params);
   }
 }
 
+/**
+ * Control all devices for a generic group.
+ * @param id
+ * @param params
+ * @returns {*}
+ */
 function controlDevicesInGroup(id, params) {
   return getDevicesForGenericGroup(id).then(function (items) {
 
@@ -162,13 +235,14 @@ function controlDevicesInGroup(id, params) {
       }
     });
     return Q.all(promises).then(function (response) {
+      // TODO: update group with correct state?
       return {success: 'Group state set to ' + params.action};
     });
   });
 }
 
 /**
- * Handle telldus device / group.
+ * Control a telldus device / group.
  * @param id
  * @param params
  * @returns {*}
@@ -188,7 +262,7 @@ function controlTelldus(id, params) {
 
 
 /**
- * Handle Philips Hue device / group.
+ * Control a Philips Hue device / group.
  * @param id
  * @param params
  * @returns {*}
@@ -233,6 +307,11 @@ function errorHandler(error) {
   return deferred.promise;
 }
 
+/**
+ * Transform a telldus sensor to custom format.
+ * @param sensors
+ * @returns {*}
+ */
 function transformTelldusSensors(sensors) {
   return sensors.map(function (sensor) {
     sensor.type = 'telldus-sensor';
@@ -240,6 +319,11 @@ function transformTelldusSensors(sensors) {
   });
 }
 
+/**
+ * Transform a telldus group to custom format.
+ * @param groups
+ * @returns {*}
+ */
 function transformTelldusGroups(groups) {
   return groups.map(function (group) {
     var item = {};
@@ -255,19 +339,36 @@ function transformTelldusGroups(groups) {
   });
 }
 
-function transformHueGroups(groups) {
-  return groups.map(function (group) {
-    var item = {};
-    item.id = group.id;
-    item.name = group.name;
-    item.type = 'hue-group';
-    item.state = group.action;
-    item.devices = group.lights;
-    item.motorized = false;
-    return item;
-  });
+/**
+ * Transform a hue group to custom format.
+ * @param group
+ * @returns {{}}
+ */
+function transformHueGroup(group) {
+  var item = {};
+  item.id = group.id;
+  item.name = group.name;
+  item.type = 'hue-group';
+  item.state = group.action;
+  item.devices = group.lights;
+  item.motorized = false;
+  return item;
 }
 
+/**
+ * Transform a list of hue groups to custom format.
+ * @param groups
+ * @returns {*}
+ */
+function transformHueGroups(groups) {
+  return groups.map(transformHueGroup);
+}
+
+/**
+ * Transform a generic group (as in mongo model) to custom format.
+ * @param group
+ * @returns {{}}
+ */
 function transformGenericGroup(group) {
   var item = {};
   item.name = group.name;
@@ -284,10 +385,21 @@ function transformGenericGroup(group) {
   return item;
 }
 
+/**
+ * Transform a list of generic groups to custom format.
+ * @param groups
+ * @returns {*}
+ */
 function transformGenericGroups(groups) {
   return groups.map(transformGenericGroup);
 }
 
+
+/**
+ * Transform a telldus device to custom format.
+ * @param device
+ * @returns {{}}
+ */
 function transformTelldusDevice(device) {
   var item = {};
   item.id = device.id;
@@ -300,10 +412,20 @@ function transformTelldusDevice(device) {
   return item;
 }
 
+/**
+ * Transform a list of telldus devices to custom format.
+ * @param devices
+ * @returns {*}
+ */
 function transformTelldusDevices(devices) {
   return devices.map(transformTelldusDevice);
 }
 
+/**
+ * Transform a Hue device to custom format.
+ * @param device
+ * @returns {{}}
+ */
 function transformHueDevice(device) {
   var item = {};
   item.id = device.id;
@@ -315,6 +437,11 @@ function transformHueDevice(device) {
   return item;
 }
 
+/**
+ * Transform a list of Hue devices to custom format.
+ * @param devices
+ * @returns {*}
+ */
 function transformHueDevices(devices) {
   return devices.map(transformHueDevice);
 }

@@ -1,4 +1,19 @@
-<div>
-  {{ctrl.group.name}}
-  {{ctrl.group.id}}
+<div class="group-edit">
+
+  <div class="row">
+    <div class="col-sm-6">
+      <input class="form-control" type="text" ng-model="ctrl.group.name"/>
+    </div>
+    <div class="col-sm-6">
+
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="device in ctrl.groupDevices">
+          <span class="badge">{{device.type}}</span>
+          {{device.name}}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <button type="button" ng-click="ctrl.saveGroup()" class="btn btn-primary pull-right">Save group</button>
+
 </div>

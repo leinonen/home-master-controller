@@ -1,6 +1,7 @@
 /**
  * Philips Hue API wrapper
  * @type {exports}
+ * @author Peter Leinonen
  */
 
 var http = require('request-promise-json');
@@ -11,6 +12,10 @@ function getConfig() {
   return Configuration.findOne().execQ();
 }
 
+/**
+ * Get all groups.
+ * @returns {*}
+ */
 exports.getGroups = function () {
   return getConfig().then(function (config) {
     return http.get(config.hue.endpoint + '/groups').then(function (groups) {
@@ -24,9 +29,15 @@ exports.getGroups = function () {
 
 };
 
+/**
+ * Get all the lights.
+ * @returns {*}
+ */
 exports.getLights = function () {
   return getConfig().then(function (config) {
     return http.get(config.hue.endpoint + '/lights').then(function (lights) {
+
+      // crude error handling :)
       if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
         console.log('hue error: ' + lights[0].error.description);
         return [];
@@ -41,6 +52,11 @@ exports.getLights = function () {
   });
 };
 
+/**
+ * Get a single light.
+ * @param id
+ * @returns {*}
+ */
 exports.getLight = function (id) {
   return getConfig().then(function (config) {
     return http.get(config.hue.endpoint + '/lights/' + id).then(function (light) {
@@ -49,6 +65,12 @@ exports.getLight = function (id) {
   });
 };
 
+/**
+ * Set the state of a light.
+ * @param id
+ * @param state
+ * @returns {*}
+ */
 exports.setLightState = function (id, state) {
   return getConfig().then(function (config) {
     return http.put(config.hue.endpoint + '/lights/' + id + '/state', state).then(function (response) {
@@ -58,7 +80,14 @@ exports.setLightState = function (id, state) {
   });
 };
 
-// var data = {bri: Number(bri)};
+// var action = {bri: Number(bri)};
+
+/**
+ * Set the state for a group.
+ * @param id
+ * @param action
+ * @returns {*}
+ */
 exports.setGroupAction = function (id, action) {
   return getConfig().then(function (config) {
     return http.put(config.hue.endpoint + '/groups/' + id + '/action', action).then(function (response) {

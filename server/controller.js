@@ -68,6 +68,28 @@ exports.group = function (req, res) {
     });
 };
 
+exports.groupDevices = function (req, res) {
+  Master
+    .groupDevices(req.params.id, req.query.type)
+    .then(function (devices) {
+      res.json(devices);
+    }).catch(function (err) {
+      errorHandler(res, err);
+    });
+};
+
+exports.getGenericGroups = function (req, res) {
+  Master.getGenericGroups().then(function (groups) {
+    res.json(groups);
+  });
+};
+
+exports.createGenericGroup = function (req, res) {
+  var group = Master.createGenericGroup(req.body);
+  res.json(group);
+};
+
+
 exports.control = function (req, res) {
   Master
     .control(req.params.id, req.body)
@@ -113,16 +135,4 @@ exports.saveConfiguration = function (req, res) {
         return res.json(c);
       }
     });
-};
-
-
-exports.getGenericGroups = function (req, res) {
-  Master.getGenericGroups().then(function (groups) {
-    res.json(groups);
-  });
-};
-
-exports.createGenericGroup = function (req, res) {
-  var group = Master.createGenericGroup(req.body);
-  res.json(group);
 };
