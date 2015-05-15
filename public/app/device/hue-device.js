@@ -11,8 +11,9 @@
       $rootScope.$emit('fetchDevices');
     }
 
-    function control(id, params) {
-      MasterApi.control(id, params).then(function (status) {
+    function control(params) {
+      params.type = ctrl.device.type;
+      MasterApi.control(ctrl.device.id, params).then(function (status) {
         $timeout(fetchDevices, 100);
       }).catch(console.error);
     }
@@ -39,22 +40,22 @@
 
     ctrl.toggleDevice = function () {
       if (ctrl.device.state.on) {
-        control(ctrl.device.id, {type: ctrl.device.type, action: ctrl.device.motorized ? 'down' : 'off'});
+        control({action: ctrl.device.motorized ? 'down' : 'off'});
       } else {
-        control(ctrl.device.id, {type: ctrl.device.type, action: ctrl.device.motorized ? 'up' : 'on'});
+        control({action: ctrl.device.motorized ? 'up' : 'on'});
       }
     };
 
     ctrl.setBrightness = function () {
-      control(ctrl.device.id, {type: ctrl.device.type, action: 'bri', value: ctrl.device.state.bri});
+      control({action: 'bri', value: ctrl.device.state.bri});
     };
 
     ctrl.setSaturation = function () {
-      control(ctrl.device.id, {type: ctrl.device.type, action: 'sat', value: ctrl.device.state.sat});
+      control({action: 'sat', value: ctrl.device.state.sat});
     };
 
     ctrl.setHue = function (device) {
-      control(ctrl.device.id, {type: ctrl.device.type, action: 'hue', value: ctrl.device.state.hue});
+      control({action: 'hue', value: ctrl.device.state.hue});
     };
 
   });

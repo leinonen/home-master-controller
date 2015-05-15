@@ -10,9 +10,10 @@
       $rootScope.$emit('fetchDevices');
     }
 
-    function control(id, params) {
-      MasterApi.control(id, params).then(function (status) {
-        $timeout(fetchDevices, 100);
+    function control(params) {
+      params.type = ctrl.device.type;
+      MasterApi.control(ctrl.device.id, params).then(function (status) {
+        $timeout(fetchDevices, 250);
       }).catch(console.error);
     }
 
@@ -34,9 +35,9 @@
 
     ctrl.toggleDevice = function () {
       if (ctrl.device.state.on) {
-        control(ctrl.device.id, {type: ctrl.device.type, action: ctrl.device.motorized ? 'down' : 'off'});
+        control({action: ctrl.device.motorized ? 'down' : 'off'});
       } else {
-        control(ctrl.device.id, {type: ctrl.device.type, action: ctrl.device.motorized ? 'up' : 'on'});
+        control({action: ctrl.device.motorized ? 'up' : 'on'});
       }
     };
 
