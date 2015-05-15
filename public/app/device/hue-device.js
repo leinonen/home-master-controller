@@ -5,7 +5,7 @@
   module.controller('HueDeviceCtrl', function ($scope, $rootScope, $timeout, MasterApi) {
     var ctrl = this;
     ctrl.device = $scope.device;
-    ctrl.showControls = false;
+    ctrl.showControls = true;
 
     function fetchDevices() {
       $rootScope.$emit('fetchDevices');

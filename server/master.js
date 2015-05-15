@@ -91,18 +91,65 @@ exports.device = function (id, type) {
  * @param device
  */
 exports.control = function (id, params) {
-  console.log('control %d : %s -> action: %s', id, params.type, params.action);
+  console.log('control ' + id + ' : %s -> action: %s', params.type, params.action);
 
-  if (params.type === 'telldus-device' || params.type === 'telldus-group') {
+  if (isTelldus(params)) {
     return controlTelldus(id, params);
-  } else if (params.type === 'hue-device' || params.type === 'hue-group') {
+  } else if (isHue(params)) {
     return controlHue(id, params);
+  } else if (isGeneric(params)) {
+    return controlGenericGroup(id, params);
   } else {
     var deferred = Q.defer();
     deferred.reject('Not implemented');
     return deferred.promise;
   }
 };
+
+
+function getDevicesForGenericGroup(id) {
+  return Group.findOne({_id: id}).execQ().then(function (group) {
+    // TODO: handle generic-group. recursive call?
+    return group.items.filter(function (item) {
+      return isTelldus(item) || isHue(item);
+    });
+  });
+}
+
+function isTelldus(item) {
+  return item.type === 'telldus-device' || item.type === 'telldus-group';
+}
+
+function isHue(item) {
+  return item.type === 'hue-device' || item.type === 'hue-group';
+}
+
+function isGeneric(item) {
+  return item.type === 'generic-group';
+}
+
+function controlGenericGroup(id, params) {
+  if (params.action === 'on' || params.action === 'off') {
+    return controlDevicesInGroup(id, params);
+  }
+}
+
+function controlDevicesInGroup(id, params) {
+  return getDevicesForGenericGroup(id).then(function (items) {
+
+    var promises = items.map(function (item) {
+      params.type = item.type; // Must send correct type!
+      if (isTelldus(item)) {
+        return controlTelldus(item.id, params);
+      } else if (isHue(item)) {
+        return controlHue(item.id, params);
+      }
+    });
+    return Q.all(promises).then(function (response) {
+      return {success: 'Group state set to ' + params.action};
+    });
+  });
+}
 
 /**
  * Handle telldus device.
@@ -111,6 +158,7 @@ exports.control = function (id, params) {
  * @returns {*}
  */
 function controlTelldus(id, params) {
+  console.log('controlTelldus ' + params.type + ' ' + params.action);
   if (params.action === 'on') {
     return telldus.turnOn(id);
   } else if (params.action === 'off') {
@@ -130,40 +178,26 @@ function controlTelldus(id, params) {
  * @returns {*}
  */
 function controlHue(id, params) {
+  console.log('controlHue ' + params.type + ' ' + params.action);
+
+  var message = {};
   if (params.action === 'on') {
-
-    if (params.type === 'hue-device') {
-      console.log('turn light on');
-      return hue.setLightState(id, {on: true});
-    } else if (params.type === 'hue-group') {
-      console.log('turn group on');
-      return hue.setGroupAction(id, {on: true});
-    }
-
+    message = {on: true};
   } else if (params.action === 'off') {
-
-    if (params.type === 'hue-device') {
-      console.log('turn light off');
-      return hue.setLightState(id, {on: false});
-    } else if (params.type === 'hue-group') {
-      console.log('turn group off');
-      return hue.setGroupAction(id, {on: false});
-    }
-
+    message = {on: false};
   } else if (params.action === 'bri') {
-    console.log('set brightness to ' + params.value);
-    return hue.setLightState(id, {bri: Number(params.value)});
-
+    message = {bri: Number(params.value)};
   } else if (params.action === 'sat') {
-    console.log('set saturation to ' + params.value);
-    return hue.setLightState(id, {sat: Number(params.value)});
-
+    message = {sat: Number(params.value)};
   } else if (params.action === 'hue') {
-    console.log('set hue to ' + params.value);
-    return hue.setLightState(id, {hue: Number(params.value)});
-
+    message = {hue: Number(params.value)};
   }
 
+  if (params.type === 'hue-device') {
+    return hue.setLightState(id, message);
+  } else if (params.type === 'hue-group') {
+    return hue.setGroupAction(id, message);
+  }
 }
 
 /**

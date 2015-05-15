@@ -30,11 +30,25 @@
     };
 
     ctrl.getState = function (group) {
-      if (group.motorized) {
+      if (group.type === 'generic-group'){
+        return '?';
+      } else if (group.motorized) {
         return group.state.on ? 'Up' : 'Down';
       } else {
         return group.state.on ? 'On' : 'Off';
       }
+    };
+
+    ctrl.isGeneric = function(group){
+      return group.type === 'generic-group';
+    };
+
+    ctrl.sendOn = function (group) {
+      control(group.id, {type: group.type, action: 'on'});
+    };
+
+    ctrl.sendOff = function (group) {
+      control(group.id, {type: group.type, action: 'off'});
     };
 
     ctrl.toggleGroup = function (group) {

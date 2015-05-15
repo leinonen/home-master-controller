@@ -13,8 +13,16 @@
     <div class="col-sm-3">{{group.type}}</div>
     <div class="col-sm-3">{{ctrl.getState(group)}}</div>
     <div class="col-sm-3">
-      <button ng-click="ctrl.toggleGroup(group)" type="button" class="btn btn-primary pull-right">
+      <button  ng-hide="ctrl.isGeneric(group)" ng-click="ctrl.toggleGroup(group)" type="button" class="btn btn-primary pull-right">
         {{ctrl.buttonText(group)}}
+      </button>
+
+      <button  ng-show="ctrl.isGeneric(group)" ng-click="ctrl.sendOn(group)" type="button" class="btn btn-primary pull-right">
+        Turn On
+      </button>
+
+      <button  ng-show="ctrl.isGeneric(group)" ng-click="ctrl.sendOff(group)" type="button" class="btn btn-primary pull-right">
+        Turn Off
       </button>
     </div>
   </div>
