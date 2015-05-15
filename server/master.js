@@ -10,21 +10,7 @@ var Q = require('q');
 
 var Group = require('../models/group');
 
-function errorHandler(error) {
-  var deferred = Q.defer();
-  var msg = {};
-  msg.statusCode = error.statusCode;
-  msg.message = error.statusCode === 404 ? 'Not found' : 'error';
-  if (error.hasOwnProperty('request')) {
-    msg.url = error.request.url;
-  }
-  deferred.reject(msg);
-  return deferred.promise;
-}
 
-/**
- * Get all sensors
- */
 exports.sensors = function () {
   return telldus.listSensors().then(function (sensors) {
     return Q.all(sensors.map(function (sensor) {
@@ -41,9 +27,10 @@ exports.sensor = function (id) {
 function getGenericGroups() {
   return Group.find().execQ();
 }
-exports.getGenericGroups = getGenericGroups;
+exports.getGenericGroups = getGenericGroups();
 
-function createGenericGroup(group){
+
+function createGenericGroup(group) {
   var g = new Group(group);
   g.save();
   return g;
@@ -51,23 +38,6 @@ function createGenericGroup(group){
 
 exports.createGenericGroup = createGenericGroup;
 
-function transformGenericGroups(groups){
-  return groups.map(function(group){
-    var item = {};
-    item.name = group.name;
-    item.id = group._id;
-    item.items = [];
-    group.items.forEach(function(a){
-      item.items.push(a);
-    });
-    item.type = 'generic-group';
-    item.state = {
-      on: false
-    };
-    item.motorized = false;
-    return item;
-  });
-}
 
 /**
  * Get all groups
@@ -75,7 +45,7 @@ function transformGenericGroups(groups){
 exports.groups = function () {
   return telldus.listGroups().then(transformTelldusGroups).then(function (telldusGroups) {
     return hue.getGroups().then(transformHueGroups).then(function (hueGroups) {
-      return getGenericGroups().then(transformGenericGroups).then(function(genericGroups){
+      return getGenericGroups().then(transformGenericGroups).then(function (genericGroups) {
         return telldusGroups.concat(hueGroups).concat(genericGroups);
       });
     });
@@ -162,7 +132,7 @@ function controlTelldus(id, params) {
 function controlHue(id, params) {
   if (params.action === 'on') {
 
-    if (params.type === 'hue-device'){
+    if (params.type === 'hue-device') {
       console.log('turn light on');
       return hue.setLightState(id, {on: true});
     } else if (params.type === 'hue-group') {
@@ -172,10 +142,10 @@ function controlHue(id, params) {
 
   } else if (params.action === 'off') {
 
-    if (params.type === 'hue-device'){
+    if (params.type === 'hue-device') {
       console.log('turn light off');
       return hue.setLightState(id, {on: false});
-    } else if (params.type === 'hue-group'){
+    } else if (params.type === 'hue-group') {
       console.log('turn group off');
       return hue.setGroupAction(id, {on: false});
     }
@@ -196,6 +166,22 @@ function controlHue(id, params) {
 
 }
 
+/**
+ * Error handler
+ * @param error
+ * @returns {Promise.promise|*}
+ */
+function errorHandler(error) {
+  var deferred = Q.defer();
+  var msg = {};
+  msg.statusCode = error.statusCode;
+  msg.message = error.statusCode === 404 ? 'Not found' : 'error';
+  if (error.hasOwnProperty('request')) {
+    msg.url = error.request.url;
+  }
+  deferred.reject(msg);
+  return deferred.promise;
+}
 
 function transformTelldusSensors(sensors) {
   return sensors.map(function (sensor) {
@@ -230,6 +216,26 @@ function transformHueGroups(groups) {
     item.motorized = false;
     return item;
   });
+}
+
+function transformGenericGroup(group) {
+  var item = {};
+  item.name = group.name;
+  item.id = group._id;
+  item.items = [];
+  item.items = group.items.map(function (a) {
+    return a;
+  });
+  item.type = 'generic-group';
+  item.state = {
+    on: false
+  };
+  item.motorized = false;
+  return item;
+}
+
+function transformGenericGroups(groups) {
+  return groups.map(transformGenericGroup);
 }
 
 function transformTelldusDevice(device) {
