@@ -2,6 +2,7 @@
 
   var app = angular.module('app', [
     'ui.router',
+    'angular-loading-bar',
 
     'configuration',
     'hmc',
