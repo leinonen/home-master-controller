@@ -25,7 +25,7 @@ app.get('/api/devices', controller.devices);
 app.get('/api/device/:id', controller.device);
 
 app.get('/api/groups', controller.groups);
-//app.get('/api/groups/:id', controller.group);
+app.get('/api/group/:id', controller.group);
 
 app.post('/api/control/:id', controller.control);
 

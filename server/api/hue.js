@@ -4,9 +4,8 @@
  */
 
 var http = require('request-promise-json');
-//var config = require('./../config').integrations.hue;
-
 var Configuration = require('../../models/configuration');
+
 
 function getConfig() {
   return Configuration.findOne().execQ();
@@ -28,7 +27,6 @@ exports.getGroups = function () {
 exports.getLights = function () {
   return getConfig().then(function (config) {
     return http.get(config.hue.endpoint + '/lights').then(function (lights) {
-      console.log(lights[0]);
       if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
         console.log('hue error: ' + lights[0].error.description);
         return [];

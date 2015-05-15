@@ -58,6 +58,19 @@ exports.groups = function (req, res) {
     });
 };
 
+exports.group = function (req, res) {
+  var id = req.params.id;
+  var type = req.query.type;
+
+  Master
+    .group(id, type)
+    .then(function (group) {
+      res.json(group);
+    }).catch(function (err) {
+      errorHandler(res, err);
+    });
+};
+
 exports.control = function (req, res) {
   Master
     .control(req.params.id, req.body)

@@ -9,7 +9,7 @@
     <div class="col-sm-3"></div>
   </div>
   <div class="row" ng-repeat="group in ctrl.groups | orderBy:'name'">
-    <div class="col-sm-3">{{group.name}}</div>
+    <div class="col-sm-3"><a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a></div>
     <div class="col-sm-3">{{group.type}}</div>
     <div class="col-sm-3">{{ctrl.getState(group)}}</div>
     <div class="col-sm-3">

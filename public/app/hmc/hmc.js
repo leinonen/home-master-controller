@@ -28,11 +28,15 @@
       return $http.get('/api/groups').then(unwrap);
     };
 
-    this.control = function(id, params) {
+    this.getGroup = function (id, type) {
+      return $http.get('/api/group/' + id + '?type=' + type).then(unwrap);
+    };
+
+    this.control = function (id, params) {
       return $http.post('/api/control/' + id, params).then(unwrap);
     };
 
-    this.saveGroup = function(group){
+    this.saveGroup = function (group) {
       return $http.post('/api/genericGroups', group).then(unwrap);
     };
 

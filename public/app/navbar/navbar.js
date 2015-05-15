@@ -25,6 +25,13 @@
           templateUrl: 'app/views/groups-create.html'
         }]
       },
+      {
+        title: 'Edit group',
+        state: 'root.groups.edit',
+        url: '/edit/:type/:id',
+        templateUrl: 'app/views/group-edit.html',
+        position: 'hidden'
+      },
 
       {
         title: 'Sensors',

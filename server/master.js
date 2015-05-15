@@ -53,6 +53,25 @@ exports.groups = function () {
 };
 
 /**
+ * Get a single group.
+ * @param id
+ * @param type
+ * @returns {*}
+ */
+exports.group = function (id, type) {
+  if (type === 'generic-group') {
+    return Group.findOne({_id: id}).execQ().then(function (group) {
+      return transformGenericGroup(group);
+    });
+  } else if (type === 'telldus-group') {
+    return errorHandler('telldus-group not implemented yet');
+  } else if (type === 'hue-group') {
+    return errorHandler('hue-group not implemented yet!');
+  }
+};
+
+
+/**
  * Get all devices
  */
 exports.devices = function () {
@@ -80,9 +99,7 @@ exports.device = function (id, type) {
       return transformHueDevice(device);
     });
   } else {
-    var deferred = Q.defer();
-    deferred.reject('Not implemented');
-    return deferred.promise;
+    return errorHandler('Get ' + type + ' is not implemented');
   }
 };
 
@@ -109,7 +126,6 @@ exports.control = function (id, params) {
 
 function getDevicesForGenericGroup(id) {
   return Group.findOne({_id: id}).execQ().then(function (group) {
-    // TODO: handle generic-group. recursive call?
     return group.items.filter(function (item) {
       return isTelldus(item) || isHue(item);
     });
@@ -152,7 +168,7 @@ function controlDevicesInGroup(id, params) {
 }
 
 /**
- * Handle telldus device.
+ * Handle telldus device / group.
  * @param id
  * @param params
  * @returns {*}
@@ -172,7 +188,7 @@ function controlTelldus(id, params) {
 
 
 /**
- * Handle Philips Hue device.
+ * Handle Philips Hue device / group.
  * @param id
  * @param params
  * @returns {*}
@@ -209,7 +225,7 @@ function errorHandler(error) {
   var deferred = Q.defer();
   var msg = {};
   msg.statusCode = error.statusCode;
-  msg.message = error.statusCode === 404 ? 'Not found' : 'error';
+  msg.message = error.statusCode === 404 ? 'Not found' : error;
   if (error.hasOwnProperty('request')) {
     msg.url = error.request.url;
   }
