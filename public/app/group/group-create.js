@@ -52,7 +52,24 @@
       return (ctrl.selectedDevices.length + ctrl.selectedGroups.length) === 0;
     };
 
+    ctrl.isValid = function () {
+      var valid = true;
+      if (ctrl.group.name === '') {
+        valid = false;
+        Message.warning('Please enter a name!');
+      } else if (ctrl.isEmptyGroup()){
+        valid = false;
+        Message.warning('Please add something to the group!');
+      }
+
+      return valid;
+    };
+
     ctrl.saveGroup = function () {
+
+      if (!ctrl.isValid()) {
+        return;
+      }
 
       // Merge devices and groups
       var items = ctrl.selectedDevices.concat(ctrl.selectedGroups);
