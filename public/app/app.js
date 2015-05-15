@@ -28,7 +28,7 @@
       }
     });
 
-    angular.forEach(RoutesProvider.$get().routes, function (route) {
+    function addRoute(route){
       $stateProvider.state(route.state, {
         url: route.url,
         views: {
@@ -37,6 +37,15 @@
           }
         }
       });
+    }
+
+    angular.forEach(RoutesProvider.$get().routes, function (route) {
+      addRoute(route);
+      if (route.children){
+        angular.forEach(route.children, function(child){
+          addRoute(child);
+        });
+      }
     });
 
   });

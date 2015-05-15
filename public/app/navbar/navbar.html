@@ -13,10 +13,18 @@
 
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li ng-repeat="item in ctrl.items"
+        <li ng-repeat="item in ctrl.getLeftItems()"
             ui-sref-active="active"
             ui-sref="{{item.state}}">
           <a href="#">{{item.title}}</a>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-repeat="item in ctrl.getRightItems()"
+            ui-sref-active="active"
+            ui-sref="{{item.state}}">
+          <a href="#"><span ng-show="item.icon" class="{{item.icon}}"></span> {{item.title}}</a>
         </li>
       </ul>
 
