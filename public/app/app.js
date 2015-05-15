@@ -4,6 +4,7 @@
     'ui.router',
     'angular-loading-bar',
 
+    'message',
     'configuration',
     'hmc',
     'sensor',

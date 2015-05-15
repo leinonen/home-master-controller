@@ -2,7 +2,7 @@
 
   var module = angular.module('group');
 
-  module.controller('GroupCreateCtrl', function (MasterApi) {
+  module.controller('GroupCreateCtrl', function (MasterApi, Message) {
 
     var ctrl = this;
 
@@ -13,7 +13,6 @@
 
     ctrl.selectedGroup = {};
     ctrl.selectedGroups = [];
-    ctrl.message = '';
 
     ctrl.group = {
       name: '',
@@ -66,7 +65,7 @@
 
       MasterApi.saveGroup(ctrl.group).then(function () {
         console.log('Saved!');
-        ctrl.message = 'Group saved successfully!';
+        Message.success('Group created!');
         ctrl.group.name = '';
         ctrl.group.items = [];
         ctrl.selectedDevice = ctrl.devices[0];

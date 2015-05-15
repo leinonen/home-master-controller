@@ -2,17 +2,16 @@
 
   var module = angular.module('device');
 
-  module.controller('DeviceListCtrl', function ($rootScope, $timeout, MasterApi) {
+  module.controller('DeviceListCtrl', function ($rootScope, $timeout, MasterApi, Message) {
     var ctrl = this;
     ctrl.devices = [];
-    ctrl.message = '';
 
     function fetchDevices() {
       MasterApi.getDevices().then(function (devices) {
         ctrl.devices = devices;
         console.log('got device list');
       }).catch(function (err) {
-        ctrl.message = err.data.statusCode + ' : ' + err.data.message + ' : ' + err.data.url;
+        Message.danger(err.data.statusCode + ' : ' + err.data.message + ' : ' + err.data.url);
       });
     }
 

@@ -1,5 +1,5 @@
 (function(){
 
-  angular.module('group', ['hmc', 'device']);
+  angular.module('group', ['hmc', 'device','message']);
 
 })();

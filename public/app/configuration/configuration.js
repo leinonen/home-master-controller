@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('configuration', []);
+  var module = angular.module('configuration', ['message']);
 
   module.service('ConfigService', function ($http) {
     var ConfigService = this;
@@ -18,7 +18,7 @@
 
   });
 
-  module.controller('EditConfigCtrl', function (ConfigService) {
+  module.controller('EditConfigCtrl', function (ConfigService, Message) {
     var ctrl = this;
     ctrl.config = {
       telldus: {
@@ -31,19 +31,17 @@
         endpoint: ''
       }
     };
-    ctrl.message = '';
     ConfigService.getConfiguration().then(function (cfg) {
       ctrl.config = cfg;
     }).catch(function (err) {
-      ctrl.message = err.data;
+      Message.danger(err.data);
     });
 
     ctrl.saveConfiguration = function () {
       console.log('saving');
       ConfigService.saveConfiguration(ctrl.config).then(function (cfg) {
         ctrl.config = cfg;
-        ctrl.message = 'Save successful';
-        console.log('saved success!');
+        Message.success('Configuration saved!');
       });
     }
   });

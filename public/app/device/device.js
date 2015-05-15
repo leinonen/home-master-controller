@@ -1,5 +1,5 @@
 (function () {
 
-  var module = angular.module('device', ['hmc']);
+  var module = angular.module('device', ['hmc','message']);
 
 })();

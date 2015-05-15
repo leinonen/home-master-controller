@@ -3,21 +3,29 @@ body {
     padding-top: 70px;
 }
 
+.core-message {
+    position: absolute;
+    z-index: 100;
+    width: 50%;
+    margin-left: 25%;
+    box-shadow: 2px 2px 11px rgba(0, 0, 0, 0.3);
+}
+
 .device-list-header,
 .group-list-header,
-.sensor-list-header{
+.sensor-list-header {
     font-weight: bold;
 }
 
-.hue-device     .row,
+.hue-device .row,
 .telldus-device .row {
     padding: 10px 0;
 }
 
-.hue-device     .row > div,
+.hue-device .row > div,
 .telldus-device .row > div,
-.group-list     .row > div,
-.sensor-list    .row > div {
+.group-list .row > div,
+.sensor-list .row > div {
     border-top: #000 1px solid;
     line-height: 25px;
     padding-top: 10px;
