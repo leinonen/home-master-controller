@@ -1,6 +1,5 @@
 <div class="group-edit">
 
-  <button type="button" class="btn btn-danger" ng-click="ctrl.deleteGroup()">Delete group</button>
   <div class="row">
     <div class="col-sm-6">
       <p>Enter a name for the group</p>
@@ -29,6 +28,8 @@
 
     </div>
   </div>
-  <button type="button" ng-click="ctrl.saveGroup()" class="btn btn-primary pull-right">Save group</button>
+
+  <button type="button" class="btn btn-primary pull-right" ng-click="ctrl.saveGroup()" >Save group</button>
+  <button type="button" class="btn btn-danger pull-right" ng-click="ctrl.deleteGroup()">Delete group</button>
 
 </div>
