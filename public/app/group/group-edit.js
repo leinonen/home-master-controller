@@ -101,6 +101,7 @@
         ctrl.group.name = '';
         ctrl.group.items = [];
         ctrl.selectedItems = [];
+        $state.go('root.groups');
       });
     };
 
@@ -108,6 +109,7 @@
       MasterApi.deleteGroup(ctrl.group.id).then(function (response) {
         Message.info(response);
         ctrl.group = {};
+        $state.go('root.groups');
       });
     }
 

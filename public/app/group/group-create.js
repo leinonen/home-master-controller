@@ -2,7 +2,7 @@
 
   var module = angular.module('group');
 
-  module.controller('GroupCreateCtrl', function ($rootScope, MasterApi, Message) {
+  module.controller('GroupCreateCtrl', function ($state, $rootScope, MasterApi, Message) {
 
     var ctrl = this;
 
@@ -76,6 +76,7 @@
         ctrl.group.name = '';
         ctrl.group.items = [];
         ctrl.selectedItems = [];
+        $state.go('root.groups');
       });
     }
   });
