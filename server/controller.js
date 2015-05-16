@@ -123,36 +123,25 @@ exports.control = function (req, res) {
 
 exports.readConfiguration = function (req, res) {
   Configuration
-    .findOne()
-    .exec(function (err, cfg) {
-      if (err) {
-        errorHandler(res, err);
-      }
-      if (cfg) {
-        res.json(cfg);
-      } else {
-        errorHandler(res, 'Missing configuration');
-      }
-    });
+    .get()
+    .then(function (cfg) {
+      res.json(cfg);
+    }).catch(errorHandler);
 };
 
 exports.saveConfiguration = function (req, res) {
-  var data = req.body;
   Configuration
-    .findOne(data._id)
-    .exec(function (err, cfg) {
-      if (err) {
-        errorHandler(res, err);
-      }
+    .findById(req.body._id)
+    .then(function (cfg) {
       if (cfg) {
-        cfg.hue = data.hue;
-        cfg.telldus = data.telldus;
+        cfg.hue = req.body.hue;
+        cfg.telldus = req.body.telldus;
         cfg.save();
         res.json(cfg);
       } else {
-        var c = new Configuration({hue: data.hue, telldus: data.telldus});
+        var c = new Configuration({hue: req.body.hue, telldus: req.body.telldus});
         c.save();
         return res.json(c);
       }
-    });
+    }).catch(errorHandler);
 };
