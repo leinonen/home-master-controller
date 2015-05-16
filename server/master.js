@@ -1,14 +1,13 @@
 /**
  * Master API - Control everything! :D
+ * Currently supports Telldus and Philips Hue.
  * @type {exports}
  * @author Peter Leinonen
  */
+var Q = require('q');
 var telldus = require('./api/telldus');
 var telldusHelper = require('./api/telldus-helper');
-
 var hue = require('./api/hue');
-var Q = require('q');
-
 var Group = require('../models/group');
 
 
@@ -58,6 +57,12 @@ function createGenericGroup(group) {
 exports.createGenericGroup = createGenericGroup;
 
 
+/**
+ * Update a generic group.
+ * @param id
+ * @param group
+ * @returns {*}
+ */
 function updateGenericGroup(id, group) {
   return Group.findOne({_id: id}).execQ().then(function (g) {
     g.name = group.name;
@@ -68,35 +73,29 @@ function updateGenericGroup(id, group) {
 }
 exports.updateGenericGroup = updateGenericGroup;
 
+/**
+ * Delete a generic group.
+ * @param id
+ * @returns {*}
+ */
 function deleteGenericGroup(id) {
   return Group.findOne({_id: id}).execQ().then(function (g) {
     g.remove();
-    return 'Removed';
+    return 'Group removed!';
   });
 }
 exports.deleteGenericGroup = deleteGenericGroup;
+
 
 /**
  * Get all groups.
  */
 exports.groups = function () {
-  return telldus
-    .listGroups()
-    .then(transformTelldusGroups)
-    .then(function (telldusGroups) {
-      return hue
-        .getGroups()
-        .then(transformHueGroups)
-        .then(function (hueGroups) {
-          return getGenericGroups()
-            .then(transformGenericGroups)
-            .then(function (genericGroups) {
-              return telldusGroups
-                .concat(hueGroups)
-                .concat(genericGroups);
-            });
-        });
-    });
+  var promises = [];
+  promises.push(telldus.listGroups().then(transformTelldusGroups));
+  promises.push(hue.getGroups().then(transformHueGroups));
+  promises.push(getGenericGroups().then(transformGenericGroups));
+  return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
 
 /**
@@ -107,10 +106,7 @@ exports.groups = function () {
  */
 exports.group = function (id, type) {
   if (type === 'generic-group') {
-    return Group.findOne({_id: id}).execQ()
-      .then(function (group) {
-      return transformGenericGroup(group);
-    });
+    return Group.findOne({_id: id}).execQ().then(transformGenericGroup);
   } else if (type === 'telldus-group') {
     return errorHandler('telldus-group not implemented yet');
   } else if (type === 'hue-group') {
@@ -123,19 +119,10 @@ exports.group = function (id, type) {
  * Get all devices.
  */
 exports.devices = function () {
-  return telldus
-    .listDevices()
-    .then(transformTelldusDevices)
-    .then(function (telldusDevices) {
-    return hue
-      .getLights()
-      .then(transformHueDevices)
-      .then(function (hueDevices) {
-      return telldusDevices.concat(hueDevices);
-    }).catch(function (err) {
-      return errorHandler(err);
-    });
-  });
+  var promises = [];
+  promises.push(telldus.listDevices().then(transformTelldusDevices));
+  promises.push(hue.getLights().then(transformHueDevices));
+  return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
 
 /**
@@ -146,9 +133,9 @@ exports.devices = function () {
  */
 exports.device = function (id, type) {
   if (type === 'telldus-device') {
-    return telldus.getDevice(id).then(transformTelldusDevice);
+    return telldus.getDevice(id).then(transformTelldusDevice).catch(errorHandler);
   } else if (type === 'hue-device') {
-    return hue.getLight(id).then(transformHueDevice);
+    return hue.getLight(id).then(transformHueDevice).catch(errorHandler);;
   } else {
     return errorHandler('Get ' + type + ' is not implemented');
   }
@@ -181,7 +168,7 @@ exports.groupDevices = function (id, type) {
           return Group.findOne({_id: id}).execQ().then(transformGenericGroup);
         }
       });
-      return Q.all(promises);
+      return Q.all(promises).catch(errorHandler);
     });
   } else {
     return errorHandler('Not implemented');
@@ -209,6 +196,16 @@ exports.control = function (id, params) {
 
 // Helper functions!
 
+/**
+ * Flatten an array of arrays into a single array.
+ * @param arr
+ * @returns {*}
+ */
+function flattenArrays(arr) {
+  return arr.reduce(function (a, b) {
+    return a.concat(b);
+  });
+}
 
 /**
  * Check if item is a telldus-device or telldus-group.
