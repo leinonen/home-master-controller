@@ -49,15 +49,17 @@ exports.getGenericGroups = getGenericGroups;
  * @returns {Group}
  */
 function createGenericGroup(group) {
+  var deferred = Q.defer();
   var g = new Group(group);
   g.save();
-  return g;
+  deferred.resolve(g);
+  return deferred.promise;
 }
 exports.createGenericGroup = createGenericGroup;
 
 
 function updateGenericGroup(id, group) {
-  return Group.findOne({_id: id}).execQ().then(function(g){
+  return Group.findOne({_id: id}).execQ().then(function (g) {
     g.name = group.name;
     g.items = group.items;
     g.save();
@@ -67,7 +69,7 @@ function updateGenericGroup(id, group) {
 exports.updateGenericGroup = updateGenericGroup;
 
 function deleteGenericGroup(id) {
-  return Group.findOne({_id: id}).execQ().then(function(g){
+  return Group.findOne({_id: id}).execQ().then(function (g) {
     g.remove();
     return 'Removed';
   });
@@ -78,13 +80,23 @@ exports.deleteGenericGroup = deleteGenericGroup;
  * Get all groups.
  */
 exports.groups = function () {
-  return telldus.listGroups().then(transformTelldusGroups).then(function (telldusGroups) {
-    return hue.getGroups().then(transformHueGroups).then(function (hueGroups) {
-      return getGenericGroups().then(transformGenericGroups).then(function (genericGroups) {
-        return telldusGroups.concat(hueGroups).concat(genericGroups);
-      });
+  return telldus
+    .listGroups()
+    .then(transformTelldusGroups)
+    .then(function (telldusGroups) {
+      return hue
+        .getGroups()
+        .then(transformHueGroups)
+        .then(function (hueGroups) {
+          return getGenericGroups()
+            .then(transformGenericGroups)
+            .then(function (genericGroups) {
+              return telldusGroups
+                .concat(hueGroups)
+                .concat(genericGroups);
+            });
+        });
     });
-  });
 };
 
 /**
@@ -95,7 +107,8 @@ exports.groups = function () {
  */
 exports.group = function (id, type) {
   if (type === 'generic-group') {
-    return Group.findOne({_id: id}).execQ().then(function (group) {
+    return Group.findOne({_id: id}).execQ()
+      .then(function (group) {
       return transformGenericGroup(group);
     });
   } else if (type === 'telldus-group') {
@@ -110,8 +123,14 @@ exports.group = function (id, type) {
  * Get all devices.
  */
 exports.devices = function () {
-  return telldus.listDevices().then(transformTelldusDevices).then(function (telldusDevices) {
-    return hue.getLights().then(transformHueDevices).then(function (hueDevices) {
+  return telldus
+    .listDevices()
+    .then(transformTelldusDevices)
+    .then(function (telldusDevices) {
+    return hue
+      .getLights()
+      .then(transformHueDevices)
+      .then(function (hueDevices) {
       return telldusDevices.concat(hueDevices);
     }).catch(function (err) {
       return errorHandler(err);
@@ -129,10 +148,7 @@ exports.device = function (id, type) {
   if (type === 'telldus-device') {
     return telldus.getDevice(id).then(transformTelldusDevice);
   } else if (type === 'hue-device') {
-    return hue.getLight(id).then(function (device) {
-      device.id = id;
-      return transformHueDevice(device);
-    });
+    return hue.getLight(id).then(transformHueDevice);
   } else {
     return errorHandler('Get ' + type + ' is not implemented');
   }
@@ -148,14 +164,19 @@ exports.groupDevices = function (id, type) {
   if (type === 'generic-group') {
     return getDevicesForGenericGroup(id).then(function (devices) {
       var promises = devices.map(function (device) {
+
         if (device.type === 'telldus-device') {
           return telldus.getDevice(device.id).then(transformTelldusDevice);
+
         } else if (device.type === 'telldus-group') {
           return telldus.getDevice(device.id).then(transformTelldusGroup);
+
         } else if (device.type === 'hue-device') {
           return hue.getLight(device.id).then(transformHueDevice);
+
         } else if (device.type === 'hue-group') {
           return hue.getGroup(device.id).then(transformHueGroup);
+
         } else {
           return Group.findOne({_id: id}).execQ().then(transformGenericGroup);
         }
@@ -224,6 +245,7 @@ function isGeneric(item) {
 function getDevicesForGenericGroup(id) {
   return Group.findOne({_id: id}).execQ().then(function (group) {
     return group.items.filter(function (item) {
+      // TODO: add generic-group! also rename function
       return isTelldus(item) || isHue(item);
     });
   });
@@ -257,6 +279,7 @@ function controlDevicesInGroup(id, params) {
       } else if (isHue(item)) {
         return controlHue(item.id, params);
       }
+      // TODO: handle generic groups!
     });
     return Q.all(promises).then(function (response) {
       // TODO: update group with correct state?

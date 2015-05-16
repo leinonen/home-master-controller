@@ -85,22 +85,28 @@ exports.getGenericGroups = function (req, res) {
 };
 
 exports.createGenericGroup = function (req, res) {
-  var group = Master.createGenericGroup(req.body);
-  res.json(group);
+  Master
+    .createGenericGroup(req.body)
+    .then(function (group) {
+      res.json(group);
+    });
 };
 
 exports.updateGroup = function (req, res) {
-  Master.updateGenericGroup(req.params.id, req.body).then(function(group){
-    res.json(group);
-  });
+  Master
+    .updateGenericGroup(req.params.id, req.body)
+    .then(function (group) {
+      res.json(group);
+    });
 };
 
 exports.deleteGroup = function (req, res) {
-  Master.deleteGenericGroup(req.params.id, req.body).then(function(status){
-    res.json(status);
-  });
+  Master
+    .deleteGenericGroup(req.params.id, req.body)
+    .then(function (status) {
+      res.json(status);
+    });
 };
-
 
 exports.control = function (req, res) {
   Master
@@ -112,6 +118,8 @@ exports.control = function (req, res) {
     });
 };
 
+
+// Configuration
 
 exports.readConfiguration = function (req, res) {
   Configuration
