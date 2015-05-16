@@ -71,25 +71,13 @@
     };
 
     ctrl.addDevice = function (device) {
-      //console.log('adding device ' + typeof device);
-      //console.log(device);
-      if (typeof device === 'string') {
-        ctrl.selectedDevice = JSON.parse(device);
-      } else {
-        ctrl.selectedDevice = device;
-      }
+      ctrl.selectedDevice = (typeof device === 'string') ? JSON.parse(device) : device;
       ctrl.selectedDevices.push(ctrl.selectedDevice);
       ctrl.selectedDevice = {};
     };
 
     ctrl.addGroup = function (group) {
-      //console.log('adding group ' + typeof group);
-      //console.log(group);
-      if (typeof group === 'string') {
-        ctrl.selectedGroup = JSON.parse(group);
-      } else {
-        ctrl.selectedGroup = group;
-      }
+      ctrl.selectedGroup = (typeof group === 'string') ? JSON.parse(group) : group;
       ctrl.selectedGroups.push(ctrl.selectedGroup);
       ctrl.selectedGroup = {};
     };
@@ -112,7 +100,6 @@
     };
 
     ctrl.saveGroup = function () {
-
       if (!ctrl.isValid()) {
         return;
       }
