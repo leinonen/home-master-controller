@@ -57,14 +57,10 @@ exports.createGenericGroup = createGenericGroup;
 
 
 function updateGenericGroup(id, group) {
-
-  console.log(group);
   return Group.findOne({_id: id}).execQ().then(function(g){
     g.name = group.name;
     g.items = group.items;
     g.save();
-    console.log('group updated!');
-    console.log(g);
     return g;
   });
 }
