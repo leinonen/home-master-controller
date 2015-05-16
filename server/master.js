@@ -40,7 +40,7 @@ exports.sensor = function (id) {
 function getGenericGroups() {
   return Group.find().execQ();
 }
-exports.getGenericGroups = getGenericGroups();
+exports.getGenericGroups = getGenericGroups;
 
 
 /**
@@ -55,6 +55,28 @@ function createGenericGroup(group) {
 }
 exports.createGenericGroup = createGenericGroup;
 
+
+function updateGenericGroup(id, group) {
+
+  console.log(group);
+  return Group.findOne({_id: id}).execQ().then(function(g){
+    g.name = group.name;
+    g.items = group.items;
+    g.save();
+    console.log('group updated!');
+    console.log(g);
+    return g;
+  });
+}
+exports.updateGenericGroup = updateGenericGroup;
+
+function deleteGenericGroup(id) {
+  return Group.findOne({_id: id}).execQ().then(function(g){
+    g.remove();
+    return 'Removed';
+  });
+}
+exports.deleteGenericGroup = deleteGenericGroup;
 
 /**
  * Get all groups.
@@ -132,8 +154,14 @@ exports.groupDevices = function (id, type) {
       var promises = devices.map(function (device) {
         if (device.type === 'telldus-device') {
           return telldus.getDevice(device.id).then(transformTelldusDevice);
+        } else if (device.type === 'telldus-group') {
+          return telldus.getDevice(device.id).then(transformTelldusGroup);
         } else if (device.type === 'hue-device') {
           return hue.getLight(device.id).then(transformHueDevice);
+        } else if (device.type === 'hue-group') {
+          return hue.getGroup(device.id).then(transformHueGroup);
+        } else {
+          return Group.findOne({_id: id}).execQ().then(transformGenericGroup);
         }
       });
       return Q.all(promises);
@@ -321,22 +349,28 @@ function transformTelldusSensors(sensors) {
 
 /**
  * Transform a telldus group to custom format.
+ * @param group
+ * @returns {{}}
+ */
+function transformTelldusGroup(group) {
+  var item = {};
+  item.id = group.id;
+  item.name = group.name;
+  item.type = 'telldus-group';
+  item.methods = telldusHelper.getSupportedMethods(group);
+  item.state = {};
+  item.state.on = telldusHelper.isOn(group);
+  item.devices = group.devices.split(',');
+  item.motorized = telldusHelper.isMotorized(group);
+  return item;
+}
+/**
+ * Transform a telldus group to custom format.
  * @param groups
  * @returns {*}
  */
 function transformTelldusGroups(groups) {
-  return groups.map(function (group) {
-    var item = {};
-    item.id = group.id;
-    item.name = group.name;
-    item.type = 'telldus-group';
-    item.methods = telldusHelper.getSupportedMethods(group);
-    item.state = {};
-    item.state.on = telldusHelper.isOn(group);
-    item.devices = group.devices.split(',');
-    item.motorized = telldusHelper.isMotorized(group);
-    return item;
-  });
+  return groups.map(transformTelldusGroup);
 }
 
 /**

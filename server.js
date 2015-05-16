@@ -15,9 +15,6 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.get('/api/configuration', controller.readConfiguration);
 app.post('/api/configuration', controller.saveConfiguration);
 
-app.get('/api/genericGroups', controller.getGenericGroups);
-app.post('/api/genericGroups', controller.createGenericGroup);
-
 app.get('/api/sensors', controller.sensors);
 app.get('/api/sensors/:id', controller.sensor);
 
@@ -25,8 +22,14 @@ app.get('/api/devices', controller.devices);
 app.get('/api/device/:id', controller.device);
 
 app.get('/api/groups', controller.groups);
+app.post('/api/groups', controller.createGenericGroup);
+app.get('/api/genericGroups', controller.getGenericGroups);
+
 app.get('/api/group/:id', controller.group);
+app.post('/api/group/:id', controller.updateGroup);
+app.delete('/api/group/:id', controller.deleteGroup);
 app.get('/api/group/:id/devices', controller.groupDevices);
+
 
 app.post('/api/control/:id', controller.control);
 

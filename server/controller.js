@@ -89,6 +89,18 @@ exports.createGenericGroup = function (req, res) {
   res.json(group);
 };
 
+exports.updateGroup = function (req, res) {
+  Master.updateGenericGroup(req.params.id, req.body).then(function(group){
+    res.json(group);
+  });
+};
+
+exports.deleteGroup = function (req, res) {
+  Master.deleteGenericGroup(req.params.id, req.body).then(function(status){
+    res.json(status);
+  });
+};
+
 
 exports.control = function (req, res) {
   Master

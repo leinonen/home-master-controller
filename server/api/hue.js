@@ -26,7 +26,20 @@ exports.getGroups = function () {
       });
     });
   });
+};
 
+/**
+ * Get a group.
+ * @param id
+ * @returns {*}
+ */
+exports.getGroup = function (id) {
+  return getConfig().then(function (config) {
+    return http.get(config.hue.endpoint + '/groups/' + id).then(function (group) {
+      group.id = id; // Must have the id!
+      return group;
+    });
+  });
 };
 
 /**
@@ -60,6 +73,7 @@ exports.getLights = function () {
 exports.getLight = function (id) {
   return getConfig().then(function (config) {
     return http.get(config.hue.endpoint + '/lights/' + id).then(function (light) {
+      light.id = id; // Must have the id!
       return light;
     });
   });

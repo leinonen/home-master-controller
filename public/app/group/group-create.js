@@ -80,7 +80,7 @@
         return a;
       });
 
-      MasterApi.saveGroup(ctrl.group).then(function () {
+      MasterApi.createGroup(ctrl.group).then(function () {
         console.log('Saved!');
         Message.success('Group created!');
         ctrl.group.name = '';

@@ -1,17 +1,59 @@
 <div class="group-edit">
 
+  <button type="button" class="btn btn-danger" ng-click="ctrl.deleteGroup()">Delete group</button>
   <div class="row">
     <div class="col-sm-6">
-      <input class="form-control" type="text" ng-model="ctrl.group.name"/>
+      <p>Enter a name for the group</p>
+      <input class="form-control" type="text" ng-model="ctrl.group.name" placeholder="Name" ng-required="true"/>
+
+      <p>Select devices to add to the group</p>
+
+      <div class="row">
+        <div class="col-sm-10">
+          <select class="form-control" ng-model="ctrl.selectedDevice">
+            <option ng-repeat="device in ctrl.devices track by $index" value="{{device}}">{{device.name}}</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <button ng-click="ctrl.addDevice(ctrl.selectedDevice)" class="btn btn-default btn-block">
+            Add <span class="glyphicon glyphicon glyphicon-arrow-right"></span>
+          </button>
+        </div>
+      </div>
+
+      <p>Select groups to add to the group</p>
+
+      <div class="row">
+        <div class="col-sm-10">
+          <select class="form-control" ng-model="ctrl.selectedGroup">
+            <option ng-repeat="group in ctrl.groups track by $index" value="{{group}}">{{group.name}}</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <button ng-click="ctrl.addGroup(ctrl.selectedGroup)" class="btn btn-default btn-block">
+            Add <span class="glyphicon glyphicon glyphicon-arrow-right"></span>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="col-sm-6">
 
+      <p>Devices and groups that will be part of the group</p>
+
+      <p ng-show="ctrl.isEmptyGroup()">Empty group</p>
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="device in ctrl.groupDevices">
-          <span class="badge">{{device.type}}</span>
-          {{device.name}}
+        <li class="list-group-item" ng-repeat="dev in ctrl.selectedDevices track by $index">
+          {{dev.name}}
+          <span class="badge" ng-click="ctrl.removeDevice($index)">Remove</span>
+          <span class="badge">{{dev.type}}</span>
+        </li>
+        <li class="list-group-item" ng-repeat="grp in ctrl.selectedGroups track by $index">
+          {{grp.name}}
+          <span class="badge" ng-click="ctrl.removeGroup($index)">Remove</span>
+          <span class="badge">{{grp.type}}</span>
         </li>
       </ul>
+
     </div>
   </div>
   <button type="button" ng-click="ctrl.saveGroup()" class="btn btn-primary pull-right">Save group</button>
