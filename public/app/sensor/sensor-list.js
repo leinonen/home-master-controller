@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('sensor', ['hmc']);
+  var module = angular.module('sensor', ['master']);
 
   module.controller('SensorListCtrl', function (MasterApi) {
     var ctrl = this;

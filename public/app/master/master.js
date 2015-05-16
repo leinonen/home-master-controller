@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('hmc', []);
+  var module = angular.module('master', []);
 
   module.service('MasterApi', function ($http) {
 

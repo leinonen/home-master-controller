@@ -6,7 +6,7 @@
 
     'message',
     'configuration',
-    'hmc',
+    'master',
     'sensor',
     'device',
     'group',
