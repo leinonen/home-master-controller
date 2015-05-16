@@ -10,6 +10,7 @@ Uses MongoDB for storage. Make sure you have it!
 ## Features
 * Telldus Net devices and groups
 * Philips Hue lights and groups
+* Create custom groups
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
 * Heavy use of promises (Using q library), for nice and readable code!
