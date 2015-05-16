@@ -2,17 +2,12 @@
 
   var module = angular.module('group');
 
-  module.controller('EditGroupCtrl', function ($q, $stateParams, MasterApi, Message) {
+  module.controller('EditGroupCtrl', function ($rootScope, $q, $stateParams, MasterApi, Message) {
     var ctrl = this;
     ctrl.groupDevices = [];
-
     ctrl.devices = [];
     ctrl.groups = [];
-    ctrl.selectedDevice = {};
-    ctrl.selectedDevices = [];
-
-    ctrl.selectedGroup = {};
-    ctrl.selectedGroups = [];
+    ctrl.selectedItems = [];
 
     ctrl.group = {
       name: '',
@@ -23,14 +18,11 @@
       var promises = [];
       promises.push(MasterApi.getDevices().then(function (devices) {
         ctrl.devices = devices;
-        ctrl.selectedDevice = ctrl.devices[0];
       }));
-
       promises.push(MasterApi.getGroups().then(function (groups) {
-        ctrl.groups = groups.filter(function(grp){
+        ctrl.groups = groups.filter(function (grp) {
           return grp.type !== 'generic-group';
         });
-        ctrl.selectedGroup = ctrl.groups[0];
       }));
       return $q.all(promises);
     }
@@ -42,11 +34,9 @@
         MasterApi.getGroupDevices(group.id, group.type).then(function (devices) {
           ctrl.groupDevices = devices;
           ctrl.groupDevices.forEach(function (device) {
-            if (device.type === 'telldus-device' || device.type === 'hue-device') {
-              ctrl.selectedDevices.push(device);
-            }
-            if (device.type === 'telldus-group' || device.type === 'hue-group' || device.type === 'generic-group') {
-              ctrl.selectedGroups.push(device);
+            if (device.type === 'telldus-device' || device.type === 'hue-device' ||
+                device.type === 'telldus-group' || device.type === 'hue-group') {
+              ctrl.selectedItems.push(device);
             }
           });
         }).catch(function (err) {
@@ -62,28 +52,19 @@
       getGroupAndDevices();
     });
 
-    ctrl.removeDevice = function (index) {
-      ctrl.selectedDevices.splice(index, 1);
+    ctrl.removeItem = function (index) {
+      ctrl.selectedItems.splice(index, 1);
     };
 
-    ctrl.removeGroup = function (index) {
-      ctrl.selectedGroups.splice(index, 1);
-    };
-
-    ctrl.addDevice = function (device) {
-      ctrl.selectedDevice = (typeof device === 'string') ? JSON.parse(device) : device;
-      ctrl.selectedDevices.push(ctrl.selectedDevice);
-      ctrl.selectedDevice = {};
-    };
-
-    ctrl.addGroup = function (group) {
-      ctrl.selectedGroup = (typeof group === 'string') ? JSON.parse(group) : group;
-      ctrl.selectedGroups.push(ctrl.selectedGroup);
-      ctrl.selectedGroup = {};
-    };
+    $rootScope.$on('item.selected', function (event, data) {
+      if (data.type === 'telldus-device' || data.type === 'hue-device' ||
+          data.type === 'telldus-group' || data.type === 'hue-group') {
+        ctrl.selectedItems.push(data);
+      }
+    });
 
     ctrl.isEmptyGroup = function () {
-      return (ctrl.selectedDevices.length + ctrl.selectedGroups.length) === 0;
+      return ctrl.selectedItems.length === 0;
     };
 
     ctrl.isValid = function () {
@@ -105,8 +86,7 @@
       }
 
       // Merge devices and groups
-      var items = ctrl.selectedDevices.concat(ctrl.selectedGroups);
-      ctrl.group.items = items.map(function (item) {
+      ctrl.group.items = ctrl.selectedItems.map(function (item) {
         var a = {};
         a.id = item.id;
         a.type = item.type;
@@ -118,10 +98,7 @@
         Message.success('Group saved successfully!');
         ctrl.group.name = '';
         ctrl.group.items = [];
-        ctrl.selectedDevice = ctrl.devices[0];
-        ctrl.selectedDevices = [];
-        ctrl.selectedGroup = ctrl.groups[0];
-        ctrl.selectedGroups = [];
+        ctrl.selectedItems = [];
       });
     };
 

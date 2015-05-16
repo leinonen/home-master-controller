@@ -2,17 +2,13 @@
 
   var module = angular.module('group');
 
-  module.controller('GroupCreateCtrl', function (MasterApi, Message) {
+  module.controller('GroupCreateCtrl', function ($rootScope, MasterApi, Message) {
 
     var ctrl = this;
 
     ctrl.devices = [];
     ctrl.groups = [];
-    ctrl.selectedDevice = {};
-    ctrl.selectedDevices = [];
-
-    ctrl.selectedGroup = {};
-    ctrl.selectedGroups = [];
+    ctrl.selectedItems = [];
 
     ctrl.group = {
       name: '',
@@ -22,34 +18,30 @@
     function fetchDevicesAndGroups() {
       MasterApi.getDevices().then(function (devices) {
         ctrl.devices = devices;
-        ctrl.selectedDevice = ctrl.devices[0];
       });
 
       MasterApi.getGroups().then(function (groups) {
         ctrl.groups = groups;
-        ctrl.selectedGroup = ctrl.groups[0];
       });
     }
 
     fetchDevicesAndGroups();
 
 
-    ctrl.addDevice = function () {
-      var device = JSON.parse(ctrl.selectedDevice);
-      ctrl.selectedDevices.push(device);
-      ctrl.selectedDevice = {};
-      //ctrl.devices.splice(index, 1);
+    $rootScope.$on('item.selected', function (event, data) {
+      if (data.type === 'telldus-device' || data.type === 'hue-device'||
+          data.type === 'telldus-group' || data.type === 'hue-group') {
+        ctrl.selectedItems.push(data);
+      }
+    });
+
+    ctrl.removeItem = function (index) {
+      ctrl.selectedItems.splice(index, 1);
     };
 
-    ctrl.addGroup = function () {
-      var group = JSON.parse(ctrl.selectedGroup);
-      ctrl.selectedGroups.push(group);
-      ctrl.selectedGroup = {};
-      //ctrl.groups.splice(index, 1);
-    };
 
     ctrl.isEmptyGroup = function () {
-      return (ctrl.selectedDevices.length + ctrl.selectedGroups.length) === 0;
+      return ctrl.selectedItems.length === 0;
     };
 
     ctrl.isValid = function () {
@@ -57,7 +49,7 @@
       if (ctrl.group.name === '') {
         valid = false;
         Message.warning('Please enter a name!');
-      } else if (ctrl.isEmptyGroup()){
+      } else if (ctrl.isEmptyGroup()) {
         valid = false;
         Message.warning('Please add something to the group!');
       }
@@ -71,9 +63,7 @@
         return;
       }
 
-      // Merge devices and groups
-      var items = ctrl.selectedDevices.concat(ctrl.selectedGroups);
-      ctrl.group.items = items.map(function (item) {
+      ctrl.group.items = ctrl.selectedItems.map(function (item) {
         var a = {};
         a.id = item.id;
         a.type = item.type;
@@ -85,10 +75,7 @@
         Message.success('Group created!');
         ctrl.group.name = '';
         ctrl.group.items = [];
-        ctrl.selectedDevice = ctrl.devices[0];
-        ctrl.selectedDevices = [];
-        ctrl.selectedGroup = ctrl.groups[0];
-        ctrl.selectedGroups = [];
+        ctrl.selectedItems = [];
       });
     }
   });

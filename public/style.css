@@ -43,3 +43,8 @@ body {
 .hue-toggle {
     cursor: pointer;
 }
+
+
+.device-remove {
+    cursor: pointer;
+}

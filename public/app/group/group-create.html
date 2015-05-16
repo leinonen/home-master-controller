@@ -1,52 +1,32 @@
 <div class="group-create">
 
-    <div class="row">
-      <div class="col-sm-6">
-        <p>Enter a name for the group</p>
-        <input class="form-control" type="text" ng-model="ctrl.group.name" placeholder="Name" ng-required="true"/>
+  <div class="row">
+    <div class="col-sm-6">
+      <p>Enter a name for the group</p>
+      <input class="form-control" type="text" ng-model="ctrl.group.name" placeholder="Name" ng-required="true"/>
 
-        <p>Select devices to add to the group</p>
+      <p>Select devices to add to the group</p>
+      <item-selector items="ctrl.devices"></item-selector>
 
-        <div class="row">
-          <div class="col-sm-10">
-            <select class="form-control" ng-model="ctrl.selectedDevice">
-              <option ng-repeat="device in ctrl.devices track by device.id" value="{{device}}">{{device.name}}</option>
-            </select>
-          </div>
-          <div class="col-sm-2">
-            <button ng-click="ctrl.addDevice()" class="btn btn-default btn-block">Add <span class="glyphicon glyphicon glyphicon-arrow-right"></span></button>
-          </div>
-        </div>
+      <p>Select groups to add to the group</p>
+      <item-selector items="ctrl.groups"></item-selector>
 
-        <p>Select groups to add to the group</p>
-
-        <div class="row">
-          <div class="col-sm-10">
-            <select class="form-control" ng-model="ctrl.selectedGroup">
-              <option ng-repeat="group in ctrl.groups track by $index" value="{{group}}">{{group.name}}</option>
-            </select>
-          </div>
-          <div class="col-sm-2">
-            <button ng-click="ctrl.addGroup()" class="btn btn-default btn-block">Add <span class="glyphicon glyphicon glyphicon-arrow-right"></span></button>
-          </div>
-        </div>
-
-      </div>
-      <div class="col-sm-6">
-        <p>Devices and groups that will be part of the group</p>
-        <p ng-show="ctrl.isEmptyGroup()">Empty group</p>
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="dev in ctrl.selectedDevices track by $index">
-            <span class="badge">{{dev.type}}</span>
-            {{dev.name}}
-          </li>
-          <li class="list-group-item" ng-repeat="grp in ctrl.selectedGroups track by $index">
-            <span class="badge">{{grp.type}}</span>
-            {{grp.name}}
-          </li>
-        </ul>
-
-      </div>
     </div>
-    <button type="button" ng-click="ctrl.saveGroup()" class="btn btn-primary pull-right">Create group</button>
+    <div class="col-sm-6">
+      <p>Devices and groups that will be part of the group</p>
+
+      <p ng-show="ctrl.isEmptyGroup()">Empty group</p>
+
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="item in ctrl.selectedItems track by $index">
+          <span class="badge device-remove" ng-click="ctrl.removeItem($index)"><span
+            class="glyphicon glyphicon-remove"></span></span>
+          <span class="badge">{{item.type}}</span>
+          {{item.name}}
+        </li>
+      </ul>
+
+    </div>
+  </div>
+  <button type="button" ng-click="ctrl.saveGroup()" class="btn btn-primary pull-right">Create group</button>
 </div>
