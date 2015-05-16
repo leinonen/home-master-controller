@@ -10,6 +10,11 @@ var telldusHelper = require('./api/telldus-helper');
 var Hue = require('./api/hue');
 var Group = require('../models/group');
 
+var TELLDUS_DEVICE = 'telldus-device';
+var TELLDUS_GROUP = 'telldus-group';
+var HUE_DEVICE = 'hue-device';
+var HUE_GROUP = 'hue-group';
+var GENERIC_GROUP = 'generic-group';
 
 /**
  * Get all sensors.
@@ -105,13 +110,13 @@ exports.groups = function () {
  * @returns {*}
  */
 exports.group = function (id, type) {
-  if (type === 'generic-group') {
+  if (type === GENERIC_GROUP) {
     return Group.findById(id).then(transformGenericGroup);
 
-  } else if (type === 'telldus-group') {
+  } else if (type === TELLDUS_GROUP) {
     return Telldus.getDevice(id).then(transformTelldusGroup);
 
-  } else if (type === 'hue-group') {
+  } else if (type === HUE_GROUP) {
     return Hue.getGroup(id).then(transformHueGroup);
   }
 };
@@ -134,10 +139,10 @@ exports.devices = function () {
  * @returns {*}
  */
 exports.device = function (id, type) {
-  if (type === 'telldus-device') {
+  if (type === TELLDUS_DEVICE) {
     return Telldus.getDevice(id).then(transformTelldusDevice).catch(errorHandler);
 
-  } else if (type === 'hue-device') {
+  } else if (type === HUE_DEVICE) {
     return Hue.getLight(id).then(transformHueDevice).catch(errorHandler);
 
   } else {
@@ -152,20 +157,20 @@ exports.device = function (id, type) {
  * @returns {*}
  */
 exports.groupDevices = function (id, type) {
-  if (type === 'generic-group') {
+  if (type === GENERIC_GROUP) {
     return getDevicesForGenericGroup(id).then(function (devices) {
       var promises = devices.map(function (device) {
 
-        if (device.type === 'telldus-device') {
+        if (device.type === TELLDUS_DEVICE) {
           return Telldus.getDevice(device.id).then(transformTelldusDevice);
 
-        } else if (device.type === 'telldus-group') {
+        } else if (device.type === TELLDUS_GROUP) {
           return Telldus.getDevice(device.id).then(transformTelldusGroup);
 
-        } else if (device.type === 'hue-device') {
+        } else if (device.type === HUE_DEVICE) {
           return Hue.getLight(device.id).then(transformHueDevice);
 
-        } else if (device.type === 'hue-group') {
+        } else if (device.type === HUE_GROUP) {
           return Hue.getGroup(device.id).then(transformHueGroup);
 
         } else {
@@ -220,7 +225,7 @@ function flattenArrays(arr) {
  * @returns {boolean}
  */
 function isTelldus(item) {
-  return item.type === 'telldus-device' || item.type === 'telldus-group';
+  return item.type === TELLDUS_DEVICE || item.type === TELLDUS_GROUP;
 }
 
 /**
@@ -229,7 +234,7 @@ function isTelldus(item) {
  * @returns {boolean}
  */
 function isHue(item) {
-  return item.type === 'hue-device' || item.type === 'hue-group';
+  return item.type === HUE_DEVICE || item.type === HUE_GROUP;
 }
 
 /**
@@ -238,7 +243,7 @@ function isHue(item) {
  * @returns {boolean}
  */
 function isGeneric(item) {
-  return item.type === 'generic-group';
+  return item.type === GENERIC_GROUP;
 }
 
 /**
@@ -334,9 +339,9 @@ function controlHue(id, params) {
     message = {hue: Number(params.value)};
   }
 
-  if (params.type === 'hue-device') {
+  if (params.type === HUE_DEVICE) {
     return Hue.setLightState(id, message);
-  } else if (params.type === 'hue-group') {
+  } else if (params.type === HUE_GROUP) {
     return Hue.setGroupAction(id, message);
   }
 }
@@ -379,7 +384,7 @@ function transformTelldusGroup(group) {
   var item = {};
   item.id = group.id;
   item.name = group.name;
-  item.type = 'telldus-group';
+  item.type = TELLDUS_GROUP;
   item.methods = telldusHelper.getSupportedMethods(group);
   item.state = {};
   item.state.on = telldusHelper.isOn(group);
@@ -405,7 +410,7 @@ function transformHueGroup(group) {
   var item = {};
   item.id = group.id;
   item.name = group.name;
-  item.type = 'hue-group';
+  item.type = HUE_GROUP;
   item.state = group.action;
   item.devices = group.lights;
   item.motorized = false;
@@ -434,7 +439,7 @@ function transformGenericGroup(group) {
   item.items = group.items.map(function (a) {
     return a;
   });
-  item.type = 'generic-group';
+  item.type = GENERIC_GROUP;
   item.state = {
     on: false
   };
@@ -461,7 +466,7 @@ function transformTelldusDevice(device) {
   var item = {};
   item.id = device.id;
   item.name = device.name;
-  item.type = 'telldus-device';
+  item.type = TELLDUS_DEVICE;
   item.motorized = telldusHelper.isMotorized(device);
   item.methods = telldusHelper.getSupportedMethods(device);
   item.state = {};
@@ -487,7 +492,7 @@ function transformHueDevice(device) {
   var item = {};
   item.id = device.id;
   item.name = device.name;
-  item.type = 'hue-device';
+  item.type = HUE_DEVICE;
   item.modelid = device.modelid;
   item.manufacturername = device.manufacturername;
   item.state = device.state;
