@@ -2,7 +2,7 @@
 
   var module = angular.module('group');
 
-  module.controller('EditGroupCtrl', function ($rootScope, $q, $stateParams, MasterApi, Message) {
+  module.controller('EditGroupCtrl', function ($rootScope, $q, $state, $stateParams, MasterApi, Message) {
     var ctrl = this;
     ctrl.groupDevices = [];
     ctrl.devices = [];
@@ -41,10 +41,12 @@
           });
         }).catch(function (err) {
           Message.danger(err.data.message);
+          $state.go('root.groups');
         });
 
       }).catch(function (err) {
         Message.danger(err.data.message);
+        $state.go('root.groups');
       });
     }
 

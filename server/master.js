@@ -175,7 +175,7 @@ exports.groupDevices = function (id, type) {
       return Q.all(promises).catch(errorHandler);
     });
   } else {
-    return errorHandler('Not implemented');
+    return errorHandler(type + ' not implemented');
   }
 };
 
