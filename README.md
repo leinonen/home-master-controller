@@ -1,5 +1,7 @@
 # Home Master Controller
 
+![](http://qvintus.pharatropic.se/imagehost/viewImage/150516_1342.png)
+
 Control your home from one place!
 Supports Tellstick Net and Philips Hue.
 
