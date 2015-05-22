@@ -8,8 +8,16 @@ var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 
 
-function getConfig() {
-  return Configuration.findOne().execQ();
+function doGet(path) {
+  return Configuration.get().then(function (config) {
+    return http.get(config.hue.endpoint + path);
+  });
+}
+
+function doPut(path, data) {
+  return Configuration.get().then(function (config) {
+    return http.put(config.hue.endpoint + path, data);
+  });
 }
 
 /**
@@ -17,15 +25,14 @@ function getConfig() {
  * @returns {*}
  */
 exports.getGroups = function () {
-  return getConfig().then(function (config) {
-    return http.get(config.hue.endpoint + '/groups').then(function (groups) {
+  return doGet('/groups')
+    .then(function (groups) {
       return Object.keys(groups).map(function (key) {
         var group = groups[key];
         group.id = key;
         return group;
       });
     });
-  });
 };
 
 /**
@@ -34,12 +41,12 @@ exports.getGroups = function () {
  * @returns {*}
  */
 exports.getGroup = function (id) {
-  return getConfig().then(function (config) {
-    return http.get(config.hue.endpoint + '/groups/' + id).then(function (group) {
+  return doGet('/groups/' + id)
+    .then(function (group) {
       group.id = id; // Must have the id!
+      console.log(group);
       return group;
     });
-  });
 };
 
 /**
@@ -47,10 +54,9 @@ exports.getGroup = function (id) {
  * @returns {*}
  */
 exports.getLights = function () {
-  return getConfig().then(function (config) {
-    return http.get(config.hue.endpoint + '/lights').then(function (lights) {
-
-      // crude error handling :)
+  return doGet('/lights')
+    .then(function (lights) {
+      // crude error handling, hue not returning http error codes!
       if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
         console.log('hue error: ' + lights[0].error.description);
         return [];
@@ -62,7 +68,6 @@ exports.getLights = function () {
         });
       }
     });
-  });
 };
 
 /**
@@ -71,12 +76,12 @@ exports.getLights = function () {
  * @returns {*}
  */
 exports.getLight = function (id) {
-  return getConfig().then(function (config) {
-    return http.get(config.hue.endpoint + '/lights/' + id).then(function (light) {
+  return doGet('/lights/' + id)
+    .then(function (light) {
       light.id = id; // Must have the id!
+      console.log(light);
       return light;
     });
-  });
 };
 
 /**
@@ -86,12 +91,11 @@ exports.getLight = function (id) {
  * @returns {*}
  */
 exports.setLightState = function (id, state) {
-  return getConfig().then(function (config) {
-    return http.put(config.hue.endpoint + '/lights/' + id + '/state', state).then(function (response) {
+  return doPut('/lights/' + id + '/state', state)
+    .then(function (response) {
       console.log(response);
       return response;
     });
-  });
 };
 
 // var action = {bri: Number(bri)};
@@ -103,10 +107,9 @@ exports.setLightState = function (id, state) {
  * @returns {*}
  */
 exports.setGroupAction = function (id, action) {
-  return getConfig().then(function (config) {
-    return http.put(config.hue.endpoint + '/groups/' + id + '/action', action).then(function (response) {
+  return doPut('/groups/' + id + '/action', action)
+    .then(function (response) {
       console.log(response);
       return response;
     });
-  });
 };
