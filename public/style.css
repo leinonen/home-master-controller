@@ -50,3 +50,7 @@ body {
 .device-remove {
     cursor: pointer;
 }
+
+.love {
+    color: #ff188e;
+}
