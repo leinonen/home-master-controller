@@ -191,7 +191,7 @@ exports.groupDevices = function (id, type) {
  * @param device
  */
 exports.control = function (id, params) {
-  console.log('Control %s :' + id + ' -> action: %s', params.type, params.action);
+  console.log('Control %s: ' + id + ' -> action: %s', params.type, params.action);
 
   if (isTelldus(params)) {
     return controlTelldus(id, params);
@@ -202,6 +202,8 @@ exports.control = function (id, params) {
   } else if (isGeneric(params)) {
     return controlGenericGroup(id, params);
 
+  } else if (params.type === 'zwave-switch') {
+    return controlZWave(id, params);
   } else {
     return errorHandler(params.type + ' is not implemented');
   }
@@ -345,6 +347,20 @@ function controlHue(id, params) {
     return Hue.setLightState(id, message);
   } else if (params.type === Transformer.HUE_GROUP) {
     return Hue.setGroupAction(id, message);
+  }
+}
+
+/**
+ * Control z-wave device.
+ * @param id
+ * @param action
+ * @returns {*}
+ */
+function controlZWave(id, params) {
+  if (params.action === 'on') {
+    return ZWave.setOn(id);
+  } else if (params.action === 'off') {
+    return ZWave.setOff(id);
   }
 }
 
