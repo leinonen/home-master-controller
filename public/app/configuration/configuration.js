@@ -29,6 +29,9 @@
       },
       hue: {
         endpoint: ''
+      },
+      zwave: {
+        endpoint: ''
       }
     };
     ConfigService.getConfiguration().then(function (cfg) {

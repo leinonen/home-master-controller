@@ -11,6 +11,9 @@ var ConfigSchema = mongoose.Schema({
   },
   hue: {
     endpoint: String
+  },
+  zwave: {
+    endpoint: String
   }
 
 });

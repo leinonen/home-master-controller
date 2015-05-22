@@ -136,10 +136,15 @@ exports.saveConfiguration = function (req, res) {
       if (cfg) {
         cfg.hue = req.body.hue;
         cfg.telldus = req.body.telldus;
+        cfg.zwave = req.body.zwave;
         cfg.save();
         res.json(cfg);
       } else {
-        var c = new Configuration({hue: req.body.hue, telldus: req.body.telldus});
+        var c = new Configuration({
+          hue: req.body.hue,
+          telldus: req.body.telldus,
+          zwave: req.body.zwave
+        });
         c.save();
         return res.json(c);
       }
