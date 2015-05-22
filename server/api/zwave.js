@@ -9,16 +9,16 @@ function doGet(path) {
 }
 
 exports.devices = function () {
-  return doGet('/ZAutomation/api/v1/devices').then(function(response){
-    return response.data.devices.filter(function(device){
+  return doGet('/ZAutomation/api/v1/devices').then(function (response) {
+    return response.data.devices.filter(function (device) {
       return device.deviceType === 'switchBinary';
     });
   });
 };
 
 exports.sensors = function () {
-  return doGet('/ZAutomation/api/v1/devices').then(function(response){
-    return response.data.devices.filter(function(device){
+  return doGet('/ZAutomation/api/v1/devices').then(function (response) {
+    return response.data.devices.filter(function (device) {
       return device.deviceType === 'sensorMultilevel'
     });
   });
