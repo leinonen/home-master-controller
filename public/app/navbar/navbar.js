@@ -68,7 +68,7 @@
   module.controller('NavbarCtrl', function (Routes) {
 
     var ctrl = this;
-    ctrl.title = 'Home Master Controller';
+    ctrl.title = 'Master Controller';
 
     ctrl.items = Routes.routes;
 
