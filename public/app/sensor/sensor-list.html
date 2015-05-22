@@ -14,6 +14,10 @@
     <div class="col-sm-3">{{sensor.name}}</div>
     <div class="col-sm-3">{{sensor.type}}</div>
     <div class="col-sm-3">{{sensor.data[0].name}}</div>
-    <div class="col-sm-3"><span class="pull-right">{{sensor.data[0].value}} degrees</span></div>
+    <div class="col-sm-3">
+      <span class="pull-right">{{sensor.data[0].value}}
+        <span ng-show="sensor.data[0].name === 'temp'">degrees</span>
+      </span>
+    </div>
   </div>
 </div>

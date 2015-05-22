@@ -12,5 +12,6 @@
   <div ng-repeat="device in ctrl.devices | orderBy:'name'">
     <telldus-device device="device"></telldus-device>
     <hue-device device="device"></hue-device>
+    <zwave-device device="device"></zwave-device>
   </div>
 </div>

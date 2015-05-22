@@ -18,12 +18,14 @@ body {
 }
 
 .hue-device .row,
+.zwave-device .row,
 .telldus-device .row {
     padding: 10px 0;
 }
 
 .hue-device .row > div,
 .telldus-device .row > div,
+.zwave-device .row > div,
 .group-list .row > div,
 .sensor-list .row > div {
     border-top: #000 1px solid;
