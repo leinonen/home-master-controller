@@ -1,6 +1,6 @@
 /**
  * Master API - Control everything! :D
- * Currently supports Telldus and Philips Hue.
+ *
  * @type {exports}
  * @author Peter Leinonen
  */
