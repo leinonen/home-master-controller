@@ -4,16 +4,16 @@
 
   <div class="row sensor-list-header">
     <div class="col-sm-3">Name</div>
-    <div class="col-sm-3">Type</div>
-    <div class="col-sm-3">Kind</div>
-    <div class="col-sm-3"><span class="pull-right">Value</span></div>
+    <div class="col-sm-3 hidden-xs">Type</div>
+    <div class="col-sm-3 hidden-xs">Kind</div>
+    <div class="col-sm-3 hidden-xs"><span class="pull-right">Value</span></div>
   </div>
 
 
   <div class="row sensor-list" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
     <div class="col-sm-3">{{sensor.name}}</div>
-    <div class="col-sm-3">{{sensor.type}}</div>
-    <div class="col-sm-3">{{sensor.data[0].name}}</div>
+    <div class="col-sm-3 hidden-xs">{{sensor.type}}</div>
+    <div class="col-sm-3 hidden-xs">{{sensor.data[0].name}}</div>
     <div class="col-sm-3">
       <span class="pull-right">{{sensor.data[0].value}}
         <span ng-show="sensor.data[0].name === 'temp'">degrees</span>

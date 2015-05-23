@@ -1,9 +1,9 @@
 <div class="zwave-device"  ng-show="ctrl.device.type === 'zwave-switch'">
   <div class="row">
     <div class="col-sm-4">{{ctrl.device.name}}</div>
-    <div class="col-sm-2"><a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a></div>
-    <div class="col-sm-2">{{ctrl.device.type}}</div>
-    <div class="col-sm-2">{{ctrl.getState()}}</div>
+    <div class="col-sm-2 hidden-xs"><a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a></div>
+    <div class="col-sm-2 hidden-xs">{{ctrl.device.type}}</div>
+    <div class="col-sm-2 hidden-xs">{{ctrl.getState()}}</div>
     <div class="col-sm-2">
       <button ng-click="ctrl.toggleDevice()" type="button"
               class="btn btn-primary pull-right" ng-class="{'btn-success':ctrl.device.state.on}">{{ctrl.buttonText()}}

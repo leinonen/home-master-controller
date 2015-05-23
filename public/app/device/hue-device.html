@@ -4,13 +4,13 @@
     <div class="col-sm-4">
       <a ng-click="ctrl.toggleControls()" class="hue-toggle">{{ctrl.device.name}}</a>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 hidden-xs">
       <a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 hidden-xs">
       {{ctrl.device.type}}
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-2 hidden-xs">
       {{ctrl.getState()}}
     </div>
     <div class="col-sm-2">
@@ -20,12 +20,12 @@
   </div>
 
   <div class="hue-controls" ng-show="ctrl.showControls">
-    <div class="row">
+    <div class="row hidden-xs">
       <div class="col-sm-4">Model</div>
       <div class="col-sm-8">{{ctrl.device.modelid}}</div>
     </div>
 
-    <div class="row">
+    <div class="row hidden-xs">
       <div class="col-sm-4">Manufacturer</div>
       <div class="col-sm-8">{{ctrl.device.manufacturername}}</div>
     </div>

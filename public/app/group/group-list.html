@@ -4,14 +4,14 @@
 
   <div class="row group-list-header">
     <div class="col-sm-3">Name</div>
-    <div class="col-sm-3">Type</div>
-    <div class="col-sm-3">State</div>
-    <div class="col-sm-3"></div>
+    <div class="col-sm-3 hidden-xs">Type</div>
+    <div class="col-sm-3 hidden-xs">State</div>
+    <div class="col-sm-3 hidden-xs"></div>
   </div>
   <div class="row" ng-repeat="group in ctrl.groups | orderBy:'name'">
     <div class="col-sm-3"><a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a></div>
-    <div class="col-sm-3">{{group.type}}</div>
-    <div class="col-sm-3">{{ctrl.getState(group)}}</div>
+    <div class="col-sm-3 hidden-xs">{{group.type}}</div>
+    <div class="col-sm-3 hidden-xs">{{ctrl.getState(group)}}</div>
     <div class="col-sm-3">
       <button  ng-hide="ctrl.isGeneric(group)" ng-click="ctrl.toggleGroup(group)" type="button" class="btn btn-primary pull-right">
         {{ctrl.buttonText(group)}}
