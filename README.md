@@ -8,9 +8,9 @@ Supports Tellstick Net, Philips Hue and Z-Wave devices.
 Uses MongoDB for storage. Make sure you have it!
 
 ## Features
-* Telldus Net devices and groups
+* Telldus Net devices, sensors and groups
 * Philips Hue lights and groups
-* Z-Wave devices
+* Z-Wave devices and sensors
 * Create custom groups
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
@@ -30,6 +30,9 @@ node server.js
 
 ## Author
 Written with love by Peter Leinonen, 2015.
+
+## Thanks
+Special thanks to my friend Henrik Boquist for providing all the hardware and devices to test on! :)
 
 
 ## Copyright
