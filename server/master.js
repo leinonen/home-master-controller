@@ -31,8 +31,12 @@ exports.sensors = function () {
     })).then(Transformer.transformTelldusSensors);
   });
   var promises = [];
-  promises.push(telldusSensors);
-  promises.push(ZWave.sensors().then(Transformer.transformZWaveSensors));
+  promises.push(telldusSensors.catch(function(err){
+    return [];
+  }));
+  promises.push(ZWave.sensors().then(Transformer.transformZWaveSensors).catch(function(err){
+    return [];
+  }));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
 
@@ -106,9 +110,15 @@ exports.deleteGenericGroup = deleteGenericGroup;
  */
 exports.groups = function () {
   var promises = [];
-  promises.push(Telldus.groups().then(Transformer.transformTelldusGroups));
-  promises.push(Hue.groups().then(Transformer.transformHueGroups));
-  promises.push(getGenericGroups().then(Transformer.transformGenericGroups));
+  promises.push(Telldus.groups().then(Transformer.transformTelldusGroups).catch(function(err){
+    return [];
+  }));
+  promises.push(Hue.groups().then(Transformer.transformHueGroups).catch(function(err){
+    return [];
+  }));
+  promises.push(getGenericGroups().then(Transformer.transformGenericGroups).catch(function(err){
+    return [];
+  }));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
 
