@@ -199,11 +199,11 @@ exports.groupDevices = function (id, type) {
                 .then(Transformer.transformHueGroup);
 
             case DeviceTypes.GENERIC_GROUP:
-              return Group.findById(id)
+              return Group.findById(device.id)
                 .then(Transformer.transformGenericGroup);
 
             case DeviceTypes.ZWAVE_SWITCH:
-              return ZWave.device(id)
+              return ZWave.device(device.id)
                 .then(Transformer.transformZWaveDevice);
 
             default:
@@ -295,7 +295,7 @@ function getDevicesForGenericGroup(id) {
   return Group.findById(id).then(function (group) {
     return group.items.filter(function (item) {
       // TODO: add generic-group! also rename function
-      return isTelldus(item) || isHue(item);
+      return isTelldus(item) || isHue(item) || item.type === DeviceTypes.ZWAVE_SWITCH;
     });
   });
 }
@@ -421,7 +421,7 @@ function controlZWave(id, params) {
 function errorHandler(error) {
   var deferred = Q.defer();
   var msg = {};
-  msg.statusCode = error.statusCode;
+  msg.statusCode = error.statusCode || 400;
   msg.message = error.statusCode === 404 ? 'Not found' : error;
   if (error.hasOwnProperty('request')) {
     msg.url = error.request.url;

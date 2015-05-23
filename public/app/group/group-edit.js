@@ -35,18 +35,19 @@
           ctrl.groupDevices = devices;
           ctrl.groupDevices.forEach(function (device) {
             if (device.type === 'telldus-device' || device.type === 'hue-device' ||
-                device.type === 'telldus-group' || device.type === 'hue-group') {
+                device.type === 'telldus-group' || device.type === 'hue-group' ||
+                device.type === 'zwave-switch') {
               ctrl.selectedItems.push(device);
             }
           });
         }).catch(function (err) {
           Message.danger(err.data.message);
-          $state.go('root.groups');
+          //$state.go('root.groups');
         });
 
       }).catch(function (err) {
         Message.danger(err.data.message);
-        $state.go('root.groups');
+        //$state.go('root.groups');
       });
     }
 
