@@ -3,6 +3,7 @@ var mongoose = require('mongoose-q')();
 var ConfigSchema = mongoose.Schema({
 
   telldus: {
+    enabled: Boolean,
     endpoint: String,
     publicKey: String,
     privateKey: String,
@@ -10,9 +11,11 @@ var ConfigSchema = mongoose.Schema({
     accessTokenSecret: String
   },
   hue: {
+    enabled: Boolean,
     endpoint: String
   },
   zwave: {
+    enabled: Boolean,
     endpoint: String
   }
 

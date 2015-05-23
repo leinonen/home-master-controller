@@ -11,6 +11,11 @@ body {
     box-shadow: 2px 2px 11px rgba(0, 0, 0, 0.3);
 }
 
+.config-checkbox {
+    width: 40px;
+}
+
+
 .device-list-header,
 .group-list-header,
 .sensor-list-header {

@@ -3,39 +3,76 @@
   <form ng-submit="ctrl.saveConfiguration()">
     <div class="row">
       <div class="col-sm-6">
-        <h4>Telldus</h4>
 
-        <div class="form-group">
-          <p>Public key</p>
-          <input class="form-control" type="text" ng-model="ctrl.config.telldus.publicKey"
-                 placeholder="public key"/>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Telldus</h3>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <p>Enable telldus integration</p>
+              <input type="checkbox" ng-model="ctrl.config.telldus.enabled" class="form-control config-checkbox">
+            </div>
+
+            <div class="form-group">
+              <p>Public key</p>
+              <input class="form-control" type="text" ng-model="ctrl.config.telldus.publicKey"
+                     placeholder="public key"/>
+            </div>
+            <div class="form-group">
+              <p>Private key</p>
+              <input class="form-control" type="text" ng-model="ctrl.config.telldus.privateKey"
+                     placeholder="private key"/>
+            </div>
+            <div class="form-group">
+              <p>Access token</p>
+              <input class="form-control" type="text" ng-model="ctrl.config.telldus.accessToken"
+                     placeholder="access token"/>
+            </div>
+            <div class="form-group">
+              <p>Access token secret</p>
+              <input class="form-control" type="text" ng-model="ctrl.config.telldus.accessTokenSecret"
+                     placeholder="access token secret"/>
+            </div>
+
+          </div>
         </div>
-        <div class="form-group">
-          <p>Private key</p>
-          <input class="form-control" type="text" ng-model="ctrl.config.telldus.privateKey"
-                 placeholder="private key"/>
-        </div>
-        <div class="form-group">
-          <p>Access token</p>
-          <input class="form-control" type="text" ng-model="ctrl.config.telldus.accessToken"
-                 placeholder="access token"/>
-        </div>
-        <div class="form-group">
-          <p>Access token secret</p>
-          <input class="form-control" type="text" ng-model="ctrl.config.telldus.accessTokenSecret"
-                 placeholder="access token secret"/>
-        </div>
+
+
       </div>
       <div class="col-sm-6">
-        <h4>Philips Hue</h4>
 
-        <p>Endpoint url</p>
-        <input class="form-control" type="text" ng-model="ctrl.config.hue.endpoint" placeholder="hue endpoint"/>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Philips Hue</h3>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <p>Enable Philips Hue integration</p>
+              <input type="checkbox" ng-model="ctrl.config.hue.enabled" class="form-control config-checkbox">
+            </div>
 
-        <h4>Z-Wave</h4>
+            <p>Endpoint url</p>
+            <input class="form-control" type="text" ng-model="ctrl.config.hue.endpoint" placeholder="hue endpoint"/>
 
-        <p>Endpoint url</p>
-        <input class="form-control" type="text" ng-model="ctrl.config.zwave.endpoint" placeholder="zwave endpoint"/>
+          </div>
+        </div>
+
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Z-Wave</h3>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <p>Enable Z-Wave integration</p>
+              <input type="checkbox" ng-model="ctrl.config.zwave.enabled" class="form-control config-checkbox">
+            </div>
+            <p>Endpoint url</p>
+            <input class="form-control" type="text" ng-model="ctrl.config.zwave.endpoint" placeholder="zwave endpoint"/>
+          </div>
+        </div>
+
 
       </div>
     </div>

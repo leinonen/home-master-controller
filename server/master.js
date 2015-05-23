@@ -136,9 +136,18 @@ exports.group = function (id, type) {
  */
 exports.devices = function () {
   var promises = [];
-  promises.push(Telldus.devices().then(Transformer.transformTelldusDevices));
-  promises.push(Hue.lights().then(Transformer.transformHueDevices));
-  promises.push(ZWave.devices().then(Transformer.transformZWaveDevices));
+  promises.push(Telldus.devices().then(Transformer.transformTelldusDevices).catch(function(err){
+    console.log(err);
+    return [];
+  }));
+  promises.push(Hue.lights().then(Transformer.transformHueDevices).catch(function(err){
+    console.log(err);
+    return [];
+  }));
+  promises.push(ZWave.devices().then(Transformer.transformZWaveDevices).catch(function(err){
+    console.log(err);
+    return [];
+  }));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
 

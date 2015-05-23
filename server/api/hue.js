@@ -4,18 +4,29 @@
  * @author Peter Leinonen
  */
 
+var Q = require('q');
 var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 
 
 function doGet(path) {
   return Configuration.get().then(function (config) {
+    if (!config.hue.enabled){
+      var deferred = Q.defer();
+      deferred.reject('Hue not enabled');
+      return deferred.promise;
+    }
     return http.get(config.hue.endpoint + path);
   });
 }
 
 function doPut(path, data) {
   return Configuration.get().then(function (config) {
+    if (!config.hue.enabled){
+      var deferred = Q.defer();
+      deferred.reject('Hue not enabled');
+      return deferred.promise;
+    }
     return http.put(config.hue.endpoint + path, data);
   });
 }

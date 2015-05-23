@@ -22,15 +22,18 @@
     var ctrl = this;
     ctrl.config = {
       telldus: {
+        enabled: false,
         publicKey: '',
         privateKey: '',
         accessToken: '',
         accessTokenSecret: ''
       },
       hue: {
+        enabled: false,
         endpoint: ''
       },
       zwave: {
+        enabled: false,
         endpoint: ''
       }
     };

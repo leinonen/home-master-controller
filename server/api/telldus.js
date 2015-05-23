@@ -4,6 +4,7 @@
  * @type {exports}
  * @author Peter Leinonen
  */
+var Q = require('q');
 var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
@@ -40,6 +41,13 @@ function getConfig(callback){
  */
 function apiCall(path, params) {
   return getConfig().then(function(config){
+
+    if (!config.telldus.enabled){
+      var deferred = Q.defer();
+      deferred.reject('Telldus not enabled');
+      return deferred.promise;
+    }
+
     var url = config.telldus.endpoint + path;
     var oauth = new OAuth.OAuth(null, null,
       config.telldus.publicKey,

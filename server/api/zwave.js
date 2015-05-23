@@ -4,11 +4,17 @@
  * @type {exports}
  * @author Peter Leinonen
  */
+var Q = require('q');
 var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 
 function doGet(path) {
   return Configuration.get().then(function (config) {
+    if (!config.zwave.enabled){
+      var deferred = Q.defer();
+      deferred.reject('ZWave not enabled');
+      return deferred.promise;
+    }
     return http.get(config.zwave.endpoint + path);
   });
 
