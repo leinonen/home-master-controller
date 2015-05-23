@@ -61,7 +61,8 @@
 
     $rootScope.$on('item.selected', function (event, data) {
       if (data.type === 'telldus-device' || data.type === 'hue-device' ||
-          data.type === 'telldus-group' || data.type === 'hue-group') {
+          data.type === 'telldus-group' || data.type === 'hue-group' ||
+          data.type === 'zwave-switch') {
         ctrl.selectedItems.push(data);
       }
     });
