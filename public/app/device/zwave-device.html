@@ -6,7 +6,7 @@
     <div class="col-sm-2">{{ctrl.getState()}}</div>
     <div class="col-sm-2">
       <button ng-click="ctrl.toggleDevice()" type="button"
-              class="btn btn-primary pull-right">{{ctrl.buttonText()}}
+              class="btn btn-primary pull-right" ng-class="{'btn-success':ctrl.device.state.on}">{{ctrl.buttonText()}}
       </button>
     </div>
   </div>
