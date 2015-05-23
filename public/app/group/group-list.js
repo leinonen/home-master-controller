@@ -9,6 +9,18 @@
     function updateGroups() {
       MasterApi.getGroups().then(function (groups) {
         ctrl.groups = groups;
+        ctrl.groups.filter(function(g){
+          return g.type === 'generic-group';
+        }).forEach(function(g){
+          MasterApi.getGroupState(g.id).then(function(group){
+            for (var i=0; i<ctrl.groups.length; i++){
+              if (ctrl.groups[i].id === group.id){
+                ctrl.groups[i].state.on = group.state.on;
+                break;
+              }
+            }
+          });
+        });
       });
     }
 
@@ -30,9 +42,7 @@
     };
 
     ctrl.getState = function (group) {
-      if (group.type === 'generic-group'){
-        return '?';
-      } else if (group.motorized) {
+      if (group.motorized) {
         return group.state.on ? 'Up' : 'Down';
       } else {
         return group.state.on ? 'On' : 'Off';

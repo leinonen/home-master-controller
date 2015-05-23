@@ -51,6 +51,11 @@
       return $http.get('/api/group/' + id + '/devices?type=' + type).then(unwrap);
     };
 
+    this.getGroupState = function (id) {
+      return $http.get('/api/groupStatus/' + id).then(unwrap);
+    };
+
+
     // Control
     this.control = function (id, params) {
       return $http.post('/api/control/' + id, params).then(unwrap);

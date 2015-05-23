@@ -24,6 +24,7 @@ app.get('/api/device/:id', controller.device);
 app.get('/api/groups', controller.groups);
 app.post('/api/groups', controller.createGenericGroup);
 app.get('/api/genericGroups', controller.getGenericGroups);
+app.get('/api/groupStatus/:id', controller.getGroupStatus);
 
 app.get('/api/group/:id', controller.group);
 app.post('/api/group/:id', controller.updateGroup);

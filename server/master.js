@@ -31,10 +31,10 @@ exports.sensors = function () {
     })).then(Transformer.transformTelldusSensors);
   });
   var promises = [];
-  promises.push(telldusSensors.catch(function(err){
+  promises.push(telldusSensors.catch(function (err) {
     return [];
   }));
-  promises.push(ZWave.sensors().then(Transformer.transformZWaveSensors).catch(function(err){
+  promises.push(ZWave.sensors().then(Transformer.transformZWaveSensors).catch(function (err) {
     return [];
   }));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
@@ -110,13 +110,13 @@ exports.deleteGenericGroup = deleteGenericGroup;
  */
 exports.groups = function () {
   var promises = [];
-  promises.push(Telldus.groups().then(Transformer.transformTelldusGroups).catch(function(err){
+  promises.push(Telldus.groups().then(Transformer.transformTelldusGroups).catch(function (err) {
     return [];
   }));
-  promises.push(Hue.groups().then(Transformer.transformHueGroups).catch(function(err){
+  promises.push(Hue.groups().then(Transformer.transformHueGroups).catch(function (err) {
     return [];
   }));
-  promises.push(getGenericGroups().then(Transformer.transformGenericGroups).catch(function(err){
+  promises.push(getGenericGroups().then(Transformer.transformGenericGroups).catch(function (err) {
     return [];
   }));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
@@ -146,15 +146,15 @@ exports.group = function (id, type) {
  */
 exports.devices = function () {
   var promises = [];
-  promises.push(Telldus.devices().then(Transformer.transformTelldusDevices).catch(function(err){
+  promises.push(Telldus.devices().then(Transformer.transformTelldusDevices).catch(function (err) {
     console.log(err);
     return [];
   }));
-  promises.push(Hue.lights().then(Transformer.transformHueDevices).catch(function(err){
+  promises.push(Hue.lights().then(Transformer.transformHueDevices).catch(function (err) {
     console.log(err);
     return [];
   }));
-  promises.push(ZWave.devices().then(Transformer.transformZWaveDevices).catch(function(err){
+  promises.push(ZWave.devices().then(Transformer.transformZWaveDevices).catch(function (err) {
     console.log(err);
     return [];
   }));
@@ -318,6 +318,45 @@ function getDevicesForGenericGroup(id) {
     });
   });
 }
+
+
+function getGroupStatus(id) {
+  return getDevicesForGenericGroup(id).then(function (items) {
+    var promises = items.map(function (item) {
+      switch (item.type) {
+        case DeviceTypes.TELLDUS_DEVICE:
+          return Telldus.device(item.id).then(Transformer.transformHueDevice);
+
+        case DeviceTypes.TELLDUS_GROUP:
+          return Telldus.device(item.id).then(Transformer.transformHueGroup);
+
+        case DeviceTypes.HUE_DEVICE:
+          return Hue.light(item.id).then(Transformer.transformHueDevice);
+
+        case DeviceTypes.HUE_GROUP:
+          return Hue.group(item.id).then(Transformer.transformHueGroup);
+
+        case DeviceTypes.ZWAVE_SWITCH:
+          return ZWave.device(item.id).then(Transformer.transformZWaveDevice);
+      }
+    });
+    return Q.all(promises).then(function (response) {
+      var groupState = response.every(function(item){
+        return item.state.on === true;
+      });
+
+      return {
+        id: id,
+        state: {
+          on: groupState
+        }
+      }
+    });
+  });
+}
+
+exports.getGroupStatus = getGroupStatus;
+
 
 /**
  * Control a generic group.

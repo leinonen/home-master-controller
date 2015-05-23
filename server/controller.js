@@ -84,6 +84,12 @@ exports.getGenericGroups = function (req, res) {
   });
 };
 
+exports.getGroupStatus = function(req, res){
+  Master.getGroupStatus(req.params.id).then(function(data){
+    res.json(data);
+  })
+};
+
 exports.createGenericGroup = function (req, res) {
   Master
     .createGenericGroup(req.body)

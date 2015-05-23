@@ -97,7 +97,10 @@ function transformHueDevice(device) {
   item.type = DeviceTypes.HUE_DEVICE;
   item.modelid = device.modelid;
   item.manufacturername = device.manufacturername;
-  item.state = device.state;
+  //item.state = device.state;
+  item.state = {
+    on: telldusHelper.isOn(device)
+  };
   return item;
 }
 exports.transformHueDevice = transformHueDevice;
