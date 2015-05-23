@@ -22,8 +22,8 @@
       return $http.get('/api/devices').then(unwrap);
     };
 
-    this.getDevice = function (id) {
-      return $http.get('/api/device/' + id).then(unwrap);
+    this.getDevice = function (id, type) {
+      return $http.get('/api/device/' + id + '?type=' + type).then(unwrap);
     };
 
     // Groups

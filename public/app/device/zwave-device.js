@@ -7,7 +7,8 @@
     ctrl.device = $scope.device;
 
     function fetchDevices() {
-      $rootScope.$emit('fetchDevices');
+      //$rootScope.$emit('fetchDevices');
+      $rootScope.$emit('fetchDevice', {id: ctrl.device.id, type: ctrl.device.type});
     }
 
     function control(params) {
