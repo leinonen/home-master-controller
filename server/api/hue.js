@@ -24,7 +24,7 @@ function doPut(path, data) {
  * Get all groups.
  * @returns {*}
  */
-exports.getGroups = function () {
+exports.groups = function () {
   return doGet('/groups')
     .then(function (groups) {
       return Object.keys(groups).map(function (key) {
@@ -40,7 +40,7 @@ exports.getGroups = function () {
  * @param id
  * @returns {*}
  */
-exports.getGroup = function (id) {
+exports.group = function (id) {
   return doGet('/groups/' + id)
     .then(function (group) {
       group.id = id; // Must have the id!
@@ -53,7 +53,7 @@ exports.getGroup = function (id) {
  * Get all the lights.
  * @returns {*}
  */
-exports.getLights = function () {
+exports.lights = function () {
   return doGet('/lights')
     .then(function (lights) {
       // crude error handling, hue not returning http error codes!
@@ -75,7 +75,7 @@ exports.getLights = function () {
  * @param id
  * @returns {*}
  */
-exports.getLight = function (id) {
+exports.light = function (id) {
   return doGet('/lights/' + id)
     .then(function (light) {
       light.id = id; // Must have the id!

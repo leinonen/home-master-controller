@@ -7,10 +7,9 @@ mongoose.connect(config.mongo.url, config.mongo.opts);
 
 
 ZWave
-  .devices()
-  .then(Transformer.transformZWaveDevices)
-  .then(function (devices) {
+  .device('ZWayVDev_zway_2-0-37')
+  //.then(Transformer.transformZWaveDevices)
+  .then(function (data) {
 
-    console.log('-- devices --');
-    console.log(devices);
+    console.log(data);
   });

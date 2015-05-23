@@ -1,12 +1,12 @@
 /**
- * Telldus API wrapper
+ * Telldus API wrapper.
+ *
  * @type {exports}
  * @author Peter Leinonen
  */
 var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
-//var config = require('./../config').integrations.telldus;
 var Configuration = require('../../models/configuration');
 
 var TELLSTICK_TURNON = 1;
@@ -59,7 +59,7 @@ function apiCall(path, params) {
  * Get all devices.
  * @returns {*}
  */
-exports.listDevices = function () {
+exports.devices = function () {
   return apiCall('devices/list',
     {supportedMethods: METHODS})
     .then(function (response) {
@@ -73,7 +73,7 @@ exports.listDevices = function () {
  * Get all groups.
  * @returns {*}
  */
-exports.listGroups = function () {
+exports.groups = function () {
   return apiCall('devices/list',
     {supportedMethods: METHODS})
     .then(function (response) {
@@ -88,7 +88,7 @@ exports.listGroups = function () {
  * @param id
  * @returns {*}
  */
-exports.getDevice = function (id) {
+exports.device = function (id) {
   return apiCall('device/info',
     {supportedMethods: METHODS, id: id});
 };
@@ -97,7 +97,7 @@ exports.getDevice = function (id) {
  * Get all sensors.
  * @returns {*}
  */
-exports.listSensors = function () {
+exports.sensors = function () {
   return apiCall('sensors/list',
     {supportedMethods: TELLSTICK_TEMPERATURE})
     .then(function (response) {
@@ -110,7 +110,7 @@ exports.listSensors = function () {
  * @param id
  * @returns {*}
  */
-exports.getSensor = function (id) {
+exports.sensor = function (id) {
   return apiCall('sensor/info',
     {supportedMethods: TELLSTICK_TEMPERATURE, id: id});
 };

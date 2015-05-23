@@ -1,13 +1,14 @@
-var TELLDUS_DEVICE = 'telldus-device';
-exports.TELLDUS_DEVICE = TELLDUS_DEVICE;
-var TELLDUS_GROUP = 'telldus-group';
-exports.TELLDUS_GROUP = TELLDUS_GROUP;
-var HUE_DEVICE = 'hue-device';
-exports.HUE_DEVICE = HUE_DEVICE;
-var HUE_GROUP = 'hue-group';
-exports.HUE_GROUP = HUE_GROUP;
-var GENERIC_GROUP = 'generic-group';
-exports.GENERIC_GROUP = GENERIC_GROUP;
+var DeviceTypes = {
+  TELLDUS_DEVICE : 'telldus-device',
+ TELLDUS_GROUP : 'telldus-group',
+ TELLDUS_SENSOR : 'telldus-sensor',
+ HUE_DEVICE : 'hue-device',
+ HUE_GROUP : 'hue-group',
+ GENERIC_GROUP : 'generic-group',
+ ZWAVE_SWITCH : 'zwave-switch',
+ ZWAVE_SENSOR : 'zwave-sensor'
+};
+exports.DeviceTypes = DeviceTypes;
 
 
 var telldusHelper = require('./api/telldus-helper');
@@ -19,7 +20,7 @@ var telldusHelper = require('./api/telldus-helper');
  */
 function transformTelldusSensors(sensors) {
   return sensors.map(function (sensor) {
-    sensor.type = 'telldus-sensor';
+    sensor.type = DeviceTypes.TELLDUS_SENSOR;
     return sensor;
   });
 }
@@ -34,7 +35,7 @@ function transformTelldusDevice(device) {
   var item = {};
   item.id = device.id;
   item.name = device.name;
-  item.type = TELLDUS_DEVICE;
+  item.type = DeviceTypes.TELLDUS_DEVICE;
   item.motorized = telldusHelper.isMotorized(device);
   item.methods = telldusHelper.getSupportedMethods(device);
   item.state = {};
@@ -64,7 +65,7 @@ function transformTelldusGroup(group) {
   var item = {};
   item.id = group.id;
   item.name = group.name;
-  item.type = TELLDUS_GROUP;
+  item.type = DeviceTypes.TELLDUS_GROUP;
   item.methods = telldusHelper.getSupportedMethods(group);
   item.state = {};
   item.state.on = telldusHelper.isOn(group);
@@ -93,7 +94,7 @@ function transformHueDevice(device) {
   var item = {};
   item.id = device.id;
   item.name = device.name;
-  item.type = HUE_DEVICE;
+  item.type = DeviceTypes.HUE_DEVICE;
   item.modelid = device.modelid;
   item.manufacturername = device.manufacturername;
   item.state = device.state;
@@ -120,7 +121,7 @@ function transformHueGroup(group) {
   var item = {};
   item.id = group.id;
   item.name = group.name;
-  item.type = HUE_GROUP;
+  item.type = DeviceTypes.HUE_GROUP;
   item.state = group.action;
   item.devices = group.lights;
   item.motorized = false;
@@ -151,7 +152,7 @@ function transformGenericGroup(group) {
   item.items = group.items.map(function (a) {
     return a;
   });
-  item.type = GENERIC_GROUP;
+  item.type = DeviceTypes.GENERIC_GROUP;
   item.state = {
     on: false
   };
@@ -182,7 +183,7 @@ function transformZWaveDevice(device) {
   item.id = device.id;
 
   if (device.deviceType === 'switchBinary') {
-    item.type = 'zwave-switch';
+    item.type = DeviceTypes.ZWAVE_SWITCH;
   } else {
     item.type = device.deviceType;
   }
@@ -210,7 +211,7 @@ function transformZWaveSensor(device) {
   item.id = device.id;
 
   if (device.deviceType === 'sensorMultilevel') {
-    item.type = 'zwave-sensor';
+    item.type = DeviceTypes.ZWAVE_SENSOR;
   } else {
     item.type = device.deviceType;
   }
@@ -221,11 +222,16 @@ function transformZWaveSensor(device) {
     value: device.metrics.level + device.metrics.scaleTitle
   }];
 
-
   return item;
 }
 exports.transformZWaveSensor = transformZWaveSensor;
 
+
+/**
+ * Transform a list of zwave sensors to custom format.
+ * @param devices
+ * @returns {*}
+ */
 function transformZWaveSensors(devices) {
   return devices.map(transformZWaveSensor);
 }

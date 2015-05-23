@@ -1,3 +1,9 @@
+/**
+ * Z-Wave / Razberry API Wrapper.
+ *
+ * @type {exports}
+ * @author Peter Leinonen
+ */
 var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 
@@ -14,6 +20,13 @@ exports.devices = function () {
       return response.data.devices.filter(function (device) {
         return device.deviceType === 'switchBinary';
       });
+    });
+};
+
+exports.device = function (id) {
+  return doGet('/ZAutomation/api/v1/devices/' + id)
+    .then(function (response) {
+      return response.data;
     });
 };
 

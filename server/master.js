@@ -8,6 +8,13 @@ var Q = require('q');
 var Telldus = require('./api/telldus');
 var telldusHelper = require('./api/telldus-helper');
 var Transformer = require('./transformer');
+var DeviceTypes = Transformer.DeviceTypes;
+var Actions = {
+  ACTION_ON: 'on',
+  ACTION_OFF: 'off',
+  ACTION_UP: 'up',
+  ACTION_DOWN: 'down'
+};
 
 var Hue = require('./api/hue');
 var ZWave = require('./api/zwave');
@@ -18,9 +25,9 @@ var Group = require('../models/group');
  * @returns {*}
  */
 exports.sensors = function () {
-  var telldusSensors = Telldus.listSensors().then(function (sensors) {
+  var telldusSensors = Telldus.sensors().then(function (sensors) {
     return Q.all(sensors.map(function (sensor) {
-      return Telldus.getSensor(sensor.id);
+      return Telldus.sensor(sensor.id);
     })).then(Transformer.transformTelldusSensors);
   });
   var promises = [];
@@ -35,7 +42,8 @@ exports.sensors = function () {
  * @returns {*}
  */
 exports.sensor = function (id) {
-  return Telldus.getSensor(id);
+  // TODO: Add ZWAVE_SENSOR
+  return Telldus.sensor(id);
 };
 
 /**
@@ -98,8 +106,8 @@ exports.deleteGenericGroup = deleteGenericGroup;
  */
 exports.groups = function () {
   var promises = [];
-  promises.push(Telldus.listGroups().then(Transformer.transformTelldusGroups));
-  promises.push(Hue.getGroups().then(Transformer.transformHueGroups));
+  promises.push(Telldus.groups().then(Transformer.transformTelldusGroups));
+  promises.push(Hue.groups().then(Transformer.transformHueGroups));
   promises.push(getGenericGroups().then(Transformer.transformGenericGroups));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
@@ -111,14 +119,14 @@ exports.groups = function () {
  * @returns {*}
  */
 exports.group = function (id, type) {
-  if (type === Transformer.GENERIC_GROUP) {
+  if (type === DeviceTypes.GENERIC_GROUP) {
     return Group.findById(id).then(Transformer.transformGenericGroup);
 
-  } else if (type === Transformer.TELLDUS_GROUP) {
-    return Telldus.getDevice(id).then(Transformer.transformTelldusGroup);
+  } else if (type === DeviceTypes.TELLDUS_GROUP) {
+    return Telldus.device(id).then(Transformer.transformTelldusGroup);
 
-  } else if (type === Transformer.HUE_GROUP) {
-    return Hue.getGroup(id).then(Transformer.transformHueGroup);
+  } else if (type === DeviceTypes.HUE_GROUP) {
+    return Hue.group(id).then(Transformer.transformHueGroup);
   }
 };
 
@@ -128,8 +136,8 @@ exports.group = function (id, type) {
  */
 exports.devices = function () {
   var promises = [];
-  promises.push(Telldus.listDevices().then(Transformer.transformTelldusDevices));
-  promises.push(Hue.getLights().then(Transformer.transformHueDevices));
+  promises.push(Telldus.devices().then(Transformer.transformTelldusDevices));
+  promises.push(Hue.lights().then(Transformer.transformHueDevices));
   promises.push(ZWave.devices().then(Transformer.transformZWaveDevices));
   return Q.all(promises).then(flattenArrays).catch(errorHandler);
 };
@@ -141,15 +149,24 @@ exports.devices = function () {
  * @returns {*}
  */
 exports.device = function (id, type) {
-  if (type === Transformer.TELLDUS_DEVICE) {
-    return Telldus.getDevice(id).then(Transformer.transformTelldusDevice).catch(errorHandler);
 
-  } else if (type === Transformer.HUE_DEVICE) {
-    return Hue.getLight(id).then(Transformer.transformHueDevice).catch(errorHandler);
+  switch (type) {
+    case DeviceTypes.TELLDUS_DEVICE:
+      return Telldus.device(id)
+        .then(Transformer.transformTelldusDevice).catch(errorHandler);
 
-  } else {
-    return errorHandler('Get ' + type + ' is not implemented');
+    case DeviceTypes.HUE_DEVICE:
+      return Hue.light(id)
+        .then(Transformer.transformHueDevice).catch(errorHandler);
+
+    case DeviceTypes.ZWAVE_SWITCH:
+      return ZWave.device(id)
+        .then(Transformer.transformZWaveDevice).catch(errorHandler);
+
+    default:
+      return errorHandler('Get ' + type + ' is not implemented');
   }
+
 };
 
 /**
@@ -159,28 +176,42 @@ exports.device = function (id, type) {
  * @returns {*}
  */
 exports.groupDevices = function (id, type) {
-  if (type === Transformer.GENERIC_GROUP) {
-    return getDevicesForGenericGroup(id).then(function (devices) {
-      var promises = devices.map(function (device) {
+  if (type === DeviceTypes.GENERIC_GROUP) {
+    return getDevicesForGenericGroup(id)
+      .then(function (devices) {
+        var promises = devices.map(function (device) {
 
-        if (device.type === Transformer.TELLDUS_DEVICE) {
-          return Telldus.getDevice(device.id).then(Transformer.transformTelldusDevice);
+          switch (device.type) {
+            case DeviceTypes.TELLDUS_DEVICE:
+              return Telldus.device(device.id)
+                .then(Transformer.transformTelldusDevice);
 
-        } else if (device.type === Transformer.TELLDUS_GROUP) {
-          return Telldus.getDevice(device.id).then(Transformer.transformTelldusGroup);
+            case DeviceTypes.TELLDUS_GROUP:
+              return Telldus.device(device.id)
+                .then(Transformer.transformTelldusGroup);
 
-        } else if (device.type === Transformer.HUE_DEVICE) {
-          return Hue.getLight(device.id).then(Transformer.transformHueDevice);
+            case DeviceTypes.HUE_DEVICE:
+              return Hue.light(device.id)
+                .then(Transformer.transformHueDevice);
 
-        } else if (device.type === Transformer.HUE_GROUP) {
-          return Hue.getGroup(device.id).then(Transformer.transformHueGroup);
+            case DeviceTypes.HUE_GROUP:
+              return Hue.group(device.id)
+                .then(Transformer.transformHueGroup);
 
-        } else {
-          return Group.findById(id).then(Transformer.transformGenericGroup);
-        }
+            case DeviceTypes.GENERIC_GROUP:
+              return Group.findById(id)
+                .then(Transformer.transformGenericGroup);
+
+            case DeviceTypes.ZWAVE_SWITCH:
+              return ZWave.device(id)
+                .then(Transformer.transformZWaveDevice);
+
+            default:
+          }
+
+        });
+        return Q.all(promises).catch(errorHandler);
       });
-      return Q.all(promises).catch(errorHandler);
-    });
   } else {
     return errorHandler(type + ' not implemented');
   }
@@ -188,24 +219,29 @@ exports.groupDevices = function (id, type) {
 
 /**
  * Control a device or group.
- * @param device
+ * @param id
+ * @param params
  */
 exports.control = function (id, params) {
   console.log('Control %s: ' + id + ' -> action: %s', params.type, params.action);
 
-  if (isTelldus(params)) {
-    return controlTelldus(id, params);
+  switch (params.type) {
+    case DeviceTypes.TELLDUS_DEVICE:
+    case DeviceTypes.TELLDUS_GROUP:
+      return controlTelldus(id, params);
 
-  } else if (isHue(params)) {
-    return controlHue(id, params);
+    case DeviceTypes.HUE_DEVICE:
+    case DeviceTypes.HUE_GROUP:
+      return controlHue(id, params);
 
-  } else if (isGeneric(params)) {
-    return controlGenericGroup(id, params);
+    case DeviceTypes.GENERIC_GROUP:
+      return controlGenericGroup(id, params);
 
-  } else if (params.type === 'zwave-switch') {
-    return controlZWave(id, params);
-  } else {
-    return errorHandler(params.type + ' is not implemented');
+    case DeviceTypes.ZWAVE_SWITCH:
+      return controlZWave(id, params);
+
+    default:
+      return errorHandler(params.type + ' is not implemented');
   }
 };
 
@@ -229,7 +265,7 @@ function flattenArrays(arr) {
  * @returns {boolean}
  */
 function isTelldus(item) {
-  return item.type === Transformer.TELLDUS_DEVICE || item.type === Transformer.TELLDUS_GROUP;
+  return item.type === DeviceTypes.TELLDUS_DEVICE || item.type === DeviceTypes.TELLDUS_GROUP;
 }
 
 /**
@@ -238,7 +274,7 @@ function isTelldus(item) {
  * @returns {boolean}
  */
 function isHue(item) {
-  return item.type === Transformer.HUE_DEVICE || item.type === Transformer.HUE_GROUP;
+  return item.type === DeviceTypes.HUE_DEVICE || item.type === DeviceTypes.HUE_GROUP;
 }
 
 /**
@@ -247,7 +283,7 @@ function isHue(item) {
  * @returns {boolean}
  */
 function isGeneric(item) {
-  return item.type === Transformer.GENERIC_GROUP;
+  return item.type === DeviceTypes.GENERIC_GROUP;
 }
 
 /**
@@ -271,7 +307,7 @@ function getDevicesForGenericGroup(id) {
  * @returns {*}
  */
 function controlGenericGroup(id, params) {
-  if (params.action === 'on' || params.action === 'off') {
+  if (params.action === Actions.ACTION_ON || params.action === Actions.ACTION_OFF) {
     return controlDevicesInGroup(id, params);
   }
 }
@@ -287,12 +323,20 @@ function controlDevicesInGroup(id, params) {
 
     var promises = items.map(function (item) {
       params.type = item.type; // Must send correct type!
-      if (isTelldus(item)) {
-        return controlTelldus(item.id, params);
-      } else if (isHue(item)) {
-        return controlHue(item.id, params);
+
+      switch (item.type) {
+        case DeviceTypes.TELLDUS_DEVICE:
+        case DeviceTypes.TELLDUS_GROUP:
+          return controlTelldus(item.id, params);
+
+        case DeviceTypes.HUE_DEVICE:
+        case DeviceTypes.HUE_GROUP:
+          return controlHue(item.id, params);
+
+        case DeviceTypes.ZWAVE_SWITCH:
+          return controlZWave(item.id, params);
       }
-      // TODO: handle generic groups!
+      // TODO: handle generic groups! Recursive call
     });
     return Q.all(promises).then(function (response) {
       // TODO: update group with correct state?
@@ -309,14 +353,18 @@ function controlDevicesInGroup(id, params) {
  */
 function controlTelldus(id, params) {
   console.log('controlTelldus ' + params.type + ' ' + params.action);
-  if (params.action === 'on') {
-    return Telldus.turnOn(id);
-  } else if (params.action === 'off') {
-    return Telldus.turnOff(id);
-  } else if (params.action === 'up') {
-    return Telldus.goUp(id);
-  } else if (params.action === 'down') {
-    return Telldus.goDown(id);
+  switch (params.action) {
+    case Actions.ACTION_ON:
+      return Telldus.turnOn(id);
+
+    case Actions.ACTION_OFF:
+      return Telldus.turnOff(id);
+
+    case Actions.ACTION_UP:
+      return Telldus.goUp(id);
+
+    case Actions.ACTION_DOWN:
+      return Telldus.goDown(id);
   }
 }
 
@@ -331,9 +379,9 @@ function controlHue(id, params) {
   console.log('controlHue ' + params.type + ' ' + params.action);
 
   var message = {};
-  if (params.action === 'on') {
+  if (params.action === Actions.ACTION_ON) {
     message = {on: true};
-  } else if (params.action === 'off') {
+  } else if (params.action === Actions.ACTION_OFF) {
     message = {on: false};
   } else if (params.action === 'bri') {
     message = {bri: Number(params.value)};
@@ -343,9 +391,9 @@ function controlHue(id, params) {
     message = {hue: Number(params.value)};
   }
 
-  if (params.type === Transformer.HUE_DEVICE) {
+  if (params.type === DeviceTypes.HUE_DEVICE) {
     return Hue.setLightState(id, message);
-  } else if (params.type === Transformer.HUE_GROUP) {
+  } else if (params.type === DeviceTypes.HUE_GROUP) {
     return Hue.setGroupAction(id, message);
   }
 }
@@ -353,13 +401,14 @@ function controlHue(id, params) {
 /**
  * Control z-wave device.
  * @param id
- * @param action
+ * @param params
  * @returns {*}
  */
 function controlZWave(id, params) {
-  if (params.action === 'on') {
+  if (params.action === Actions.ACTION_ON) {
     return ZWave.setOn(id);
-  } else if (params.action === 'off') {
+
+  } else if (params.action === Actions.ACTION_OFF) {
     return ZWave.setOff(id);
   }
 }
