@@ -3,14 +3,14 @@
 ![](http://qvintus.pharatropic.se/imagehost/viewImage/150516_1342.png)
 
 Control your home from one place!
-Supports Tellstick Net, Philips Hue and Z-Wave devices.
+Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 
 Uses MongoDB for storage. Make sure you have it!
 
 ## Features
 * Telldus Net devices, sensors and groups
 * Philips Hue lights and groups
-* Z-Wave devices and sensors
+* Z-Wave (RaZberry) devices and sensors
 * Create custom groups
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
