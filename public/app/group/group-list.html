@@ -26,7 +26,7 @@
 
     <div class="row" ng-if="group.deviceList">
       <ul>
-        <li ng-repeat="device in group.deviceList">{{device.name}}</li>
+        <li ng-repeat="device in group.deviceList">{{device.name}} - {{device.state.on ? 'On':'Off'}}</li>
       </ul>
     </div>
 
