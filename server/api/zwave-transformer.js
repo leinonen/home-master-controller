@@ -17,6 +17,7 @@ function transformZWaveDevice(device) {
   item.name = device.metrics.title;
   item.state = {};
   item.state.on = device.metrics.level === 'on';
+  item.motorized = false;
   return item;
 }
 exports.ZWaveDevice = transformZWaveDevice;
