@@ -29,7 +29,7 @@
     function control(id, params) {
       MasterApi.control(id, params).then(function (status) {
         console.log(status);
-        setTimeout(updateGroups, 100);
+        setTimeout(updateGroups, 250);
       }).catch(console.error);
     }
 

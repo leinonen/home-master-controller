@@ -160,7 +160,7 @@ function groupState(id) {
     var promises = items.map(function (item) {
       switch (item.type) {
         case DeviceTypes.TELLDUS_DEVICE:
-          return Telldus.device(item.id).then(Transformer.HueDevice).catch(serviceDisabled);
+          return Telldus.device(item.id).then(Transformer.TelldusDevice).catch(serviceDisabled);
 
         case DeviceTypes.TELLDUS_GROUP:
           return Telldus.device(item.id).then(Transformer.HueGroup).catch(serviceDisabled);
@@ -175,17 +175,18 @@ function groupState(id) {
           return ZWave.device(item.id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
       }
     });
-    return Q.all(promises).then(function (response) {
+    return Q.all(promises).then(function (devices) {
       // Group is on if all devices are on
-      var groupState = response.every(function (item) {
-        return item.state.on === true;
+      var groupState = devices.every(function (device) {
+        return device.state.on === true;
       });
 
       return {
         id: id,
         state: {
           on: groupState
-        }
+        },
+        devices: devices
       }
     });
   });
