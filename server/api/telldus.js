@@ -9,19 +9,10 @@ var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
+var Methods = require('./telldus-methods');
 
-var TELLSTICK_TURNON = 1;
-var TELLSTICK_TURNOFF = 2;
-var TELLSTICK_BELL = 4;
-var TELLSTICK_TOGGLE = 8;
-var TELLSTICK_DIM = 16;
-var TELLSTICK_LEARN = 32;
-var TELLSTICK_EXECUTE = 64;
-var TELLSTICK_UP = 128;
-var TELLSTICK_DOWN = 256;
-var TELLSTICK_STOP = 512;
-
-var METHODS = TELLSTICK_TURNON | TELLSTICK_TURNOFF | TELLSTICK_UP | TELLSTICK_DOWN | TELLSTICK_STOP;
+var METHODS = Methods.TELLSTICK_TURNON | Methods.TELLSTICK_TURNOFF |
+  Methods.TELLSTICK_UP | Methods.TELLSTICK_DOWN | Methods.TELLSTICK_STOP;
 
 var TELLSTICK_TYPE_DEVICE = 1;
 var TELLSTICK_TYPE_GROUP = 2;
