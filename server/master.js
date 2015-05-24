@@ -23,7 +23,7 @@ exports.sensors = function () {
  * @returns {*}
  */
 exports.sensor = function (id, type) {
-  return Wrapper.sensor(id, type);
+  return Wrapper.sensor(id, type).catch(errorHandler);
 };
 
 
@@ -81,16 +81,16 @@ exports.groupState = function (id) {
   return Wrapper.groupState(id).catch(errorHandler);
 };
 
-exports.createGenericGroup = function(group){
+exports.createGenericGroup = function (group) {
   return Wrapper.createGenericGroup(group).catch(errorHandler);
 };
 
-exports.updateGenericGroup = function(id, group){
-  return Wrapper.updateGenericGroup(id, group);
+exports.updateGenericGroup = function (id, group) {
+  return Wrapper.updateGenericGroup(id, group).catch(errorHandler);
 };
 
-exports.removeGenericGroup = function(id){
-  return Wrapper.removeGenericGroup(id);
+exports.removeGenericGroup = function (id) {
+  return Wrapper.removeGenericGroup(id).catch(errorHandler);
 };
 
 /**
@@ -103,7 +103,6 @@ exports.control = function (id, params) {
 };
 
 
-
 /**
  * Error handler
  * @param error
@@ -114,12 +113,14 @@ function errorHandler(error) {
   var msg = {};
   msg.statusCode = error.statusCode || 400;
 
-  if (msg.statusCode === 500){
+  if (msg.statusCode === 500) {
     msg.message = error.message;
-  } else if (msg.statusCode === 404){
-    msg.message = 'Not found!';
+  } else if (msg.statusCode === 404) {
+
     if (error.hasOwnProperty('request')) {
-      msg.url = error.request.url;
+      msg.message = 'Not found! ' + error.request.url;
+    } else {
+      msg.message = 'Not found!';
     }
   } else {
     msg.message = error;
