@@ -37,6 +37,7 @@
         endpoint: ''
       }
     };
+
     ConfigService.getConfiguration().then(function (cfg) {
       ctrl.config = cfg;
     }).catch(function (err) {
@@ -44,9 +45,10 @@
     });
 
     ctrl.saveConfiguration = function () {
-      console.log('saving');
+      console.log('Saving configuration');
       ConfigService.saveConfiguration(ctrl.config).then(function (cfg) {
         ctrl.config = cfg;
+        console.log('Configuration saved');
         Message.success('Configuration saved!');
       });
     }

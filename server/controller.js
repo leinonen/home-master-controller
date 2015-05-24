@@ -19,7 +19,7 @@ exports.sensors = function (req, res) {
 
 exports.sensor = function (req, res) {
   Master
-    .sensor(req.params.id)
+    .sensor(req.params.id, req.query.type)
     .then(function (sensor) {
       res.json(sensor);
     })
@@ -78,19 +78,14 @@ exports.groupDevices = function (req, res) {
     });
 };
 
-exports.getGenericGroups = function (req, res) {
-  Master.getGenericGroups().then(function (groups) {
-    res.json(groups);
-  });
-};
 
-exports.getGroupStatus = function(req, res){
-  Master.getGroupStatus(req.params.id).then(function(data){
+exports.groupState = function(req, res){
+  Master.groupState(req.params.id).then(function(data){
     res.json(data);
   })
 };
 
-exports.createGenericGroup = function (req, res) {
+exports.createGroup = function (req, res) {
   Master
     .createGenericGroup(req.body)
     .then(function (group) {
@@ -108,7 +103,7 @@ exports.updateGroup = function (req, res) {
 
 exports.deleteGroup = function (req, res) {
   Master
-    .deleteGenericGroup(req.params.id, req.body)
+    .removeGenericGroup(req.params.id)
     .then(function (status) {
       res.json(status);
     });
@@ -128,31 +123,13 @@ exports.control = function (req, res) {
 // Configuration
 
 exports.readConfiguration = function (req, res) {
-  Configuration
-    .get()
-    .then(function (cfg) {
+  Configuration.get().then(function (cfg) {
       res.json(cfg);
     }).catch(errorHandler);
 };
 
 exports.saveConfiguration = function (req, res) {
-  Configuration
-    .findById(req.body._id)
-    .then(function (cfg) {
-      if (cfg) {
-        cfg.hue = req.body.hue;
-        cfg.telldus = req.body.telldus;
-        cfg.zwave = req.body.zwave;
-        cfg.save();
-        res.json(cfg);
-      } else {
-        var c = new Configuration({
-          hue: req.body.hue,
-          telldus: req.body.telldus,
-          zwave: req.body.zwave
-        });
-        c.save();
-        return res.json(c);
-      }
-    }).catch(errorHandler);
+  Configuration.saveConfig(req.body._id, req.body).then(function(cfg){
+    res.json(cfg);
+  }).catch(errorHandler);
 };

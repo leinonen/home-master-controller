@@ -52,7 +52,7 @@
     };
 
     this.getGroupState = function (id) {
-      return $http.get('/api/groupStatus/' + id).then(unwrap);
+      return $http.get('/api/groupState/' + id).then(unwrap);
     };
 
 

@@ -10,7 +10,7 @@
       MasterApi.getDevices().then(function (devices) {
         ctrl.devices = devices;
       }).catch(function (err) {
-        Message.danger(err.data.statusCode + ' : ' + err.data.message + ' : ' + err.data.url);
+        Message.danger(err.data.statusCode + ' : ' + err.data.message);
       });
     }
 
@@ -24,7 +24,7 @@
           }
         }
       }).catch(function (err) {
-        Message.danger(err.data.statusCode + ' : ' + err.data.message + ' : ' + err.data.url);
+        Message.danger(err.data.statusCode + ' : ' + err.data.message);
       });
     }
 

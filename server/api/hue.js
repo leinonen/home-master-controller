@@ -9,26 +9,41 @@ var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 
 
+function errorHandler(err) {
+  if (err.code === 'ECONNREFUSED' ||
+    err.code === 'ENETUNREACH' ||
+    err.code === 'ETIMEDOUT') {
+    return makeErrorPromise({
+      statusCode: 500,
+      message: 'Unable to connect to Hue endpoint. Check your configuration'
+    });
+  } else {
+    return makeErrorPromise(err);
+  }
+}
+
 function doGet(path) {
   return Configuration.get().then(function (config) {
-    if (!config.hue.enabled){
-      var deferred = Q.defer();
-      deferred.reject('Hue not enabled');
-      return deferred.promise;
+    if (!config.hue.enabled) {
+      return makeErrorPromise({serviceDisabled: true, message: 'Hue not enabled'});
     }
-    return http.get(config.hue.endpoint + path);
+    return http.get(config.hue.endpoint + path).catch(errorHandler);
   });
 }
 
 function doPut(path, data) {
   return Configuration.get().then(function (config) {
-    if (!config.hue.enabled){
-      var deferred = Q.defer();
-      deferred.reject('Hue not enabled');
-      return deferred.promise;
+    if (!config.hue.enabled) {
+      return makeErrorPromise({serviceDisabled: true, message: 'Hue not enabled'});
     }
-    return http.put(config.hue.endpoint + path, data);
+    return http.put(config.hue.endpoint + path, data).catch(errorHandler);
   });
+}
+
+function makeErrorPromise(msg) {
+  var deferred = Q.defer();
+  deferred.reject(msg);
+  return deferred.promise;
 }
 
 /**
@@ -55,7 +70,6 @@ exports.group = function (id) {
   return doGet('/groups/' + id)
     .then(function (group) {
       group.id = id; // Must have the id!
-      console.log(group);
       return group;
     });
 };
@@ -69,8 +83,11 @@ exports.lights = function () {
     .then(function (lights) {
       // crude error handling, hue not returning http error codes!
       if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
-        console.log('hue error: ' + lights[0].error.description);
-        return [];
+        //console.log('hue error: ' + lights[0].error.description);
+        return makeErrorPromise({
+          statusCode: 500,
+          message: 'Hue api - ' + lights[0].error.description + '. Check your configuration'
+        });
       } else {
         return Object.keys(lights).map(function (key) {
           var light = lights[key];
@@ -90,7 +107,6 @@ exports.light = function (id) {
   return doGet('/lights/' + id)
     .then(function (light) {
       light.id = id; // Must have the id!
-      console.log(light);
       return light;
     });
 };
@@ -104,6 +120,7 @@ exports.light = function (id) {
 exports.setLightState = function (id, state) {
   return doPut('/lights/' + id + '/state', state)
     .then(function (response) {
+      // TODO: Make a proper response Transformer
       console.log(response);
       return response;
     });
@@ -120,6 +137,7 @@ exports.setLightState = function (id, state) {
 exports.setGroupAction = function (id, action) {
   return doPut('/groups/' + id + '/action', action)
     .then(function (response) {
+      // TODO: Make a proper response Transformer
       console.log(response);
       return response;
     });

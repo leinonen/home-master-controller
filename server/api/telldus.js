@@ -29,8 +29,21 @@ var TELLSTICK_TYPE_SCENE = 3;
 
 var TELLSTICK_TEMPERATURE = 1;
 
-function getConfig(callback){
+function getConfig(callback) {
   return Configuration.findOne().execQ();
+}
+
+function errorHandler(err){
+  if (err.code === 'ECONNREFUSED' ||
+      err.code === 'ENETUNREACH' ||
+      err.code === 'ETIMEDOUT') {
+    return makeErrorPromise({
+      statusCode: 500,
+      message: 'Unable to connect to Telldus endpoint. Check your configuration'
+    });
+  } else {
+    return makeErrorPromise(err);
+  }
 }
 
 /**
@@ -40,12 +53,10 @@ function getConfig(callback){
  * @returns {*}
  */
 function apiCall(path, params) {
-  return getConfig().then(function(config){
+  return getConfig().then(function (config) {
 
-    if (!config.telldus.enabled){
-      var deferred = Q.defer();
-      deferred.reject('Telldus not enabled');
-      return deferred.promise;
+    if (!config.telldus.enabled) {
+      return makeErrorPromise({serviceDisabled: true, message: 'Telldus not enabled'});
     }
 
     var url = config.telldus.endpoint + path;
@@ -59,9 +70,18 @@ function apiCall(path, params) {
     oauthParameters.forEach(function (params) {
       messageParameters[params[0]] = params[1];
     });
-    return http.get(url + '?' + Qs.stringify(messageParameters));
+
+    return http.get(url + '?' + Qs.stringify(messageParameters)).catch(errorHandler);
   });
 }
+
+
+function makeErrorPromise(msg) {
+  var deferred = Q.defer();
+  deferred.reject(msg);
+  return deferred.promise;
+}
+
 
 /**
  * Get all devices.

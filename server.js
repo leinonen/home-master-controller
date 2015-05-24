@@ -22,9 +22,9 @@ app.get('/api/devices', controller.devices);
 app.get('/api/device/:id', controller.device);
 
 app.get('/api/groups', controller.groups);
-app.post('/api/groups', controller.createGenericGroup);
-app.get('/api/genericGroups', controller.getGenericGroups);
-app.get('/api/groupStatus/:id', controller.getGroupStatus);
+app.post('/api/groups', controller.createGroup);
+//app.get('/api/genericGroups', controller.getGenericGroups);
+app.get('/api/groupState/:id', controller.groupState);
 
 app.get('/api/group/:id', controller.group);
 app.post('/api/group/:id', controller.updateGroup);
