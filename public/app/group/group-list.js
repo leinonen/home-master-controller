@@ -16,6 +16,7 @@
             for (var i=0; i<ctrl.groups.length; i++){
               if (ctrl.groups[i].id === group.id){
                 ctrl.groups[i].state.on = group.state.on;
+                ctrl.groups[i].deviceList = group.devices;
                 break;
               }
             }
