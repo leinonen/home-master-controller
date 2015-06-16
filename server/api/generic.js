@@ -1,4 +1,5 @@
 var Group = require('../../models/group');
+var Q = require('q');
 /**
  * Get all generic groups.
  * @returns {*}
