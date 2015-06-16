@@ -3,8 +3,23 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose-q')();
-var config = require('./server/config');
+var fs = require('fs');
+//var config = require('./server/config');
 var controller = require('./server/controller');
+
+function getUserHome() {
+  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+}
+
+var conf = path.join(getUserHome(), '/.hmc.conf');
+
+if (!fs.existsSync(conf)){
+  console.log('Configuration file missing! Create .hmc.conf in your home directory.');
+}
+
+var config = JSON.parse(fs.readFileSync(conf, 'utf-8'));
+
+console.log(getUserHome());
 
 mongoose.connect(config.mongo.url, config.mongo.opts);
 
