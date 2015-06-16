@@ -1,0 +1,13 @@
+{
+  "port": 8080,
+  "mongo": {
+    "url": "<host>:27017/homeMasterController_dev",
+    "opts": {
+      "server": {
+        "socketOptions": {
+          "keepAlive": 1
+        }
+      }
+    }
+  }
+}
