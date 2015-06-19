@@ -19,7 +19,7 @@
       }).catch(console.error);
     }
 
-    ctrl.toggleControls = function(){
+    ctrl.toggleControls = function () {
       ctrl.showControls = !ctrl.showControls;
     };
 
@@ -36,6 +36,18 @@
         return ctrl.device.state.on ? 'Bring Down' : 'Bring Up';
       } else {
         return ctrl.device.state.on ? 'Turn Off' : 'Turn On';
+      }
+    };
+
+    ctrl.colorLoopText = function () {
+      return ctrl.device.state.effect === 'none' ? 'Enable Colorloop' : 'Disable Colorloop';
+    };
+
+    ctrl.toggleColorLoop = function () {
+      if (ctrl.device.state.effect === 'none') {
+        control({action: 'colorloop-on'});
+      } else {
+        control({action: 'colorloop-off'});
       }
     };
 

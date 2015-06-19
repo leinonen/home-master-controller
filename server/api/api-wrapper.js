@@ -195,18 +195,17 @@ function groupState(id) {
 exports.groupState = groupState;
 
 
-exports.createGenericGroup = function(group){
+exports.createGenericGroup = function (group) {
   return Generic.create(group);
 };
 
-exports.updateGenericGroup = function(id, group){
+exports.updateGenericGroup = function (id, group) {
   return Generic.update(id, group);
 };
 
-exports.removeGenericGroup = function(id){
+exports.removeGenericGroup = function (id) {
   return Generic.remove(id);
 };
-
 
 
 /**
@@ -293,6 +292,10 @@ function controlHue(id, params) {
     message = {on: true};
   } else if (params.action === Actions.ACTION_OFF) {
     message = {on: false};
+  } else if (params.action === 'colorloop-on') {
+    message = {effect: 'colorloop'}
+  } else if (params.action === 'colorloop-off') {
+    message = {effect: 'none'}
   } else if (params.action === 'bri') {
     message = {bri: Number(params.value)};
   } else if (params.action === 'sat') {

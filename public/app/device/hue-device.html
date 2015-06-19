@@ -53,12 +53,20 @@
           <div class="col-sm-6">
             <select class="form-control" ng-model="ctrl.device.state.hue" ng-change="ctrl.setHue()"
                     ng-disabled="ctrl.device.state.on === false">
+              <option value="3000">Deep Orange</option>
               <option value="12750">Yellow</option>
               <option value="25500">Green</option>
               <option value="46920">Blue</option>
               <option value="56100">Pink</option>
               <option value="65280">Red</option>
             </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <button ng-click="ctrl.toggleColorLoop()" type="button" class="btn btn-primary pull-right" ng-class="{'btn-success':ctrl.device.state.effect !== 'none'}">{{ctrl.colorLoopText()}}
+            </button>
           </div>
         </div>
 
