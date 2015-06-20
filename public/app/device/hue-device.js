@@ -40,7 +40,7 @@
     };
 
     ctrl.colorLoopText = function () {
-      return ctrl.device.state.effect === 'none' ? 'Enable Colorloop' : 'Disable Colorloop';
+      return ctrl.device.state.effect === 'none' ? 'Enable' : 'Disable';
     };
 
     ctrl.toggleColorLoop = function () {

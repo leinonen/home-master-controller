@@ -1,8 +1,8 @@
 <div class="group-list">
 
-  <p ng-show="ctrl.groups.length === 0">Loading groups..</p>
+  <p ng-show="ctrl.groups.length === 0">No groups found</p>
 
-  <div class="row group-list-header">
+  <div class="row group-list-header" ng-show="ctrl.groups.length > 0">
     <div class="col-sm-3">Name</div>
     <div class="col-sm-3 hidden-xs">Type</div>
     <div class="col-sm-3 hidden-xs">State</div>
