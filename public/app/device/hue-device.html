@@ -2,7 +2,9 @@
 
   <div class="row">
     <div class="col-sm-4">
-      <a ng-click="ctrl.toggleControls()" class="hue-toggle" title="{{ctrl.device.manufacturername}} {{ctrl.device.modelid}}">{{ctrl.device.name}}</a>
+      <a ng-click="ctrl.toggleControls()"
+         class="hue-toggle"
+         title="{{ctrl.device.manufacturername}} {{ctrl.device.modelid}}">{{ctrl.device.name}}</a>
     </div>
     <div class="col-sm-2 hidden-xs">
       <a ng-href="/api/device/{{ctrl.device.id}}?type={{ctrl.device.type}}">{{ctrl.device.id}}</a>
@@ -14,7 +16,11 @@
       {{ctrl.getState()}}
     </div>
     <div class="col-sm-2">
-      <button ng-click="ctrl.toggleDevice()" type="button" class="btn btn-primary pull-right" ng-class="{'btn-success':ctrl.device.state.on}">{{ctrl.buttonText()}}
+      <button ng-click="ctrl.toggleDevice()"
+              type="button"
+              class="btn btn-primary pull-right"
+              ng-class="{'btn-success':ctrl.device.state.on}">
+        {{ctrl.buttonText()}}
       </button>
     </div>
   </div>
@@ -51,7 +57,9 @@
           <div class="col-sm-4">Hue</div>
           <div class="col-sm-2">{{ctrl.device.state.hue}}</div>
           <div class="col-sm-6">
-            <select class="form-control" ng-model="ctrl.device.state.hue" ng-change="ctrl.setHue()"
+            <select class="form-control"
+                    ng-model="ctrl.device.state.hue"
+                    ng-change="ctrl.setHue()"
                     ng-disabled="ctrl.device.state.on === false">
               <option value="3000">Deep Orange</option>
               <option value="12750">Yellow</option>
@@ -68,7 +76,11 @@
             Color looping
           </div>
           <div class="col-sm-6">
-            <button ng-click="ctrl.toggleColorLoop()" type="button" class="btn btn-primary" ng-class="{'btn-success':ctrl.device.state.effect !== 'none'}">{{ctrl.colorLoopText()}}
+            <button ng-click="ctrl.toggleColorLoop()"
+                    type="button"
+                    class="btn btn-primary"
+                    ng-class="{'btn-success':ctrl.device.state.effect !== 'none'}">
+              {{ctrl.colorLoopText()}}
             </button>
           </div>
         </div>

@@ -11,7 +11,9 @@
 
   <div ng-repeat="group in ctrl.groups | orderBy:'name'">
     <div class="row" >
-      <div class="col-sm-3"><a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a></div>
+      <div class="col-sm-3">
+        <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a>
+      </div>
       <div class="col-sm-3 hidden-xs">{{group.type}}</div>
       <div class="col-sm-3 hidden-xs">{{ctrl.getState(group)}}</div>
       <div class="col-sm-3">
