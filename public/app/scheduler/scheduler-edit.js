@@ -87,6 +87,7 @@
         ctrl.schedule = {};
         console.log('update successful');
         Message.success('Successfully updated schedule');
+        $state.go('root.scheduler');
       }).catch(function (err) {
         console.error(err.data);
         Message.danger(err.data);

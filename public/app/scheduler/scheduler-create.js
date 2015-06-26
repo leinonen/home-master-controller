@@ -74,6 +74,7 @@
         ctrl.schedule = {};
         console.log('create successful');
         Message.success('Successfully created schedule');
+        $state.go('root.scheduler');
       }).catch(function (err) {
         console.error(err.data);
         Message.danger(err.data);
