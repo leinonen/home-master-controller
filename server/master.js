@@ -7,6 +7,9 @@
 var Q = require('q');
 var Wrapper = require('./api/api-wrapper');
 var Group = require('../models/group');
+var Schedule = require('../models/schedule');
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
 
 /**
  * Get all sensors.
@@ -100,6 +103,49 @@ exports.removeGenericGroup = function (id) {
  */
 exports.control = function (id, params) {
   return Wrapper.control(id, params).catch(errorHandler);
+};
+
+
+exports.schedule = function (id) {
+  return Schedule.findById(id);
+};
+
+exports.schedules = function () {
+  return Schedule.findAll();
+};
+
+exports.createSchedule = function (schedule) {
+  var sch = new Schedule(schedule);
+  sch.save();
+
+  //eventEmitter.emit('SchedulerUpdate');
+
+  var def = Q.defer();
+  def.resolve(sch);
+
+  return def.promise;
+};
+
+exports.updateSchedule = function (id, sch) {
+  return Schedule
+    .findById(id)
+    .then(function (schedule) {
+      schedule.name = sch.name;
+      schedule.action = sch.action;
+      schedule.active = sch.active;
+      schedule.time = sch.time;
+      schedule.random = sch.random;
+      schedule.weekdays = sch.weekdays;
+      schedule.items = sch.items;
+      schedule.save();
+      console.log('updated schedule. sending SchedulerUpdate event');
+      //eventEmitter.emit('SchedulerUpdate');
+      return schedule;
+    });
+};
+
+exports.deleteSchedule = function (id) {
+
 };
 
 

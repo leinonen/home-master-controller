@@ -41,6 +41,27 @@
         position: 'left'
       },
       {
+        title: 'Scheduler',
+        state: 'root.scheduler',
+        url: '/scheduler',
+        templateUrl: 'app/views/scheduler.html',
+        position: 'left'
+      },
+      {
+        title: 'Create Schedule',
+        state: 'root.scheduler.create',
+        url: '/create',
+        templateUrl: 'app/views/scheduler-create.html',
+        position: 'hidden'
+      },
+      {
+        title: 'Edit Schedule',
+        state: 'root.scheduler.edit',
+        url: '/edit/:id',
+        templateUrl: 'app/views/scheduler-edit.html',
+        position: 'hidden'
+      },
+      {
         title: 'Configuration',
         state: 'root.configuration',
         url: '/config',

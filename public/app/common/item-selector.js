@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('group');
+  var module = angular.module('common');
 
   module.controller('SelectItemCtrl', function ($rootScope, $scope) {
     var ctrl = this;
@@ -18,7 +18,7 @@
       scope: {
         items: '='
       },
-      templateUrl: 'app/group/item-selector.html',
+      templateUrl: 'app/common/item-selector.html',
       controller: 'SelectItemCtrl',
       controllerAs: 'ctrl',
       link: function ($scope, element, attrs, ctrl) {

@@ -1,0 +1,44 @@
+<div>
+
+  <h3><button ui-sref="root.scheduler.create" class="btn btn-link pull-right">
+    <span class="glyphicon glyphicon-plus"></span> Create schedule</button></h3>
+
+
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Action</th>
+      <th>Time</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
+      <th>Sun</th>
+    </tr>
+    <tbody ng-repeat="schedule in ctrl.schedules">
+    <tr>
+      <td><a ui-sref="root.scheduler.edit({id:schedule._id})">{{schedule.name}}</a></td>
+      <td>{{schedule.action}}</td>
+      <td>{{schedule.time}}</td>
+      <td><span class="{{ctrl.getIcon('mon', schedule.weekdays)}}"></span></td>
+      <td><span class="{{ctrl.getIcon('tue', schedule.weekdays)}}"></span></td>
+      <td><span class="{{ctrl.getIcon('wed', schedule.weekdays)}}"></span></td>
+      <td><span class="{{ctrl.getIcon('thu', schedule.weekdays)}}"></span></td>
+      <td><span class="{{ctrl.getIcon('fri', schedule.weekdays)}}"></span></td>
+      <td><span class="{{ctrl.getIcon('sat', schedule.weekdays)}}"></span></td>
+      <td><span class="{{ctrl.getIcon('sun', schedule.weekdays)}}"></span></td>
+    </tr>
+    <tr>
+      <td colspan="10">
+        <ul>
+          <li ng-repeat="device in schedule.devices">{{device.name}}</li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
+</div>

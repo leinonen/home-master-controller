@@ -57,6 +57,13 @@ body {
     cursor: pointer;
 }
 
+
+.scheduler-form p {
+    padding-top: 20px;
+}
+
+
+
 .love {
     color: #ff188e;
 }

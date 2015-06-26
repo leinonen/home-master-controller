@@ -6,6 +6,7 @@ var mongoose = require('mongoose-q')();
 var fs = require('fs');
 //var config = require('./server/config');
 var controller = require('./server/controller');
+var Scheduler = require('./server/scheduler');
 
 function getUserHome() {
   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
@@ -46,8 +47,15 @@ app.post('/api/group/:id', controller.updateGroup);
 app.delete('/api/group/:id', controller.deleteGroup);
 app.get('/api/group/:id/devices', controller.groupDevices);
 
-
 app.post('/api/control/:id', controller.control);
+
+
+app.get('/api/schedules', controller.schedules);
+app.post('/api/schedules', controller.createSchedule);
+app.get('/api/schedules/:id', controller.schedule);
+app.put('/api/schedules/:id', controller.updateSchedule);
+app.delete('/api/schedules/:id', controller.deleteSchedule);
+
 
 app.use(function (err, req, res, next) {
   console.error(err.message);
@@ -57,3 +65,4 @@ app.use(function (err, req, res, next) {
 app.listen(config.port);
 console.log('server listening on port %d', config.port);
 
+Scheduler.startScheduler();

@@ -79,8 +79,8 @@ exports.groupDevices = function (req, res) {
 };
 
 
-exports.groupState = function(req, res){
-  Master.groupState(req.params.id).then(function(data){
+exports.groupState = function (req, res) {
+  Master.groupState(req.params.id).then(function (data) {
     res.json(data);
   })
 };
@@ -123,13 +123,58 @@ exports.control = function (req, res) {
 // Configuration
 
 exports.readConfiguration = function (req, res) {
-  Configuration.get().then(function (cfg) {
+  Configuration
+    .get()
+    .then(function (cfg) {
       res.json(cfg);
     }).catch(errorHandler);
 };
 
 exports.saveConfiguration = function (req, res) {
-  Configuration.saveConfig(req.body._id, req.body).then(function(cfg){
-    res.json(cfg);
-  }).catch(errorHandler);
+  Configuration
+    .saveConfig(req.body._id, req.body)
+    .then(function (cfg) {
+      res.json(cfg);
+    }).catch(errorHandler);
+};
+
+
+exports.schedule = function (req, res) {
+  Master
+    .schedule(req.params.id)
+    .then(function (schedule) {
+      res.json(schedule);
+    }).catch(errorHandler);
+};
+
+exports.schedules = function (req, res) {
+  Master
+    .schedules()
+    .then(function (schedules) {
+      res.json(schedules);
+    }).catch(errorHandler);
+};
+
+exports.createSchedule = function (req, res) {
+  Master
+    .createSchedule(req.body)
+    .then(function (schedule) {
+      res.json(schedule);
+    }).catch(errorHandler);
+};
+
+exports.updateSchedule = function (req, res) {
+  Master
+    .updateSchedule(req.params.id, req.body)
+    .then(function (schedule) {
+      res.json(schedule);
+    }).catch(errorHandler);
+};
+
+exports.deleteSchedule = function (req, res) {
+  Master
+    .deleteSchedule(req.params.id)
+    .then(function (response) {
+      res.json(response);
+    }).catch(errorHandler);
 };

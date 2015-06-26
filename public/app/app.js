@@ -4,13 +4,15 @@
     'ui.router',
     'angular-loading-bar',
 
+    'common',
     'message',
     'configuration',
     'master',
     'sensor',
     'device',
     'group',
-    'navbar'
+    'navbar',
+    'scheduler'
   ]);
 
   app.config(function ($stateProvider, $urlRouterProvider, RoutesProvider) {
