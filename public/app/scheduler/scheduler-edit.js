@@ -2,7 +2,7 @@
 
   var module = angular.module('scheduler');
 
-  module.controller('EditScheduleCtrl', function ($rootScope, $stateParams, SchedulerService, Message, MasterApi, Weekdays) {
+  module.controller('EditScheduleCtrl', function ($rootScope, $state, $stateParams, SchedulerService, Message, MasterApi, Weekdays) {
     var ctrl = this;
     ctrl.devices = [];
     ctrl.selectedDevices = [];
