@@ -7,11 +7,15 @@ Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 
 Uses MongoDB for storage. Make sure you have it!
 
-## Features
+## Featured devices
 * Telldus Net devices, sensors and groups
 * Philips Hue lights and groups
 * Z-Wave (RaZberry) devices and sensors
-* Create custom groups
+
+## Features
+* Create custom groups containing any kind of (featured) device.
+* Scheduler for automatic on/off switching
+* Colorlooping for Philips Hue lights
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
 * Heavy use of promises (Using q library), for nice and readable code!
@@ -27,6 +31,8 @@ sudo npm install
 bower install
 node server.js
 ```
+
+Also, make sure the time is set correctly on your system for the scheduler to work properly.
 
 ## Author
 Written with love by Peter Leinonen, 2015.
