@@ -23,8 +23,7 @@ Uses MongoDB for storage. Make sure you have it!
 
 ## Installation
 
-Edit `server/config.js` to set up port and MongoDB. Default port is 8080.
-
+Copy .hmc.conf.example to .hmc.conf in your home directory, and edit to fit your needs.
 
 ```
 sudo npm install
