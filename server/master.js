@@ -8,8 +8,9 @@ var Q = require('q');
 var Wrapper = require('./api/api-wrapper');
 var Group = require('../models/group');
 var Schedule = require('../models/schedule');
-var events = require('events');
-var eventEmitter = new events.EventEmitter();
+//var events = require('events');
+//var eventEmitter = new events.EventEmitter();
+var Bus = require('./bus');
 
 /**
  * Get all sensors.
@@ -117,12 +118,9 @@ exports.schedules = function () {
 exports.createSchedule = function (schedule) {
   var sch = new Schedule(schedule);
   sch.save();
-
-  //eventEmitter.emit('SchedulerUpdate');
-
+  Bus.emit('SchedulerUpdate');
   var def = Q.defer();
   def.resolve(sch);
-
   return def.promise;
 };
 
@@ -138,14 +136,19 @@ exports.updateSchedule = function (id, sch) {
       schedule.weekdays = sch.weekdays;
       schedule.items = sch.items;
       schedule.save();
-      console.log('updated schedule. sending SchedulerUpdate event');
-      //eventEmitter.emit('SchedulerUpdate');
+      console.log('schedule updated');
+      Bus.emit('SchedulerUpdate');
       return schedule;
     });
 };
 
 exports.deleteSchedule = function (id) {
-
+  return Schedule
+    .findById(id)
+    .then(function (schedule) {
+    schedule.remove();
+    return {};
+  });
 };
 
 
