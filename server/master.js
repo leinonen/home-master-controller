@@ -132,6 +132,9 @@ exports.updateSchedule = function (id, sch) {
       schedule.action = sch.action;
       schedule.active = sch.active;
       schedule.time = sch.time;
+      // sunset and sunrise are booleans
+      schedule.sunset = sch.sunset;
+      schedule.sunrise = sch.sunrise;
       schedule.random = sch.random;
       schedule.weekdays = sch.weekdays;
       schedule.items = sch.items;

@@ -14,6 +14,12 @@
         })
         .forEach(function (s) {
 
+          if (s.sunset) {
+            s.time = 'Sunset';
+          } else if (s.sunrise) {
+            s.time = 'Sunrise';
+          }
+
           s.items
             .forEach(function (item) {
               MasterApi

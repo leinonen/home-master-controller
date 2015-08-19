@@ -12,6 +12,8 @@
       action: '',
       active: true,
       time: '',
+      sunrise: false,
+      sunset: false,
       random: 0,
       weekdays: []
     };

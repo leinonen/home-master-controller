@@ -6,6 +6,8 @@ var ScheduleSchema = mongoose.Schema({
   action: String,
   active: Boolean,
   time: String,
+  sunrise: Boolean,
+  sunset: Boolean,
   random: Number,
   weekdays: [String]
 });
