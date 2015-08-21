@@ -46,7 +46,7 @@ function transformZWaveSensor(device) {
 
   item.data = [{
     name: device.metrics.probeTitle,
-    value: device.metrics.level + device.metrics.scaleTitle
+    value: device.metrics.level + ' ' + device.metrics.scaleTitle
   }];
 
   return item;
