@@ -9,6 +9,7 @@
       <th>Name</th>
       <th>Action</th>
       <th>Time</th>
+      <th>Rnd</th>
       <th>Mon</th>
       <th>Tue</th>
       <th>Wed</th>
@@ -22,6 +23,7 @@
       <td><a ui-sref="root.scheduler.edit({id:schedule._id})">{{schedule.name}}</a></td>
       <td>{{schedule.action}}</td>
       <td>{{schedule.time}}</td>
+      <td>{{schedule.random || 0}}</td>
       <td><span class="{{ctrl.getIcon('mon', schedule.weekdays)}}"></span></td>
       <td><span class="{{ctrl.getIcon('tue', schedule.weekdays)}}"></span></td>
       <td><span class="{{ctrl.getIcon('wed', schedule.weekdays)}}"></span></td>
@@ -31,7 +33,7 @@
       <td><span class="{{ctrl.getIcon('sun', schedule.weekdays)}}"></span></td>
     </tr>
     <tr>
-      <td colspan="10">
+      <td colspan="11">
         <ul>
           <li ng-repeat="device in schedule.devices">{{device.name}}</li>
         </ul>
