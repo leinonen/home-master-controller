@@ -65,6 +65,13 @@
       return ctrl.schedule.sunset || ctrl.schedule.sunrise;
     };
 
+    ctrl.deleteSchedule = function (id) {
+      SchedulerService.deleteSchedule(id).then(function () {
+        Message.success('Schedule deleted');
+        $state.go('root.scheduler');
+      });
+    };
+
     ctrl.updateSchedule = function () {
       if (!ctrl.validateForm()) {
         Message.warning('Form is not valid');

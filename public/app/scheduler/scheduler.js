@@ -29,6 +29,12 @@
       });
     };
 
+    service.deleteSchedule = function (id) {
+      return $http.delete('/api/schedules/' + id).then(function (response) {
+        return response.data;
+      });
+    };
+
   });
 
   module.service('Weekdays', function(){

@@ -149,9 +149,10 @@ exports.deleteSchedule = function (id) {
   return Schedule
     .findById(id)
     .then(function (schedule) {
-    schedule.remove();
-    return {};
-  });
+      schedule.remove();
+      Bus.emit('SchedulerUpdate');
+      return {};
+    });
 };
 
 
