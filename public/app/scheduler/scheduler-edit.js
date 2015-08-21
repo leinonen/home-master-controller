@@ -61,6 +61,9 @@
       ctrl.weekdays = Weekdays.getFullWeek();
     };
 
+    ctrl.isSunriseOrSunset = function () {
+      return ctrl.schedule.sunset || ctrl.schedule.sunrise;
+    };
 
     ctrl.updateSchedule = function () {
       if (!ctrl.validateForm()) {

@@ -49,6 +49,10 @@
       ctrl.weekdays = Weekdays.getFullWeek();
     };
 
+    ctrl.isSunriseOrSunset = function () {
+      return ctrl.schedule.sunset || ctrl.schedule.sunrise;
+    };
+
     ctrl.createSchedule = function () {
       if (!ctrl.validateForm()) {
         Message.warning('Form is not valid');

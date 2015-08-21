@@ -22,9 +22,18 @@
       </div>
       <div class="col-sm-4">
         <p>Time</p>
-        <input type="text" ng-model="ctrl.schedule.time" class="form-control" placeholder="00:00"/>
-        Sunrise<input type="checkbox" ng-model="ctrl.schedule.sunrise" class="form-control">
-        Sunset<input type="checkbox" ng-model="ctrl.schedule.sunset" class="form-control">
+        <input type="text" ng-model="ctrl.schedule.time" class="form-control"
+               placeholder="00:00" ng-disabled="ctrl.isSunriseOrSunset()"/>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="ctrl.schedule.sunrise">Sunrise
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" ng-model="ctrl.schedule.sunset">Sunset
+          </label>
+        </div>
       </div>
       <div class="col-sm-3">
         <p>Randomize (mins)</p>
@@ -56,7 +65,7 @@
           </tr>
         </table>
 
-        <div class="btn-group" role="group" aria-label="...">
+        <div class="btn-group pull-right" role="group" aria-label="...">
           <button type="button" class="btn btn-default" ng-click="ctrl.selectWorkdays()">Workdays</button>
           <button type="button" class="btn btn-default" ng-click="ctrl.selectWeekend()">Weekend</button>
           <button type="button" class="btn btn-default" ng-click="ctrl.selectFullWeek()">All</button>
