@@ -15,11 +15,13 @@ Uses MongoDB for storage. Make sure you have it!
 ## Features
 * Create custom groups containing any kind of (featured) device.
 * Scheduler for automatic on/off switching
-* Colorlooping for Philips Hue lights
+* Sunset and sunrise options for scheduler
+* Random offset for scheduler
+* Color looping for Philips Hue lights
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
 * Heavy use of promises (Using q library), for nice and readable code!
-* Bootstrap for responsive design
+* Bootstrap for responsive design that looks nice on all devices
 
 ## Installation
 
