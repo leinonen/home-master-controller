@@ -34,7 +34,9 @@
       },
       zwave: {
         enabled: false,
-        endpoint: ''
+        endpoint: '',
+        username: '',
+        password: ''
       }
     };
 
