@@ -85,11 +85,29 @@
                      ng-model="ctrl.config.zwave.enabled"
                      class="form-control config-checkbox">
             </div>
-            <p>Endpoint url</p>
-            <input class="form-control" type="text"
-                   ng-model="ctrl.config.zwave.endpoint"
-                   ng-disabled="!ctrl.config.zwave.enabled"
-                   placeholder="zwave endpoint"/>
+
+            <div class="form-group">
+              <p>Endpoint url</p>
+              <input class="form-control" type="text"
+                     ng-model="ctrl.config.zwave.endpoint"
+                     ng-disabled="!ctrl.config.zwave.enabled"
+                     placeholder="zwave endpoint"/>
+            </div>
+
+            <div class="form-group">
+               <p>Username</p>
+               <input class="form-control" type="text"
+                      ng-model="ctrl.config.zwave.username"
+                      ng-disabled="!ctrl.config.zwave.enabled"
+                      placeholder="Username"/>
+            </div>
+            <div class="form-group">
+              <p>Password</p>
+              <input class="form-control" type="password"
+                     ng-model="ctrl.config.zwave.password"
+                     ng-disabled="!ctrl.config.zwave.enabled"
+                     placeholder="zwave password"/>
+           </div>
           </div>
         </div>
 

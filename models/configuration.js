@@ -16,7 +16,9 @@ var ConfigSchema = mongoose.Schema({
   },
   zwave: {
     enabled: Boolean,
-    endpoint: String
+    endpoint: String,
+    username: String,
+    password: String
   }
 
 });
