@@ -26,7 +26,7 @@ mongoose.connect(config.mongo.url, config.mongo.opts);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/client/public')));
 
 app.get('/api/configuration', controller.readConfiguration);
 app.post('/api/configuration', controller.saveConfiguration);
