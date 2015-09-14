@@ -1,8 +1,8 @@
 {
-  "name": "ptc-telldus",
-  "version": "1.0.0",
+  "name": "home-master-controller",
+  "version": "2.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
