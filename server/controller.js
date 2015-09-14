@@ -2,7 +2,7 @@ var Master = require('./master');
 var Configuration = require('../models/configuration');
 
 var errorHandler = (response, error) => {
-  console.log(error);
+  console.log(error.message);
   response.status(error.statusCode || 400).json(error);
 }
 

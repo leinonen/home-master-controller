@@ -70,11 +70,10 @@ var zwave_login_get = (config, uri) => {
   }
 }
 
+var isConnectionError = (code) => ['ECONNREFUSED', 'ENETUNREACH', 'ETIMEDOUT'].indexOf(code) !== -1;
+
 var errorHandler = (err) => {
-  console.log(err);
-  if (err.code === 'ECONNREFUSED' ||
-    err.code === 'ENETUNREACH' ||
-    err.code === 'ETIMEDOUT') {
+  if (isConnectionError(err.code)) {
     return Promise.reject({
       statusCode: 500,
       message: 'Unable to connect to Z-Wave endpoint. Check your configuration'
