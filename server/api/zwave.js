@@ -70,7 +70,9 @@ var zwave_login_get = (config, uri) => {
   }
 }
 
-var isConnectionError = (code) => ['ECONNREFUSED', 'ENETUNREACH', 'ETIMEDOUT'].indexOf(code) !== -1;
+var isConnectionError = (code) => [
+  'ECONNREFUSED', 'ENETUNREACH', 'ETIMEDOUT'
+].indexOf(code) !== -1;
 
 var errorHandler = (err) => {
   if (isConnectionError(err.code)) {
