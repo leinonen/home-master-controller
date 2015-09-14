@@ -1,12 +1,13 @@
+'use strict';
+
 var Group = require('../../models/group');
-var Q = require('q');
+var Promise = require('../util/promise');
 /**
  * Get all generic groups.
  * @returns {*}
  */
-function groups() {
-  return Group.findAll();
-}
+var groups = () => Group.findAll();
+
 exports.groups = groups;
 
 /**
@@ -14,13 +15,12 @@ exports.groups = groups;
  * @param group
  * @returns {Group}
  */
-function create(group) {
-  var deferred = Q.defer();
+var create = (group) => {
   var g = new Group(group);
   g.save();
-  deferred.resolve(g);
-  return deferred.promise;
+  return Promise.resolve(g);
 }
+
 exports.create = create;
 
 
@@ -30,14 +30,14 @@ exports.create = create;
  * @param group
  * @returns {*}
  */
-function update(id, group) {
-  return Group.findById(id).then(function (g) {
+var update = (id, group) => Group.findById(id)
+  .then(g => {
     g.name = group.name;
     g.items = group.items;
     g.save();
     return g;
   });
-}
+
 exports.update = update;
 
 /**
@@ -45,12 +45,11 @@ exports.update = update;
  * @param id
  * @returns {*}
  */
-function remove(id) {
-  return Group.findById(id).then(function (g) {
-    g.remove();
-    return 'Group removed!';
-  });
-}
+var remove = (id) => Group.findById(id).then(g => {
+  g.remove();
+  return 'Group removed!';
+});
+
 exports.remove = remove;
 
 /**
@@ -58,9 +57,6 @@ exports.remove = remove;
  * @param id
  * @returns {*}
  */
-function groupDevices(id) {
-  return Group.findById(id).then(function (group) {
-    return group.items;
-  });
-}
+var groupDevices = (id) => Group.findById(id).then(group => group.items);
+
 exports.groupDevices = groupDevices;

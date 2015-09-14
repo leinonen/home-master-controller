@@ -3,7 +3,7 @@
  * Other errors are propagated to the error handler in master.js
  * @type {exports}
  */
-var Q = require('q');
+var Promise = require('../util/promise');
 var Telldus = require('./telldus');
 var Hue = require('./hue');
 var ZWave = require('./zwave');
@@ -14,15 +14,15 @@ var DeviceTypes = require('./device-types');
 var Actions = require('./actions');
 
 exports.sensors = function () {
-  var telldusSensors = Telldus.sensors().then(function (sensors) {
-    return Q.all(sensors.map(function (sensor) {
-      return Telldus.sensor(sensor.id);
-    })).then(Transformer.TelldusSensors).catch(serviceDisabledArray);
-  });
+  var telldusSensors = Telldus.sensors()
+    .then(sensors => Promise.all(sensors.map(sensor => Telldus.sensor(sensor.id))))
+    .then(Transformer.TelldusSensors)
+    .catch(serviceDisabledArray);
+
   var promises = [];
   promises.push(telldusSensors.catch(serviceDisabledArray));
   promises.push(ZWave.sensors().then(Transformer.ZWaveSensors).catch(serviceDisabledArray));
-  return Q.all(promises).then(flattenArrays);
+  return Promise.all(promises).then(flattenArrays);
 };
 
 
@@ -40,7 +40,7 @@ exports.groups = function () {
   promises.push(Telldus.groups().then(Transformer.TelldusGroups).catch(serviceDisabledArray));
   promises.push(Hue.groups().then(Transformer.HueGroups).catch(serviceDisabledArray));
   promises.push(Generic.groups().then(Transformer.GenericGroups));
-  return Q.all(promises).then(flattenArrays);
+  return Promise.all(promises).then(flattenArrays);
 };
 
 exports.group = function (id, type) {
@@ -55,7 +55,7 @@ exports.group = function (id, type) {
       return Hue.group(id).then(Transformer.HueGroup);
 
     default:
-      return makeErrorPromise('Unsupported group ' + type);
+      return Promise.reject('Unsupported group ' + type);
   }
 };
 
@@ -64,7 +64,7 @@ exports.devices = function () {
   promises.push(Telldus.devices().then(Transformer.TelldusDevices).catch(serviceDisabledArray));
   promises.push(Hue.lights().then(Transformer.HueDevices).catch(serviceDisabledArray));
   promises.push(ZWave.devices().then(Transformer.ZWaveDevices).catch(serviceDisabledArray));
-  return Q.all(promises).then(flattenArrays);
+  return Promise.all(promises).then(flattenArrays);
 };
 
 exports.device = function (id, type) {
@@ -79,7 +79,7 @@ exports.device = function (id, type) {
       return ZWave.device(id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
 
     default:
-      return makeErrorPromise('Invalid device type: ' + type);
+      return Promise.reject('Invalid device type: ' + type);
   }
 };
 
@@ -91,8 +91,8 @@ exports.device = function (id, type) {
  */
 exports.groupDevices = function (id, type) {
   if (type === DeviceTypes.GENERIC_GROUP) {
-    return Generic.groupDevices(id).then(function (devices) {
-      var promises = devices.map(function (device) {
+    return Generic.groupDevices(id).then(devices => {
+      var promises = devices.map(device => {
 
         switch (device.type) {
           case DeviceTypes.TELLDUS_DEVICE:
@@ -114,14 +114,14 @@ exports.groupDevices = function (id, type) {
             return ZWave.device(device.id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
 
           default:
-            return makeErrorPromise('Invalid device type ' + device.type);
+            return Promise.reject('Invalid device type ' + device.type);
         }
 
       });
-      return Q.all(promises);
+      return Promise.all(promises);
     });
   } else {
-    return makeErrorPromise(type + ' not implemented');
+    return Promise.reject(type + ' not implemented');
   }
 };
 
@@ -150,7 +150,7 @@ exports.control = function (id, params) {
       return controlZWave(id, params);
 
     default:
-      return makeErrorPromise(params.type + ' is not implemented');
+      return Promise.reject(params.type + ' is not implemented');
   }
 };
 
@@ -175,11 +175,9 @@ function groupState(id) {
           return ZWave.device(item.id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
       }
     });
-    return Q.all(promises).then(function (devices) {
+    return Promise.all(promises).then(devices => {
       // Group is on if all devices are on
-      var groupState = devices.every(function (device) {
-        return device.state.on === true;
-      });
+      var groupState = devices.every(device => device.state.on === true);
 
       return {
         id: id,
@@ -247,7 +245,7 @@ function controlDevicesInGroup(id, params) {
       }
       // TODO: handle generic groups! Recursive call
     });
-    return Q.all(promises).then(function (response) {
+    return Promise.all(promises).then(function (response) {
       // TODO: update group with correct state?
       return {success: 'Group state set to ' + params.action};
     });
@@ -327,24 +325,14 @@ function controlZWave(id, params) {
 }
 
 
-function makeErrorPromise(msg) {
-  var deferred = Q.defer();
-  deferred.reject(msg);
-  return deferred.promise;
-}
+var serviceDisabled = (err) => Promise.reject(err);
 
-
-function serviceDisabled(err) {
-  return makeErrorPromise(err);
-}
-
-
-function serviceDisabledArray(err) {
+var serviceDisabledArray = (err) => {
   if (err.serviceDisabled && err.serviceDisabled === true) {
-    console.log(err.message);
+    // console.log(err.message);
     return [];
   } else {
-    return makeErrorPromise(err);
+    return Promise.reject(err);
   }
 }
 
@@ -354,10 +342,4 @@ function serviceDisabledArray(err) {
  * @param arr
  * @returns {*}
  */
-function flattenArrays(arr) {
-  return arr.reduce(function (a, b) {
-    return a.concat(b);
-  });
-}
-
-
+var flattenArrays = (arr) => arr.reduce((a, b) => a.concat(b));

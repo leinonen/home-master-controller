@@ -1,10 +1,12 @@
+'use strict';
+
 /**
  * Telldus API wrapper.
  *
  * @type {exports}
  * @author Peter Leinonen
  */
-var Q = require('q');
+var Promise = require('../util/promise');
 var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
@@ -28,13 +30,24 @@ function errorHandler(err){
   if (err.code === 'ECONNREFUSED' ||
       err.code === 'ENETUNREACH' ||
       err.code === 'ETIMEDOUT') {
-    return makeErrorPromise({
+    return Promise.reject({
       statusCode: 500,
       message: 'Unable to connect to Telldus endpoint. Check your configuration'
     });
   } else {
-    return makeErrorPromise(err);
+    return Promise.reject(err);
   }
+}
+
+var createOAuthParams = (url, params, config) => {
+  let oauth = new OAuth.OAuth(null, null,
+    config.telldus.publicKey,
+    config.telldus.privateKey, '1.0', null, 'HMAC-SHA1');
+  let oauthParameters = oauth._prepareParameters(
+    config.telldus.accessToken,
+    config.telldus.accessTokenSecret, 'GET', url, params);
+  let messageParameters = {};
+  oauthParameters.forEach(params => messageParameters[params[0]] = params[1]);
 }
 
 /**
@@ -43,133 +56,78 @@ function errorHandler(err){
  * @param params
  * @returns {*}
  */
-function apiCall(path, params) {
-  return getConfig().then(function (config) {
-
+var apiCall = (path, params) => {
+  return Configuration.get().then(config => {
     if (!config.telldus.enabled) {
-      return makeErrorPromise({serviceDisabled: true, message: 'Telldus not enabled'});
+      return Promise.reject({serviceDisabled: true, message: 'Telldus not enabled'});
     }
-
-    var url = config.telldus.endpoint + path;
-    var oauth = new OAuth.OAuth(null, null,
-      config.telldus.publicKey,
-      config.telldus.privateKey, '1.0', null, 'HMAC-SHA1');
-    var oauthParameters = oauth._prepareParameters(
-      config.telldus.accessToken,
-      config.telldus.accessTokenSecret, 'GET', url, params);
-    var messageParameters = {};
-    oauthParameters.forEach(function (params) {
-      messageParameters[params[0]] = params[1];
-    });
-
+    let url = config.telldus.endpoint + path;
+    let oAuthParams = createOAuthParams(url, params, config);
     return http.get(url + '?' + Qs.stringify(messageParameters)).catch(errorHandler);
   });
 }
 
-
-function makeErrorPromise(msg) {
-  var deferred = Q.defer();
-  deferred.reject(msg);
-  return deferred.promise;
-}
 
 
 /**
  * Get all devices.
  * @returns {*}
  */
-exports.devices = function () {
-  return apiCall('devices/list',
-    {supportedMethods: METHODS})
-    .then(function (response) {
-      return response.device.filter(function (device) {
-        return device.type === 'device';
-      })
-    });
-};
+exports.devices = () => apiCall('devices/list', {supportedMethods: METHODS})
+  .then(response => response.device.filter(device => device.type === 'device'));
 
 /**
  * Get all groups.
  * @returns {*}
  */
-exports.groups = function () {
-  return apiCall('devices/list',
-    {supportedMethods: METHODS})
-    .then(function (response) {
-      return response.device.filter(function (device) {
-        return device.type === 'group';
-      })
-    });
-};
+exports.groups = () => apiCall('devices/list',  {supportedMethods: METHODS})
+  .then(response => response.device.filter(device => device.type === 'group'));
 
 /**
  * Get a single device.
  * @param id
  * @returns {*}
  */
-exports.device = function (id) {
-  return apiCall('device/info',
-    {supportedMethods: METHODS, id: id});
-};
+exports.device = (id) => apiCall('device/info', {supportedMethods: METHODS, id: id});
 
 /**
  * Get all sensors.
  * @returns {*}
  */
-exports.sensors = function () {
-  return apiCall('sensors/list',
-    {supportedMethods: TELLSTICK_TEMPERATURE})
-    .then(function (response) {
-      return response.sensor;
-    });
-};
+exports.sensors = () => apiCall('sensors/list', {supportedMethods: TELLSTICK_TEMPERATURE})
+  .then(response => response.sensor);
 
 /**
  * Get a single sensor.
  * @param id
  * @returns {*}
  */
-exports.sensor = function (id) {
-  return apiCall('sensor/info',
-    {supportedMethods: TELLSTICK_TEMPERATURE, id: id});
-};
+exports.sensor = (id) => apiCall('sensor/info', {supportedMethods: TELLSTICK_TEMPERATURE, id: id});
 
 /**
  * Turn a device on.
  * @param id
  * @returns {*}
  */
-exports.turnOn = function (id) {
-  return apiCall('device/turnOn',
-    {supportedMethods: METHODS, id: id});
-};
+exports.turnOn = (id) => apiCall('device/turnOn', {supportedMethods: METHODS, id: id});
 
 /**
  * Turn a device off.
  * @param id
  * @returns {*}
  */
-exports.turnOff = function (id) {
-  return apiCall('device/turnOff',
-    {supportedMethods: METHODS, id: id});
-};
+exports.turnOff = (id) => apiCall('device/turnOff', {supportedMethods: METHODS, id: id});
 
 /**
  * Make device go up.
  * @param id
  * @returns {*}
  */
-exports.goUp = function (id) {
-  return apiCall('device/up',
-    {supportedMethods: METHODS, id: id});
-};
+exports.goUp = (id) => apiCall('device/up', {supportedMethods: METHODS, id: id});
 
 /**
  * Make device go down.
  * @param id
  * @returns {*}
  */
-exports.goDown = function (id) {
-  return apiCall('device/down',
-    {supportedMethods: METHODS, id: id});
-};
+exports.goDown = (id) => apiCall('device/down', {supportedMethods: METHODS, id: id});

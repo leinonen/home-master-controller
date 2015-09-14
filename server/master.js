@@ -16,9 +16,7 @@ var Bus = require('./bus');
  * Get all sensors.
  * @returns {*}
  */
-exports.sensors = function () {
-  return Wrapper.sensors().catch(errorHandler);
-};
+exports.sensors = () => Wrapper.sensors().catch(errorHandler);
 
 /**
  * Get a specific sensor.
@@ -26,17 +24,12 @@ exports.sensors = function () {
  * @param type
  * @returns {*}
  */
-exports.sensor = function (id, type) {
-  return Wrapper.sensor(id, type).catch(errorHandler);
-};
-
+exports.sensor = (id, type) => Wrapper.sensor(id, type).catch(errorHandler);
 
 /**
  * Get all groups.
  */
-exports.groups = function () {
-  return Wrapper.groups().catch(errorHandler);
-};
+exports.groups = () => Wrapper.groups().catch(errorHandler);
 
 /**
  * Get a single group.
@@ -44,17 +37,12 @@ exports.groups = function () {
  * @param type
  * @returns {*}
  */
-exports.group = function (id, type) {
-  return Wrapper.group(id, type).catch(errorHandler);
-};
-
+exports.group = (id, type) => Wrapper.group(id, type).catch(errorHandler);
 
 /**
  * Get all devices.
  */
-exports.devices = function () {
-  return Wrapper.devices().catch(errorHandler);
-};
+exports.devices = () => Wrapper.devices().catch(errorHandler);
 
 /**
  * Get a specific device.
@@ -62,9 +50,8 @@ exports.devices = function () {
  * @param type
  * @returns {*}
  */
-exports.device = function (id, type) {
-  return Wrapper.device(id, type).catch(errorHandler);
-};
+exports.device = (id, type) =>
+  Wrapper.device(id, type).catch(errorHandler);
 
 /**
  * Get all devices for a specific group.
@@ -72,50 +59,39 @@ exports.device = function (id, type) {
  * @param type
  * @returns {*}
  */
-exports.groupDevices = function (id, type) {
-  return Wrapper.groupDevices(id, type).catch(errorHandler);
-};
+exports.groupDevices = (id, type) =>
+  Wrapper.groupDevices(id, type).catch(errorHandler);
 
 /**
  * Get the state of a group
  * @param id
  * @returns {*}
  */
-exports.groupState = function (id) {
-  return Wrapper.groupState(id).catch(errorHandler);
-};
+exports.groupState = (id) =>
+  Wrapper.groupState(id).catch(errorHandler);
 
-exports.createGenericGroup = function (group) {
-  return Wrapper.createGenericGroup(group).catch(errorHandler);
-};
+exports.createGenericGroup = (group) =>
+  Wrapper.createGenericGroup(group).catch(errorHandler);
 
-exports.updateGenericGroup = function (id, group) {
-  return Wrapper.updateGenericGroup(id, group).catch(errorHandler);
-};
+exports.updateGenericGroup = (id, group) =>
+  Wrapper.updateGenericGroup(id, group).catch(errorHandler);
 
-exports.removeGenericGroup = function (id) {
-  return Wrapper.removeGenericGroup(id).catch(errorHandler);
-};
+exports.removeGenericGroup = (id) =>
+  Wrapper.removeGenericGroup(id).catch(errorHandler);
 
 /**
  * Control a device or group.
  * @param id
  * @param params
  */
-exports.control = function (id, params) {
-  return Wrapper.control(id, params).catch(errorHandler);
-};
+exports.control = (id, params) =>
+  Wrapper.control(id, params).catch(errorHandler);
 
+exports.schedule = (id) => Schedule.findById(id);
 
-exports.schedule = function (id) {
-  return Schedule.findById(id);
-};
+exports.schedules = () => Schedule.findAll();
 
-exports.schedules = function () {
-  return Schedule.findAll();
-};
-
-exports.createSchedule = function (schedule) {
+exports.createSchedule = (schedule) => {
   var sch = new Schedule(schedule);
   sch.save();
   Bus.emit('SchedulerUpdate');
@@ -124,36 +100,32 @@ exports.createSchedule = function (schedule) {
   return def.promise;
 };
 
-exports.updateSchedule = function (id, sch) {
-  return Schedule
-    .findById(id)
-    .then(function (schedule) {
-      schedule.name = sch.name;
-      schedule.action = sch.action;
-      schedule.active = sch.active;
-      schedule.time = sch.time;
-      // sunset and sunrise are booleans
-      schedule.sunset = sch.sunset;
-      schedule.sunrise = sch.sunrise;
-      schedule.random = sch.random;
-      schedule.weekdays = sch.weekdays;
-      schedule.items = sch.items;
-      schedule.save();
-      console.log('schedule updated');
-      Bus.emit('SchedulerUpdate');
-      return schedule;
-    });
-};
+exports.updateSchedule = (id, sch) => Schedule.findById(id)
+  .then(schedule => {
+    schedule.name = sch.name;
+    schedule.action = sch.action;
+    schedule.active = sch.active;
+    schedule.time = sch.time;
+    // sunset and sunrise are booleans
+    schedule.sunset = sch.sunset;
+    schedule.sunrise = sch.sunrise;
+    schedule.random = sch.random;
+    schedule.weekdays = sch.weekdays;
+    schedule.items = sch.items;
+    schedule.save();
+    console.log('schedule updated');
+    Bus.emit('SchedulerUpdate');
+    return schedule;
+  });
 
-exports.deleteSchedule = function (id) {
-  return Schedule
-    .findById(id)
-    .then(function (schedule) {
-      schedule.remove();
-      Bus.emit('SchedulerUpdate');
-      return {};
-    });
-};
+
+exports.deleteSchedule = (id) => Schedule.findById(id)
+  .then(schedule => {
+    schedule.remove();
+    Bus.emit('SchedulerUpdate');
+    return {};
+  });
+
 
 
 /**

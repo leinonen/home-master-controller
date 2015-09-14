@@ -10,9 +10,7 @@ function transformGenericGroup(group) {
   item.name = group.name;
   item.id = group._id;
   item.items = [];
-  item.items = group.items.map(function (a) {
-    return a;
-  });
+  item.items = group.items.map(a => a); // ???
   item.type = DeviceTypes.GENERIC_GROUP;
   item.state = {
     on: false
@@ -27,9 +25,6 @@ exports.GenericGroup = transformGenericGroup;
  * @param groups
  * @returns {*}
  */
-function transformGenericGroups(groups) {
-  return groups.map(transformGenericGroup);
-}
+var transformGenericGroups = (groups) => groups.map(transformGenericGroup);
 
 exports.GenericGroups = transformGenericGroups;
-

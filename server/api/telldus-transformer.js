@@ -6,12 +6,11 @@ var telldusHelper = require('./telldus-helper');
  * @param sensors
  * @returns {*}
  */
-function transformTelldusSensors(sensors) {
-  return sensors.map(function (sensor) {
-    sensor.type = DeviceTypes.TELLDUS_SENSOR;
-    return sensor;
-  });
-}
+var transformTelldusSensors = (sensors) => sensors.map(sensor => {
+  sensor.type = DeviceTypes.TELLDUS_SENSOR;
+  return sensor;
+});
+
 exports.TelldusSensors = transformTelldusSensors;
 
 /**
@@ -37,9 +36,8 @@ exports.TelldusDevice = transformTelldusDevice;
  * @param devices
  * @returns {*}
  */
-function transformTelldusDevices(devices) {
-  return devices.map(transformTelldusDevice);
-}
+var transformTelldusDevices = (devices) => devices.map(transformTelldusDevice);
+
 exports.TelldusDevices = transformTelldusDevices;
 
 
@@ -68,7 +66,6 @@ exports.TelldusGroup = transformTelldusGroup;
  * @param groups
  * @returns {*}
  */
-function transformTelldusGroups(groups) {
-  return groups.map(transformTelldusGroup);
-}
+var transformTelldusGroups = (groups) => groups.map(transformTelldusGroup);
+
 exports.TelldusGroups = transformTelldusGroups;

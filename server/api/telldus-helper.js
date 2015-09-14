@@ -1,9 +1,6 @@
 var Methods = require('./telldus-methods');
 
-function bitset(value, mask) {
-  return (value & mask) !== 0;
-}
-
+var bitset = (value, mask) => (value & mask) !== 0;
 
 function isMotorized(device) {
   return bitset(device.methods, Methods.TELLSTICK_DOWN) ||

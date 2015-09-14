@@ -4,112 +4,103 @@
  * @author Peter Leinonen
  */
 
-var Q = require('q');
+var Promise = require('../util/promise');
 var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 
 
-function errorHandler(err) {
+var errorHandler = (err) => {
   if (err.code === 'ECONNREFUSED' ||
     err.code === 'ENETUNREACH' ||
     err.code === 'ETIMEDOUT') {
-    return makeErrorPromise({
+    return Promise.reject({
       statusCode: 500,
       message: 'Unable to connect to Hue endpoint. Check your configuration'
     });
   } else {
-    return makeErrorPromise(err);
+    return Promise.reject(err);
   }
 }
 
-function doGet(path) {
-  return Configuration.get().then(function (config) {
-    if (!config.hue.enabled) {
-      return makeErrorPromise({serviceDisabled: true, message: 'Hue not enabled'});
-    }
-    return http.get(config.hue.endpoint + path).catch(errorHandler);
-  });
-}
+var doGet = (path) => Configuration.get().then(config => {
+  if (!config.hue.enabled) {
+    return Promise.reject({serviceDisabled: true, message: 'Hue not enabled'});
+  }
+  return http.get(config.hue.endpoint + path).catch(errorHandler);
+});
 
-function doPut(path, data) {
-  return Configuration.get().then(function (config) {
-    if (!config.hue.enabled) {
-      return makeErrorPromise({serviceDisabled: true, message: 'Hue not enabled'});
-    }
-    return http.put(config.hue.endpoint + path, data).catch(errorHandler);
-  });
-}
 
-function makeErrorPromise(msg) {
-  var deferred = Q.defer();
-  deferred.reject(msg);
-  return deferred.promise;
-}
+var doPut = (path, data) => Configuration.get().then(config => {
+  if (!config.hue.enabled) {
+    return Promise.reject({serviceDisabled: true, message: 'Hue not enabled'});
+  }
+  return http.put(config.hue.endpoint + path, data).catch(errorHandler);
+});
+
 
 /**
  * Get all groups.
  * @returns {*}
  */
-exports.groups = function () {
-  return doGet('/groups')
-    .then(function (groups) {
-      return Object.keys(groups).map(function (key) {
-        var group = groups[key];
-        group.id = key;
-        return group;
-      });
-    });
-};
+exports.groups = () =>
+  doGet('/groups')
+  .then(groups => Object.keys(groups)
+    .map(key => {
+      var group = groups[key];
+      group.id = key;
+      return group;
+    })
+  );
+
 
 /**
  * Get a group.
  * @param id
  * @returns {*}
  */
-exports.group = function (id) {
-  return doGet('/groups/' + id)
-    .then(function (group) {
-      group.id = id; // Must have the id!
-      return group;
-    });
-};
+exports.group = (id) =>
+  doGet('/groups/' + id)
+  .then(group => {
+    group.id = id; // Must have the id!
+    return group;
+  });
+
 
 /**
  * Get all the lights.
  * @returns {*}
  */
-exports.lights = function () {
-  return doGet('/lights')
-    .then(function (lights) {
-      // crude error handling, hue not returning http error codes!
-      if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
-        //console.log('hue error: ' + lights[0].error.description);
-        return makeErrorPromise({
-          statusCode: 500,
-          message: 'Hue api - ' + lights[0].error.description + '. Check your configuration'
-        });
-      } else {
-        return Object.keys(lights).map(function (key) {
-          var light = lights[key];
-          light.id = key;
-          return light;
-        });
-      }
-    });
-};
+exports.lights = () =>
+  doGet('/lights')
+  .then(lights => {
+    // crude error handling, hue not returning http error codes!
+    if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
+      //console.log('hue error: ' + lights[0].error.description);
+      return Promise.reject({
+        statusCode: 500,
+        message: 'Hue api - ' + lights[0].error.description + '. Check your configuration'
+      });
+    } else {
+      return Object.keys(lights).map(key => {
+        var light = lights[key];
+        light.id = key;
+        return light;
+      });
+    }
+  });
+
 
 /**
  * Get a single light.
  * @param id
  * @returns {*}
  */
-exports.light = function (id) {
-  return doGet('/lights/' + id)
-    .then(function (light) {
-      light.id = id; // Must have the id!
-      return light;
-    });
-};
+exports.light = (id) =>
+  doGet('/lights/' + id)
+  .then(light => {
+    light.id = id; // Must have the id!
+    return light;
+  });
 
 /**
  * Set the state of a light.
@@ -117,14 +108,14 @@ exports.light = function (id) {
  * @param state
  * @returns {*}
  */
-exports.setLightState = function (id, state) {
-  return doPut('/lights/' + id + '/state', state)
-    .then(function (response) {
-      // TODO: Make a proper response Transformer
-      console.log(response);
-      return response;
-    });
-};
+exports.setLightState = (id, state) =>
+  doPut('/lights/' + id + '/state', state)
+  .then(response => {
+    // TODO: Make a proper response Transformer
+    console.log(response);
+    return response;
+  });
+
 
 // var action = {bri: Number(bri)};
 
@@ -134,11 +125,10 @@ exports.setLightState = function (id, state) {
  * @param action
  * @returns {*}
  */
-exports.setGroupAction = function (id, action) {
-  return doPut('/groups/' + id + '/action', action)
-    .then(function (response) {
-      // TODO: Make a proper response Transformer
-      console.log(response);
-      return response;
-    });
-};
+exports.setGroupAction = (id, action) =>
+  doPut('/groups/' + id + '/action', action)
+  .then(response => {
+    // TODO: Make a proper response Transformer
+    console.log(response);
+    return response;
+  });

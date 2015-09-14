@@ -1,38 +1,42 @@
+'use strict';
+
 /**
  * Z-Wave / Razberry API Wrapper.
  *
  * @type {exports}
  * @author Peter Leinonen
  */
-var Q = require('q');
+var Promise = require('../util/promise');
 var http = require('request-promise-json');
 var Configuration = require('../../models/configuration');
 var sessionCookie = undefined;
 
-function zwave_login(config) {
-  return http.request({
+const ZWAVE_DEVICES = '/ZAutomation/api/v1/devices';
+
+var getFormData = (config) => {
+  return {
+    form: true,
+    login: config.username,
+    password: config.password,
+    keepme: false,
+    default_ui: 1
+  };
+}
+
+var zwave_login = (config) => http.request({
     method: 'POST',
     url: config.endpoint + '/ZAutomation/api/v1/login',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: {
-      form: true,
-      login: config.username,
-      password: config.password,
-      keepme: false,
-      default_ui: 1
-    }
-  }).then(function(response) {
-    return response.data.sid;
+    body: getFormData(config)
   })
-  .catch(function(err) {
-    return makeErrorPromise(err);
-  });
-}
+  .then(res => res.data.sid)
+  .catch(err => Promise.reject(err));
 
-function zwave_get(url) {
+
+var zwave_get = (url) => {
   // console.log('zwave_get ' + url+ ' sessionCookie: ' + sessionCookie);
   return http.request({
     method: 'GET',
@@ -42,110 +46,80 @@ function zwave_get(url) {
     },
     url: url
   })
-  .then(function(response) {
-    if (response.code === 200){
-      return response;
+  .then(res => {
+    if (res.code === 200){
+      return res;
     } else {
-      return makeErrorPromise('Some kind of error');
+      return Promise.reject('Some kind of error');
     }
   })
-  .catch(function(err) {
-    return makeErrorPromise(err);
-  });
+  .catch(err => Promise.reject(err));
 }
 
-function zwave_login_get(config, uri) {
+var zwave_login_get = (config, uri) => {
   if (sessionCookie === undefined) {
     return zwave_login(config)
-    .then(function(sid) {
-      sessionCookie = sid;
-      return zwave_get(config.endpoint + uri);
-    });
+      .then(sid => {
+        sessionCookie = sid;
+        return zwave_get(config.endpoint + uri);
+      });
   } else {
     return zwave_get(config.endpoint + uri);
   }
 }
 
-function errorHandler(err) {
+var errorHandler = (err) => {
   console.log(err);
   if (err.code === 'ECONNREFUSED' ||
     err.code === 'ENETUNREACH' ||
     err.code === 'ETIMEDOUT') {
-    return makeErrorPromise({
+    return Promise.reject({
       statusCode: 500,
       message: 'Unable to connect to Z-Wave endpoint. Check your configuration'
     });
   } else {
-    return makeErrorPromise(err);
+    return Promise.reject(err);
   }
 }
 
-function doGet(path) {
-  return Configuration.get().then(function (config) {
+var doGet = (path) => Configuration.get()
+  .then(config => {
     if (!config.zwave.enabled) {
-      return makeErrorPromise({serviceDisabled: true, message: 'ZWave not enabled'});
+      return Promise.reject({serviceDisabled: true, message: 'ZWave not enabled'});
     }
     return zwave_login_get(config.zwave, path);
-  }).catch(errorHandler);
-}
+  })
+  .catch(errorHandler);
 
-function makeErrorPromise(msg) {
-  var deferred = Q.defer();
-  deferred.reject(msg);
-  return deferred.promise;
-}
+var isBinarySwitch = (device) => device.deviceType === 'switchBinary';
+var isSensorMultilevel = (device) => device.deviceType === 'sensorMultilevel';
+
+exports.devices = () => doGet(ZWAVE_DEVICES)
+  .then(res => res.data.devices.filter(isBinarySwitch));
+
+exports.device = (id) => doGet(ZWAVE_DEVICES + '/' + id)
+  .then(res => res.data);
+
+exports.setOn = (id) => doGet(ZWAVE_DEVICES + '/' + id + '/command/on')
+  .then(res => {
+    console.log(res.message);
+    return {
+      status: res.message
+    };
+  });
+
+exports.setOff = (id) =>
+  doGet(ZWAVE_DEVICES + '/' + id + '/command/off')
+  .then(res => {
+    console.log(res.message);
+    return {
+      status: res.message
+    };
+  });
 
 
-exports.devices = function () {
-  return doGet('/ZAutomation/api/v1/devices')
-    .then(function (response) {
-      return response.data.devices.filter(function (device) {
-        return device.deviceType === 'switchBinary';
-      });
-    });
-};
+exports.sensors = () => doGet(ZWAVE_DEVICES)
+  .then(res => res.data.devices.filter(isSensorMultilevel));
 
-exports.device = function (id) {
-  return doGet('/ZAutomation/api/v1/devices/' + id)
-    .then(function (response) {
-      return response.data;
-    });
-};
-
-exports.setOn = function (id) {
-  console.log('Turn zwave device ' + id + ' on');
-  return doGet('/ZAutomation/api/v1/devices/' + id + '/command/on')
-    .then(function (response) {
-      console.log(response);
-      return {
-        status: response.message
-      };
-    });
-};
-
-exports.setOff = function (id) {
-  console.log('Turn zwave device ' + id + ' off');
-  return doGet('/ZAutomation/api/v1/devices/' + id + '/command/off')
-    .then(function (response) {
-      console.log(response);
-      return {
-        status: response.message
-      };
-    });
-};
-
-exports.sensors = function () {
-  return doGet('/ZAutomation/api/v1/devices')
-    .then(function (response) {
-      return response.data.devices.filter(function (device) {
-        return device.deviceType === 'sensorMultilevel'
-      });
-    });
-};
-
-exports.sensor = function (id) {
-  return doGet('/ZAutomation/api/v1/devices/' + id)
-    .then(function (response) {
-      return response.data;
-    });
-};
+exports.sensor = (id) => doGet(ZWAVE_DEVICES + '/' + id)
+  .then(res => res.data);

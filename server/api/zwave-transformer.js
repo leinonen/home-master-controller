@@ -4,7 +4,7 @@ var DeviceTypes = require('./device-types');
  * @param device
  * @returns {{}}
  */
-function transformZWaveDevice(device) {
+var transformZWaveDevice = (device) => {
   var item = {};
   item.id = device.id;
 
@@ -22,9 +22,8 @@ function transformZWaveDevice(device) {
 }
 exports.ZWaveDevice = transformZWaveDevice;
 
-function transformZWaveDevices(devices) {
-  return devices.map(transformZWaveDevice);
-}
+var transformZWaveDevices = (devices)  => devices.map(transformZWaveDevice);
+
 exports.ZWaveDevices = transformZWaveDevices;
 
 
@@ -33,7 +32,7 @@ exports.ZWaveDevices = transformZWaveDevices;
  * @param device
  * @returns {{}}
  */
-function transformZWaveSensor(device) {
+var transformZWaveSensor = (device) => {
   var item = {};
   item.id = device.id;
 
@@ -51,6 +50,7 @@ function transformZWaveSensor(device) {
 
   return item;
 }
+
 exports.ZWaveSensor = transformZWaveSensor;
 
 
@@ -59,7 +59,6 @@ exports.ZWaveSensor = transformZWaveSensor;
  * @param devices
  * @returns {*}
  */
-function transformZWaveSensors(devices) {
-  return devices.map(transformZWaveSensor);
-}
+var transformZWaveSensors = (devices) => devices.map(transformZWaveSensor);
+
 exports.ZWaveSensors = transformZWaveSensors;

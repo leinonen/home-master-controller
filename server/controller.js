@@ -1,180 +1,140 @@
 var Master = require('./master');
 var Configuration = require('../models/configuration');
 
-function errorHandler(response, error) {
+var errorHandler = (response, error) => {
   console.log(error);
   response.status(error.statusCode || 400).json(error);
 }
 
-exports.sensors = function (req, res) {
+exports.sensors = (req, res) => {
   Master
     .sensors()
-    .then(function (sensors) {
-      res.json(sensors);
-    })
-    .catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(sensors => res.json(sensors))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.sensor = function (req, res) {
+exports.sensor = (req, res) => {
   Master
     .sensor(req.params.id, req.query.type)
-    .then(function (sensor) {
-      res.json(sensor);
-    })
-    .catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(sensor => res.json(sensor))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.devices = function (req, res) {
+exports.devices = (req, res) => {
   Master
     .devices()
-    .then(function (devices) {
-      res.json(devices);
-    }).catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(devices => res.json(devices))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.device = function (req, res) {
+exports.device = (req, res) => {
   Master
     .device(req.params.id, req.query.type)
-    .then(function (device) {
-      res.json(device);
-    }).catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(device => res.json(device))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.groups = function (req, res) {
+exports.groups = (req, res) => {
   Master
     .groups()
-    .then(function (groups) {
-      res.json(groups);
-    }).catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(groups => res.json(groups))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.group = function (req, res) {
+exports.group = (req, res) => {
   Master
     .group(req.params.id, req.query.type)
-    .then(function (group) {
-      res.json(group);
-    }).catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(group => res.json(group))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.groupDevices = function (req, res) {
+exports.groupDevices = (req, res) => {
   Master
     .groupDevices(req.params.id, req.query.type)
-    .then(function (devices) {
-      res.json(devices);
-    }).catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(devices => res.json(devices))
+    .catch(err => errorHandler(res, err));
 };
 
-
-exports.groupState = function (req, res) {
-  Master.groupState(req.params.id).then(function (data) {
-    res.json(data);
-  })
+exports.groupState = (req, res) => {
+  Master
+    .groupState(req.params.id)
+    .then(data => res.json(data));
 };
 
-exports.createGroup = function (req, res) {
+exports.createGroup = (req, res) => {
   Master
     .createGenericGroup(req.body)
-    .then(function (group) {
-      res.json(group);
-    });
+    .then(group => res.json(group));
 };
 
-exports.updateGroup = function (req, res) {
+exports.updateGroup = (req, res) => {
   Master
     .updateGenericGroup(req.params.id, req.body)
-    .then(function (group) {
-      res.json(group);
-    });
+    .then(group => res.json(group));
 };
 
-exports.deleteGroup = function (req, res) {
+exports.deleteGroup = (req, res) => {
   Master
     .removeGenericGroup(req.params.id)
-    .then(function (status) {
-      res.json(status);
-    });
+    .then(status => res.json(status));
 };
 
-exports.control = function (req, res) {
+exports.control = (req, res) => {
   Master
     .control(req.params.id, req.body)
-    .then(function (response) {
-      res.json(response);
-    }).catch(function (err) {
-      errorHandler(res, err);
-    });
+    .then(response => res.json(response))
+    .catch(err => errorHandler(res, err));
 };
 
 
 // Configuration
 
-exports.readConfiguration = function (req, res) {
+exports.readConfiguration = (req, res) => {
   Configuration
     .get()
-    .then(function (cfg) {
-      res.json(cfg);
-    }).catch(errorHandler);
+    .then(cfg => res.json(cfg))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.saveConfiguration = function (req, res) {
+exports.saveConfiguration = (req, res) => {
   Configuration
     .saveConfig(req.body._id, req.body)
-    .then(function (cfg) {
-      res.json(cfg);
-    }).catch(errorHandler);
+    .then(cfg => res.json(cfg))
+    .catch(err => errorHandler(res, err));
 };
 
 
-exports.schedule = function (req, res) {
+exports.schedule = (req, res) => {
   Master
     .schedule(req.params.id)
-    .then(function (schedule) {
-      res.json(schedule);
-    }).catch(errorHandler);
+    .then(schedule => res.json(schedule))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.schedules = function (req, res) {
+exports.schedules = (req, res) => {
   Master
     .schedules()
-    .then(function (schedules) {
-      res.json(schedules);
-    }).catch(errorHandler);
+    .then(schedules => res.json(schedules))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.createSchedule = function (req, res) {
+exports.createSchedule = (req, res) => {
   Master
     .createSchedule(req.body)
-    .then(function (schedule) {
-      res.json(schedule);
-    }).catch(errorHandler);
+    .then(schedule => res.json(schedule))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.updateSchedule = function (req, res) {
+exports.updateSchedule = (req, res) => {
   Master
     .updateSchedule(req.params.id, req.body)
-    .then(function (schedule) {
-      res.json(schedule);
-    }).catch(errorHandler);
+    .then(schedule => res.json(schedule))
+    .catch(err => errorHandler(res, err));
 };
 
-exports.deleteSchedule = function (req, res) {
+exports.deleteSchedule = (req, res) => {
   Master
     .deleteSchedule(req.params.id)
-    .then(function (response) {
-      res.json(response);
-    }).catch(errorHandler);
+    .then(response => res.json(response))
+    .catch(err => errorHandler(res, err));
 };

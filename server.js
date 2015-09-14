@@ -8,9 +8,9 @@ var fs = require('fs');
 var controller = require('./server/controller');
 var Scheduler = require('./server/scheduler');
 
-function getUserHome() {
-  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
-}
+var getUserHome = () => {
+   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+};
 
 var conf = path.join(getUserHome(), '/.hmc.conf');
 
@@ -57,7 +57,7 @@ app.put('/api/schedules/:id', controller.updateSchedule);
 app.delete('/api/schedules/:id', controller.deleteSchedule);
 
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   console.error(err.message);
   res.sendStatus(err.status || 500);
 });

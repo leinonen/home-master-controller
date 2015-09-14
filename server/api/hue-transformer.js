@@ -1,3 +1,5 @@
+'use strict';
+
 var DeviceTypes = require('./device-types');
 
 /**
@@ -5,8 +7,8 @@ var DeviceTypes = require('./device-types');
  * @param device
  * @returns {{}}
  */
-function transformHueDevice(device) {
-  var item = {};
+var transformHueDevice = (device) => {
+  let item = {};
   item.id = device.id;
   item.name = device.name;
   item.type = DeviceTypes.HUE_DEVICE;
@@ -22,9 +24,8 @@ exports.HueDevice = transformHueDevice;
  * @param devices
  * @returns {*}
  */
-function transformHueDevices(devices) {
-  return devices.map(transformHueDevice);
-}
+var transformHueDevices = (devices) => devices.map(transformHueDevice);
+
 exports.HueDevices = transformHueDevices;
 
 /**
@@ -32,8 +33,8 @@ exports.HueDevices = transformHueDevices;
  * @param group
  * @returns {{}}
  */
-function transformHueGroup(group) {
-  var item = {};
+var transformHueGroup = (group) => {
+  let item = {};
   item.id = group.id;
   item.name = group.name;
   item.type = DeviceTypes.HUE_GROUP;
@@ -49,7 +50,6 @@ exports.HueGroup = transformHueGroup;
  * @param groups
  * @returns {*}
  */
-function transformHueGroups(groups) {
-  return groups.map(transformHueGroup);
-}
+var transformHueGroups = (groups) => groups.map(transformHueGroup);
+
 exports.HueGroups = transformHueGroups;
