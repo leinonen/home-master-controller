@@ -35,26 +35,28 @@ var zwave_login = (config) => http.request({
   .then(res => res.data.sid)
   .catch(err => Promise.reject(err));
 
+var handleZWaveResponse = (res) => {
+  if (res.code === 200){
+    return res;
+  } else {
+    return Promise.reject('Some kind of error');
+  }
+}
 
-var zwave_get = (url) => {
-  // console.log('zwave_get ' + url+ ' sessionCookie: ' + sessionCookie);
-  return http.request({
+var createLoginHeader = () => {
+  return {
+    'Accept': 'application/json',
+    'Cookie': 'ZWAYSession=' + sessionCookie
+  };
+}
+
+var zwave_get = (url) => http.request({
     method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Cookie': 'ZWAYSession=' + sessionCookie
-    },
+    headers: createLoginHeader(),
     url: url
   })
-  .then(res => {
-    if (res.code === 200){
-      return res;
-    } else {
-      return Promise.reject('Some kind of error');
-    }
-  })
+  .then(res => handleZWaveResponse(res))
   .catch(err => Promise.reject(err));
-}
 
 var zwave_login_get = (config, uri) => {
   if (sessionCookie === undefined) {
@@ -94,6 +96,13 @@ var doGet = (path) => Configuration.get()
 var isBinarySwitch = (device) => device.deviceType === 'switchBinary';
 var isSensorMultilevel = (device) => device.deviceType === 'sensorMultilevel';
 
+var handleResponse = (res) => {
+  console.log(res.message);
+  return {
+    status: res.message
+  };
+}
+
 exports.devices = () => doGet(ZWAVE_DEVICES)
   .then(res => res.data.devices.filter(isBinarySwitch));
 
@@ -101,22 +110,10 @@ exports.device = (id) => doGet(ZWAVE_DEVICES + '/' + id)
   .then(res => res.data);
 
 exports.setOn = (id) => doGet(ZWAVE_DEVICES + '/' + id + '/command/on')
-  .then(res => {
-    console.log(res.message);
-    return {
-      status: res.message
-    };
-  });
+  .then(res => handleResponse(res));
 
-exports.setOff = (id) =>
-  doGet(ZWAVE_DEVICES + '/' + id + '/command/off')
-  .then(res => {
-    console.log(res.message);
-    return {
-      status: res.message
-    };
-  });
-
+exports.setOff = (id) => doGet(ZWAVE_DEVICES + '/' + id + '/command/off')
+  .then(res => handleResponse(res));
 
 exports.sensors = () => doGet(ZWAVE_DEVICES)
   .then(res => res.data.devices.filter(isSensorMultilevel));
