@@ -4,6 +4,15 @@ body {
     font-size: 150%;
 }
 
+.device-name {
+  font-size: 20px;
+}
+
+.device-row {
+  margin-bottom: 10px;
+}
+
+
 .core-message {
     position: absolute;
     z-index: 100;

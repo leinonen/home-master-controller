@@ -1,17 +1,98 @@
 <div class="device-list">
   <p ng-show="!ctrl.showDevices()">Loading devices..</p>
 
-  <div class="row device-list-header">
-    <div class="col-sm-4">Name</div>
-    <div class="col-sm-2 hidden-xs">ID</div>
-    <div class="col-sm-2 hidden-xs">Type</div>
-    <div class="col-sm-2 hidden-xs">State</div>
-    <div class="col-sm-2"></div>
-  </div>
-
   <div ng-repeat="device in ctrl.devices | orderBy:'name'">
-    <telldus-device device="device"></telldus-device>
-    <hue-device device="device"></hue-device>
-    <zwave-device device="device"></zwave-device>
+
+    <!-- DEVICE -->
+    <div class="row device-row">
+      <div class="col-sm-6 device-name">{{device.name}}</div>
+      <div class="col-sm-3"><span class="badge">{{device.type}}</span></div>
+      <div class="col-sm-3">
+        <button ng-click="ctrl.toggleDevice(device)"
+                type="button"
+                class="btn btn-primary pull-right"
+                ng-class="{'btn-success':device.state.on}">
+                {{ctrl.buttonText(device)}}
+        </button>
+        <button ng-show="device.type === 'hue-device'"
+                ng-click="ctrl.toggleShowControls(device)"
+                type="button"
+                class="btn btn-primary pull-right"
+                ng-class="{'btn-default':ctrl.showControls}">
+          Modify
+        </button>
+      </div>
+    </div>
+
+    <!-- HUE DEVICE -->
+    <div ng-show="device.type === 'hue-device'" class="hue-device">
+        <div class="hue-controls" ng-show="ctrl.showControls(device)">
+
+          <div class="panel panel-default">
+            <!--<div class="panel-heading">{{ctrl.device.manufacturername}} {{ctrl.device.modelid}}</div>-->
+            <div class="panel-body">
+
+              <div class="row">
+                <div class="col-sm-4">Brightness</div>
+                <div class="col-sm-2">{{device.state.bri}}</div>
+                <div class="col-sm-6">
+                  <input type='range' min='0' max='254'
+                         ng-model="device.state.bri"
+                         ng-change="ctrl.setBrightness(device)"
+                         ng-disabled="ctrl.device.state.on === false"/>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">Saturation</div>
+                <div class="col-sm-2">{{device.state.sat}}</div>
+                <div class="col-sm-6">
+                  <input type='range' min='0' max='254'
+                         ng-model="device.state.sat"
+                         ng-change="ctrl.setSaturation(device)"
+                         ng-disabled="device.state.on === false"/>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">Hue</div>
+                <div class="col-sm-2">{{device.state.hue}}</div>
+                <div class="col-sm-6">
+                  <select class="form-control"
+                          ng-model="device.state.hue"
+                          ng-change="ctrl.setHue(device)"
+                          ng-disabled="device.state.on === false">
+                    <option value="3000">Deep Orange</option>
+                    <option value="12750">Yellow</option>
+                    <option value="25500">Green</option>
+                    <option value="46920">Blue</option>
+                    <option value="56100">Pink</option>
+                    <option value="65280">Red</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  Color looping
+                </div>
+                <div class="col-sm-6">
+                  <button ng-click="ctrl.toggleColorLoop(device)"
+                          type="button"
+                          class="btn btn-primary"
+                          ng-class="{'btn-success':device.state.effect !== 'none'}">
+                    {{ctrl.colorLoopText(device)}}
+                  </button>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+
+      </div>
+
+    </div>
+
   </div>
 </div>
