@@ -234,6 +234,14 @@ function controlDevicesInGroup(id, params) {
       switch (item.type) {
         case DeviceTypes.TELLDUS_DEVICE:
         case DeviceTypes.TELLDUS_GROUP:
+          // Handle special case for motorized things!
+          if (item.motorized) {
+            if (params.action === Actions.ACTION_ON){
+              params.action = Actions.ACTION_UP;
+            } else if (params.action === Actions.ACTION_OFF) {
+              params.action = Actions.ACTION_DOWN;
+            }
+          }
           return controlTelldus(item.id, params);
 
         case DeviceTypes.HUE_DEVICE:
