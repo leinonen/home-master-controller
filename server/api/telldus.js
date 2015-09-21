@@ -48,7 +48,8 @@ var createOAuthParams = (url, params, config) => {
     config.telldus.accessTokenSecret, 'GET', url, params);
   let messageParameters = {};
   oauthParameters.forEach(params => messageParameters[params[0]] = params[1]);
-}
+  return messageParameters;
+};
 
 /**
  * Make the actual api call to telldus.
@@ -63,7 +64,7 @@ var apiCall = (path, params) => {
     }
     let url = config.telldus.endpoint + path;
     let oAuthParams = createOAuthParams(url, params, config);
-    return http.get(url + '?' + Qs.stringify(messageParameters)).catch(errorHandler);
+    return http.get(url + '?' + Qs.stringify(oAuthParams)).catch(errorHandler);
   });
 }
 
