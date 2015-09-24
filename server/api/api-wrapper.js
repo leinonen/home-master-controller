@@ -244,15 +244,19 @@ ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
       switch (item.type) {
         case DeviceTypes.TELLDUS_DEVICE:
           // Handle special case for motorized things!
+          var telldusParams = {
+            action: params.action,
+            type: params.type
+          };
           if (item.motorized) {
-            if (params.action === Actions.ACTION_ON) {
-              params.action = Actions.ACTION_UP;
+            if (telldusParams.action === Actions.ACTION_ON) {
+              telldusParams.action = Actions.ACTION_UP;
             } else if (params.action === Actions.ACTION_OFF) {
-              params.action = Actions.ACTION_DOWN;
+              telldusParams.action = Actions.ACTION_DOWN;
             }
           }
-          console.log(item.name + ', type: ' + item.type + ', motorized: ' + item.motorized + ', action: ' + params.action);
-          return wrapper.controlTelldus(item.id, params);
+          console.log(item.name + ', type: ' + item.type + ', motorized: ' + item.motorized + ', action: ' + telldusParams.action);
+          return wrapper.controlTelldus(item.id, telldusParams);
 
         case DeviceTypes.TELLDUS_GROUP:
           return wrapper.controlTelldus(item.id, params);
