@@ -1,0 +1,31 @@
+[
+  {
+    "state": {
+      "on": true,
+      "bri": 254,
+      "hue": 3000,
+      "sat": 254,
+      "effect": "none",
+      "alert": "none",
+      "colormode": "hs",
+      "reachable": true
+    },
+    "type": "Color light",
+    "name": "Livingroom Light Strip",
+    "modelid": "LST001",
+    "manufacturername": "Philips",
+    "uniqueid": "00:17:88:01:00:cc:cc:4b-0b",
+    "swversion": "66010400",
+    "pointsymbol": {
+      "1": "none",
+      "2": "none",
+      "3": "none",
+      "4": "none",
+      "5": "none",
+      "6": "none",
+      "7": "none",
+      "8": "none"
+    },
+    "id": "4"
+  }
+]

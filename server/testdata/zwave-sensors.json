@@ -1,0 +1,59 @@
+[
+  {
+    "creatorId": 1,
+    "deviceType": "sensorMultilevel",
+    "h": 1303283139,
+    "hasHistory": false,
+    "id": "ZWayVDev_zway_2-0-49-4",
+    "location": 0,
+    "metrics": {
+      "probeTitle": "Power",
+      "scaleTitle": "W",
+      "level": 20.6,
+      "icon": "energy",
+      "title": "Sensor Power 2-0-49-4 Fibar Group"
+    },
+    "permanently_hidden": false,
+    "tags": [],
+    "visibility": true,
+    "updateTime": 1443029400
+  },
+  {
+    "creatorId": 1,
+    "deviceType": "sensorMultilevel",
+    "h": 1303304277,
+    "hasHistory": false,
+    "id": "ZWayVDev_zway_2-0-50-0",
+    "location": 0,
+    "metrics": {
+      "probeTitle": "Electric",
+      "scaleTitle": "kWh",
+      "level": 1.53,
+      "icon": "meter",
+      "title": "Meter Electric 2-0-50-0 Fibar Group"
+    },
+    "permanently_hidden": false,
+    "tags": [],
+    "visibility": true,
+    "updateTime": 1443029400
+  },
+  {
+    "creatorId": 1,
+    "deviceType": "sensorMultilevel",
+    "h": 1303304279,
+    "hasHistory": false,
+    "id": "ZWayVDev_zway_2-0-50-2",
+    "location": 0,
+    "metrics": {
+      "probeTitle": "Electric",
+      "scaleTitle": "W",
+      "level": 20.6,
+      "icon": "meter",
+      "title": "Livingroom Lights Electric Meter"
+    },
+    "permanently_hidden": false,
+    "tags": [],
+    "visibility": true,
+    "updateTime": 1443029400
+  }
+]

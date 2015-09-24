@@ -4,13 +4,14 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine-node server/**/*.spec.js"
   },
   "author": "Peter Leinonen",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
+    "homedir": "^0.6.0",
     "mongoose": "^4.0.2",
     "mongoose-q": "0.0.17",
     "oauth": "^0.9.12",

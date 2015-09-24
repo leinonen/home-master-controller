@@ -1,0 +1,19 @@
+[
+    {
+    "creatorId": 1,
+    "deviceType": "switchBinary",
+    "h": 1078449915,
+    "hasHistory": false,
+    "id": "ZWayVDev_zway_2-0-37",
+    "location": 0,
+    "metrics": {
+      "icon": "switch",
+      "title": "Livingroom Lights Switch",
+      "level": "on"
+    },
+    "permanently_hidden": false,
+    "tags": [],
+    "visibility": true,
+    "updateTime": 1443028357
+  }
+]

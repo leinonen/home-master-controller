@@ -1,0 +1,29 @@
+[
+    {
+    "__v": 1,
+    "_id": "55f70acda6771dd0086f141f",
+    "action": "on",
+    "active": true,
+    "name": "test schedule",
+    "random": 0,
+    "sunrise": false,
+    "sunset": false,
+    "time": "20:04",
+    "weekdays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ],
+    "items": [
+      {
+        "id": "4",
+        "type": "hue-device",
+        "_id": "55f70bcbcf140d7c0c2fdc49"
+      }
+    ]
+  }
+]

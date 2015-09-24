@@ -5,12 +5,17 @@
  * @author Peter Leinonen
  */
 var Q = require('q');
-var Wrapper = require('./api/api-wrapper');
+var ApiWrapper = require('./api/api-wrapper');
 var Group = require('../models/group');
 var Schedule = require('../models/schedule');
-//var events = require('events');
-//var eventEmitter = new events.EventEmitter();
 var Bus = require('./bus');
+
+var TelldusAPI = require('./api/telldus');
+var HueAPI = require('./api/hue');
+var ZWaveAPI = require('./api/zwave');
+var Group = require('../models/group');
+var GenericAPI = require('./api/generic');
+var Wrapper = new ApiWrapper(TelldusAPI, HueAPI, ZWaveAPI, GenericAPI, Group);
 
 /**
  * Get all sensors.
@@ -94,7 +99,7 @@ exports.schedules = () => Schedule.findAll();
 exports.createSchedule = (schedule) => {
   var sch = new Schedule(schedule);
   sch.save();
-  Bus.emit('SchedulerUpdate');
+  Bus.emit('UpdateScheduler');
   var def = Q.defer();
   def.resolve(sch);
   return def.promise;
@@ -113,8 +118,7 @@ exports.updateSchedule = (id, sch) => Schedule.findById(id)
     schedule.weekdays = sch.weekdays;
     schedule.items = sch.items;
     schedule.save();
-    console.log('schedule updated');
-    Bus.emit('SchedulerUpdate');
+    Bus.emit('UpdateScheduler');
     return schedule;
   });
 
@@ -122,7 +126,7 @@ exports.updateSchedule = (id, sch) => Schedule.findById(id)
 exports.deleteSchedule = (id) => Schedule.findById(id)
   .then(schedule => {
     schedule.remove();
-    Bus.emit('SchedulerUpdate');
+    Bus.emit('UpdateScheduler');
     return {};
   });
 

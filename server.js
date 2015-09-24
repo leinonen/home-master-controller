@@ -4,23 +4,19 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose-q')();
 var fs = require('fs');
-//var config = require('./server/config');
+var homedir = require('homedir');
 var controller = require('./server/controller');
+var ScheduleService = require('./models/schedule');
 var Scheduler = require('./server/scheduler');
+var scheduler = new Scheduler(ScheduleService);
+var conf = path.join(homedir(), '/.hmc.conf');
 
-var getUserHome = () => {
-   return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
-};
-
-var conf = path.join(getUserHome(), '/.hmc.conf');
-
-if (!fs.existsSync(conf)){
+if (!fs.existsSync(conf)) {
   console.log('Configuration file missing! Create .hmc.conf in your home directory.');
+  process.exit(0);
 }
 
 var config = JSON.parse(fs.readFileSync(conf, 'utf-8'));
-
-console.log(getUserHome());
 
 mongoose.connect(config.mongo.url, config.mongo.opts);
 
@@ -39,7 +35,6 @@ app.get('/api/device/:id', controller.device);
 
 app.get('/api/groups', controller.groups);
 app.post('/api/groups', controller.createGroup);
-//app.get('/api/genericGroups', controller.getGenericGroups);
 app.get('/api/groupState/:id', controller.groupState);
 
 app.get('/api/group/:id', controller.group);
@@ -49,13 +44,12 @@ app.get('/api/group/:id/devices', controller.groupDevices);
 
 app.post('/api/control/:id', controller.control);
 
-
+// Scheduler
 app.get('/api/schedules', controller.schedules);
 app.post('/api/schedules', controller.createSchedule);
 app.get('/api/schedules/:id', controller.schedule);
 app.put('/api/schedules/:id', controller.updateSchedule);
 app.delete('/api/schedules/:id', controller.deleteSchedule);
-
 
 app.use((err, req, res, next) => {
   console.error(err.message);
@@ -63,6 +57,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(config.port);
-console.log('server listening on port %d', config.port);
+console.log('Home Master Controller is running on port %d', config.port);
 
-Scheduler.startScheduler();
+scheduler.start();

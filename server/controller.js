@@ -4,7 +4,7 @@ var Configuration = require('../models/configuration');
 var errorHandler = (response, error) => {
   console.log(error.message);
   response.status(error.statusCode || 400).json(error);
-}
+};
 
 exports.sensors = (req, res) => {
   Master
