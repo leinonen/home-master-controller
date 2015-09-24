@@ -4,30 +4,9 @@
  * @type {exports}
  */
 var Promise = require('../util/promise');
-//var Telldus = require('./telldus');
-//var Hue = require('./hue');
-//var ZWave = require('./zwave');
-//var Group = require('../../models/group');
-//var Generic = require('./generic');
 var Transformer = require('./transformer');
 var DeviceTypes = require('./device-types');
 var Actions = require('./actions');
-
-var serviceDisabled = (err) => Promise.reject(err);
-
-var serviceDisabledArray = (err) => {
-  if (err.serviceDisabled && err.serviceDisabled === true) {
-    // console.log(err.message);
-    return [];
-  } else {
-    return Promise.reject(err);
-  }
-};
-
-
-
-var flattenArrays = (arr) => arr.reduce((a, b) => a.concat(b));
-
 
 function ApiWrapper(telldus, hue, zwave, generic, group) {
   this.Telldus = telldus;
@@ -37,6 +16,19 @@ function ApiWrapper(telldus, hue, zwave, generic, group) {
   this.Generic = generic;
 }
 module.exports = ApiWrapper;
+
+
+var serviceDisabled = (err) => Promise.reject(err);
+
+var serviceDisabledArray = (err) => {
+  if (err.serviceDisabled && err.serviceDisabled === true) {
+    return [];
+  } else {
+    return Promise.reject(err);
+  }
+};
+
+var flattenArrays = (arr) => arr.reduce((a, b) => a.concat(b));
 
 
 ApiWrapper.prototype.sensors = function () {
