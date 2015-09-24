@@ -17,7 +17,7 @@ module.exports = function(service) {
         fetchSchedules().then(schedules => {
           _schedules = schedules;
           console.log('Scheduler refreshed');
-          _schedules.forEach(s => console.log(s.time));
+          _schedules.forEach(s => console.log(s.name + ' -> ' + s.time));
         });
       }, 5); // Why?
     });
