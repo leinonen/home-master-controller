@@ -245,12 +245,13 @@ ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
         case DeviceTypes.TELLDUS_DEVICE:
           // Handle special case for motorized things!
           if (item.motorized) {
-            if (params.action === Actions.ACTION_ON){
+            if (params.action === Actions.ACTION_ON) {
               params.action = Actions.ACTION_UP;
             } else if (params.action === Actions.ACTION_OFF) {
               params.action = Actions.ACTION_DOWN;
             }
           }
+          console.log(item.name + ', type: ' + item.type + ', motorized: ' + item.motorized + ', action: ' + params.action);
           return wrapper.controlTelldus(item.id, params);
 
         case DeviceTypes.TELLDUS_GROUP:
@@ -263,11 +264,9 @@ ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
         case DeviceTypes.ZWAVE_SWITCH:
           return wrapper.controlZWave(item.id, params);
       }
-      // TODO: handle generic groups! Recursive call
     });
 
     return Promise.all(promises).then(function (response) {
-      // TODO: update group with correct state?
       return {success: 'Group state set to ' + params.action};
     });
 
