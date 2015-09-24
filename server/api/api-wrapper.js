@@ -240,9 +240,13 @@ ApiWrapper.prototype.controlGenericGroup = function(id, params) {
 
 ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
   var wrapper = this;
-  return wrapper.Generic.groupDevices(id).then(function (items) {
-
-    var promises = items.map(function (item) {
+  return wrapper.Generic.groupDevices(id)
+    .then(function(items) {
+      // Get actual devices so we can test if they are motorized
+      return Promise.all(items.map(item => wrapper.device(item.id, item.type)))
+    })
+    .then(function (items) {
+      var promises = items.map(function (item) {
       params.type = item.type; // Must send correct type!
 
       switch (item.type) {
@@ -267,10 +271,12 @@ ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
       }
       // TODO: handle generic groups! Recursive call
     });
+
     return Promise.all(promises).then(function (response) {
       // TODO: update group with correct state?
       return {success: 'Group state set to ' + params.action};
     });
+
   });
 };
 
