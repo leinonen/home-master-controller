@@ -251,7 +251,7 @@ ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
           if (item.motorized) {
             if (telldusParams.action === Actions.ACTION_ON) {
               telldusParams.action = Actions.ACTION_UP;
-            } else if (params.action === Actions.ACTION_OFF) {
+            } else if (telldusParams.action === Actions.ACTION_OFF) {
               telldusParams.action = Actions.ACTION_DOWN;
             }
           }
