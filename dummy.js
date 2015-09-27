@@ -21,14 +21,9 @@ var conf = path.join(getUserHome(), '/.hmc.conf');
 var config = JSON.parse(fs.readFileSync(conf, 'utf-8'));
 mongoose.connect(config.mongo.url, config.mongo.opts);
 
-//var wrapper = new ApiWrapper(Telldus, Hue, ZWave, Group, Generic);
+var wrapper = new ApiWrapper(Telldus, Hue, ZWave, Group, Generic);
 
-/*wrapper.sensors().then(function(sensors){
-  console.log(sensors);
-});*/
-
-Schedule.findAll().then(function(json){
-  console.log(json);
-}).catch(function(err){
-  console.error(err);
+wrapper.groups().then(function(a){
+  console.log(a);
 });
+

@@ -8,328 +8,262 @@ var Transformer = require('./transformer');
 var DeviceTypes = require('./device-types');
 var Actions = require('./actions');
 
-function ApiWrapper(telldus, hue, zwave, generic, group) {
-  this.Telldus = telldus;
-  this.Hue = hue;
-  this.ZWave = zwave;
-  this.Group = group;
-  this.Generic = generic;
-}
-module.exports = ApiWrapper;
+var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) {
+  var TelldusAPI = telldus;
+  var HueAPI = hue;
+  var ZWaveAPI = zwave;
+  var GroupAPI = group;
+  var GenericAPI = generic;
 
+  var ZWAVE_SENSOR  = (id) => ZWaveAPI.sensor(id).then(Transformer.ZWaveSensor).catch(serviceDisabled);
+  var ZWAVE_SENSORS = ()   => ZWaveAPI.sensors().then(Transformer.ZWaveSensors).catch(serviceDisabledArray);
+  var ZWAVE_DEVICE  = (id) => ZWaveAPI.device(id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
+  var ZWAVE_DEVICES = ()   => ZWaveAPI.devices().then(Transformer.ZWaveDevices).catch(serviceDisabledArray);
 
-var serviceDisabled = (err) => Promise.reject(err);
+  var HUE_DEVICE  = (id) => HueAPI.light(id).then(Transformer.HueDevice).catch(serviceDisabled);
+  var HUE_DEVICES = ()   => HueAPI.lights().then(Transformer.HueDevices).catch(serviceDisabledArray);
+  var HUE_GROUP   = (id) => HueAPI.group(id).then(Transformer.HueGroup).catch(serviceDisabled);
+  var HUE_GROUPS  = ()   => HueAPI.groups().then(Transformer.HueGroups).catch(serviceDisabledArray);
 
-var serviceDisabledArray = (err) => {
-  if (err.serviceDisabled && err.serviceDisabled === true) {
-    return [];
-  } else {
-    return Promise.reject(err);
-  }
-};
-
-var flattenArrays = (arr) => arr.reduce((a, b) => a.concat(b));
-
-
-ApiWrapper.prototype.sensors = function () {
-  var wrapper = this;
-  var telldusSensors = wrapper.Telldus.sensors()
-    .then(sensors => Promise.all(sensors.map(sensor => wrapper.Telldus.sensor(sensor.id))))
+  var TELLDUS_DEVICE  = (id) => TelldusAPI.device(id).then(Transformer.TelldusDevice).catch(serviceDisabled);
+  var TELLDUS_DEVICES = ()   => TelldusAPI.devices().then(Transformer.TelldusDevices).catch(serviceDisabledArray);
+  var TELLDUS_GROUP   = (id) => TelldusAPI.group(id).then(Transformer.TelldusGroup).catch(serviceDisabled);
+  var TELLDUS_GROUPS  = ()   => TelldusAPI.groups().then(Transformer.TelldusGroups).catch(serviceDisabledArray);
+  var TELLDUS_SENSOR  = (id) => TelldusAPI.sensor(id).catch(serviceDisabled);
+  var TELLDUS_SENSORS = () => TelldusAPI.sensors()
+    .then(sensors => Promise.all(sensors.map(sensor => TelldusAPI.sensor(sensor.id))))
     .then(Transformer.TelldusSensors)
     .catch(serviceDisabledArray);
 
-  var promises = [];
-  promises.push(telldusSensors.catch(serviceDisabledArray));
-  promises.push(wrapper.ZWave.sensors().then(Transformer.ZWaveSensors).catch(serviceDisabledArray));
-  return Promise.all(promises).then(flattenArrays);
-};
+  var GENERIC_GROUP  = (id) => GroupAPI.findById(id).then(Transformer.GenericGroup);
+  var GENERIC_GROUPS = ()   => GenericAPI.groups().then(Transformer.GenericGroups);
 
+  var serviceDisabled = (err) => Promise.reject(err);
+  var serviceDisabledArray = (err) => {
+    if (err.serviceDisabled && err.serviceDisabled === true) {
+      return [];
+    } else {
+      return Promise.reject(err);
+    }
+  };
 
+  var getSensors = function () {
+    var promises = [];
+    promises.push(TELLDUS_SENSORS());
+    promises.push(ZWAVE_SENSORS());
+    return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
+  };
 
-ApiWrapper.prototype.sensor = function (id, type) {
-  if (type === DeviceTypes.TELLDUS_SENSOR) {
-    return this.Telldus.sensor(id);
-  } else if (type === DeviceTypes.ZWAVE_SENSOR) {
-    return this.ZWave.sensor(id);
-  }
-};
+  var getSensor = function (id, type) {
+    switch (type) {
+      case DeviceTypes.TELLDUS_SENSOR: return TELLDUS_SENSOR(id);
+      case DeviceTypes.ZWAVE_SENSOR:   return ZWAVE_SENSOR(id);
+      default : return Promise.reject('Unsupported sensor type: ' + type)
+    }
+  };
 
+  var getGroups = function () {
+    var promises = [];
+    promises.push(TELLDUS_GROUPS());
+    promises.push(HUE_GROUPS());
+    promises.push(GENERIC_GROUPS());
+    return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
+  };
 
-ApiWrapper.prototype.groups = function () {
-  var promises = [];
-  promises.push(this.Telldus.groups().then(Transformer.TelldusGroups).catch(serviceDisabledArray));
-  promises.push(this.Hue.groups().then(Transformer.HueGroups).catch(serviceDisabledArray));
-  promises.push(this.Generic.groups().then(Transformer.GenericGroups));
-  return Promise.all(promises).then(flattenArrays);
-};
+  var getGroup = function (id, type) {
+    switch (type) {
+      case DeviceTypes.GENERIC_GROUP: return GENERIC_GROUP(id);
+      case DeviceTypes.TELLDUS_GROUP: return TELLDUS_GROUP(id);
+      case DeviceTypes.HUE_GROUP:     return HUE_GROUP(id);
+      default:  return Promise.reject('Unsupported group ' + type);
+    }
+  };
 
-ApiWrapper.prototype.devices = function () {
-  var promises = [];
-  promises.push(this.Telldus.devices().then(Transformer.TelldusDevices).catch(serviceDisabledArray));
-  promises.push(this.Hue.lights().then(Transformer.HueDevices).catch(serviceDisabledArray));
-  promises.push(this.ZWave.devices().then(Transformer.ZWaveDevices).catch(serviceDisabledArray));
-  return Promise.all(promises).then(flattenArrays);
-};
+  var getDevices = function () {
+    var promises = [];
+    promises.push(TELLDUS_DEVICES());
+    promises.push(HUE_DEVICES());
+    promises.push(ZWAVE_DEVICES());
+    return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
+  };
 
+  var getDevice = (id, type) => {
+    switch (type) {
+      case DeviceTypes.TELLDUS_DEVICE: return TELLDUS_DEVICE(id);
+      case DeviceTypes.TELLDUS_GROUP:  return TELLDUS_GROUP(id);
+      case DeviceTypes.HUE_DEVICE:     return HUE_DEVICE(id);
+      case DeviceTypes.HUE_GROUP:      return HUE_GROUP(id);
+      case DeviceTypes.GENERIC_GROUP:  return GENERIC_GROUP(id);
+      case DeviceTypes.ZWAVE_SWITCH:   return ZWAVE_DEVICE(id);
+      default: return Promise.reject('Invalid device type ' + device.type);
+    }
+  };
 
-ApiWrapper.prototype.group = function (id, type) {
-  switch (type) {
-    case DeviceTypes.GENERIC_GROUP:
-      return this.Group.findById(id).then(Transformer.GenericGroup);
+  var groupDevices = (id, type) => {
+    if (type === DeviceTypes.GENERIC_GROUP) {
+      return GenericAPI.groupDevices(id)
+        .then(devices => Promise.all(devices.map(device => getDevice(device.id, device.type))));
+    } else {
+      return Promise.reject(type + ' not implemented');
+    }
+  };
 
-    case DeviceTypes.TELLDUS_GROUP:
-      return this.Telldus.device(id).then(Transformer.TelldusGroup);
+  var control = (id, params) => {
+    console.log('Control %s: ' + id + ' -> action: %s', params.type, params.action);
+    switch (params.type) {
+      case DeviceTypes.TELLDUS_DEVICE:
+      case DeviceTypes.TELLDUS_GROUP:
+        return controlTelldus(id, params);
 
-    case DeviceTypes.HUE_GROUP:
-      return this.Hue.group(id).then(Transformer.HueGroup);
+      case DeviceTypes.HUE_DEVICE:
+      case DeviceTypes.HUE_GROUP:
+        return controlHue(id, params);
 
-    default:
-      return Promise.reject('Unsupported group ' + type);
-  }
-};
+      case DeviceTypes.GENERIC_GROUP:
+        return controlGenericGroup(id, params);
 
+      case DeviceTypes.ZWAVE_SWITCH:
+        return controlZWave(id, params);
 
+      default:
+        return Promise.reject(params.type + ' is not implemented');
+    }
+  };
 
-ApiWrapper.prototype.device = function (id, type) {
-  switch (type) {
-    case DeviceTypes.TELLDUS_DEVICE:
-      return this.Telldus.device(id).then(Transformer.TelldusDevice).catch(serviceDisabled);
-
-    case DeviceTypes.HUE_DEVICE:
-      return this.Hue.light(id).then(Transformer.HueDevice).catch(serviceDisabled);
-
-    case DeviceTypes.ZWAVE_SWITCH:
-      return this.ZWave.device(id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
-
-    default:
-      return Promise.reject('Invalid device type: ' + type);
-  }
-};
-
-
-ApiWrapper.prototype.groupDevices = function (id, type) {
-  var wrapper = this;
-  if (type === DeviceTypes.GENERIC_GROUP) {
-    return wrapper.Generic.groupDevices(id).then(devices => {
-      var promises = devices.map(device => {
-
-        switch (device.type) {
-          case DeviceTypes.TELLDUS_DEVICE:
-            return wrapper.Telldus.device(device.id).then(Transformer.TelldusDevice).catch(serviceDisabled);
-
-          case DeviceTypes.TELLDUS_GROUP:
-            return wrapper.Telldus.device(device.id).then(Transformer.TelldusGroup).catch(serviceDisabled);
-
-          case DeviceTypes.HUE_DEVICE:
-            return wrapper.Hue.light(device.id).then(Transformer.HueDevice).catch(serviceDisabled);
-
-          case DeviceTypes.HUE_GROUP:
-            return wrapper.Hue.group(device.id).then(Transformer.HueGroup).catch(serviceDisabled);
-
-          case DeviceTypes.GENERIC_GROUP:
-            return wrapper.Group.findById(device.id).then(Transformer.GenericGroup);
-
-          case DeviceTypes.ZWAVE_SWITCH:
-            return wrapper.ZWave.device(device.id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
-
-          default:
-            return Promise.reject('Invalid device type ' + device.type);
-        }
-
-      });
-      return Promise.all(promises);
-    });
-  } else {
-    return Promise.reject(type + ' not implemented');
-  }
-};
-
-
-
-ApiWrapper.prototype.control = function (id, params) {
-  //console.log('Control %s: ' + id + ' -> action: %s', params.type, params.action);
-
-  switch (params.type) {
-    case DeviceTypes.TELLDUS_DEVICE:
-    case DeviceTypes.TELLDUS_GROUP:
-      return this.controlTelldus(id, params);
-
-    case DeviceTypes.HUE_DEVICE:
-    case DeviceTypes.HUE_GROUP:
-      return this.controlHue(id, params);
-
-    case DeviceTypes.GENERIC_GROUP:
-      return this.controlGenericGroup(id, params);
-
-    case DeviceTypes.ZWAVE_SWITCH:
-      return this.controlZWave(id, params);
-
-    default:
-      return Promise.reject(params.type + ' is not implemented');
-  }
-};
-
-
-ApiWrapper.prototype.groupState = function(id) {
-  var wrapper = this;
-  return wrapper.Generic.groupDevices(id).then(function (items) {
-    var promises = items.map(function (item) {
-      switch (item.type) {
-        case DeviceTypes.TELLDUS_DEVICE:
-          return wrapper.Telldus.device(item.id).then(Transformer.TelldusDevice).catch(serviceDisabled);
-
-        case DeviceTypes.TELLDUS_GROUP:
-          return wrapper.Telldus.device(item.id).then(Transformer.HueGroup).catch(serviceDisabled);
-
-        case DeviceTypes.HUE_DEVICE:
-          return wrapper.Hue.light(item.id).then(Transformer.HueDevice).catch(serviceDisabled);
-
-        case DeviceTypes.HUE_GROUP:
-          return wrapper.Hue.group(item.id).then(Transformer.HueGroup).catch(serviceDisabled);
-
-        case DeviceTypes.ZWAVE_SWITCH:
-          return wrapper.ZWave.device(item.id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
-      }
-    });
-    return Promise.all(promises).then(devices => {
+  var groupState = (id) => GenericAPI.groupDevices(id)
+    .then(items => Promise.all(items.map(item => getDevice(item.id, item.type))).then(devices => {
       // Group is on if all devices are on
-      var groupState = devices.every(device => device.state.on === true);
-
       return {
         id: id,
         state: {
-          on: groupState
+          on: devices.every(device => device.state.on === true)
         },
         devices: devices
       }
-    });
-  });
-};
+    }));
 
+  var createGenericGroup = (group) => GenericAPI.create(group);
+  var updateGenericGroup = (id, group) => GenericAPI.update(id, group);
+  var removeGenericGroup = (id) => GenericAPI.remove(id);
 
+  var controlGenericGroup = (id, params) => {
+    if (params.action === Actions.ACTION_ON ||
+        params.action === Actions.ACTION_OFF) {
+      return controlDevicesInGroup(id, params);
+    }
+  };
 
-ApiWrapper.prototype.createGenericGroup = function (group) {
-  return this.Generic.create(group);
-};
-
-ApiWrapper.prototype.updateGenericGroup = function (id, group) {
-  return this.Generic.update(id, group);
-};
-
-ApiWrapper.prototype.removeGenericGroup = function (id) {
-  return this.Generic.remove(id);
-};
-
-
-
-ApiWrapper.prototype.controlGenericGroup = function(id, params) {
-  if (params.action === Actions.ACTION_ON ||
-    params.action === Actions.ACTION_OFF) {
-    return this.controlDevicesInGroup(id, params);
-  }
-};
-
-
-ApiWrapper.prototype.controlDevicesInGroup = function(id, params) {
-  var wrapper = this;
-  return wrapper.Generic.groupDevices(id)
-    .then(function(items) {
-      // Get actual devices so we can test if they are motorized
-      return Promise.all(items.map(item => wrapper.device(item.id, item.type)))
-    })
-    .then(function (items) {
-      var promises = items.map(function (item) {
-      params.type = item.type; // Must send correct type!
-
-      switch (item.type) {
-        case DeviceTypes.TELLDUS_DEVICE:
-          // Handle special case for motorized things!
-          var telldusParams = {
-            action: params.action,
-            type: params.type
-          };
-          if (item.motorized) {
-            if (telldusParams.action === Actions.ACTION_ON) {
-              telldusParams.action = Actions.ACTION_UP;
-            } else if (telldusParams.action === Actions.ACTION_OFF) {
-              telldusParams.action = Actions.ACTION_DOWN;
-            }
-          }
-          console.log(item.name + ', type: ' + item.type + ', motorized: ' + item.motorized + ', action: ' + telldusParams.action);
-          return wrapper.controlTelldus(item.id, telldusParams);
-
-        case DeviceTypes.TELLDUS_GROUP:
-          return wrapper.controlTelldus(item.id, params);
-
-        case DeviceTypes.HUE_DEVICE:
-        case DeviceTypes.HUE_GROUP:
-          return wrapper.controlHue(item.id, params);
-
-        case DeviceTypes.ZWAVE_SWITCH:
-          return wrapper.controlZWave(item.id, params);
+  var getTelldusParamsForItem = (item, params) => {
+    var telldusParams = {
+      action: params.action,
+      type: params.type
+    };
+    if (item.motorized) {
+      if (params.action === Actions.ACTION_ON) {
+        telldusParams.action = Actions.ACTION_UP;
+      } else if (params.action === Actions.ACTION_OFF) {
+        telldusParams.action = Actions.ACTION_DOWN;
       }
-    });
+    }
+    return telldusParams;
+  };
 
-    return Promise.all(promises).then(function (response) {
-      return {success: 'Group state set to ' + params.action};
-    });
+  var controlDevicesInGroup = (id, params) => {
+    return GenericAPI.groupDevices(id)
+      .then(items => Promise.all(items.map(item => getDevice(item.id, item.type))))
+      .then(items => {
+        var promises = items.map(item => {
+          params.type = item.type; // Must send correct type!
 
-  });
+          switch (item.type) {
+            case DeviceTypes.TELLDUS_DEVICE:
+            case DeviceTypes.TELLDUS_GROUP:
+              return controlTelldus(item.id, getTelldusParamsForItem(item, params));
+
+            case DeviceTypes.HUE_DEVICE:
+            case DeviceTypes.HUE_GROUP:
+              return controlHue(item.id, params);
+
+            case DeviceTypes.ZWAVE_SWITCH:
+              return controlZWave(item.id, params);
+          }
+        });
+
+        return Promise.all(promises).then(response => {
+          return {success: 'Group state set to ' + params.action};
+        });
+
+      });
+  };
+
+  var controlTelldus = function(id, params) {
+    switch (params.action) {
+      case Actions.ACTION_ON:   return TelldusAPI.turnOn(id);
+      case Actions.ACTION_OFF:  return TelldusAPI.turnOff(id);
+      case Actions.ACTION_UP:   return TelldusAPI.goUp(id);
+      case Actions.ACTION_DOWN: return TelldusAPI.goDown(id);
+    }
+  };
+
+  var createHueParams = (params) => {
+    var hueParams = {};
+    switch (params.action) {
+      case Actions.ACTION_ON:
+        hueParams = {on: true};
+        break;
+      case Actions.ACTION_OFF:
+        hueParams = {on: false};
+        break;
+      case 'colorloop-on':
+        hueParams = {effect: 'colorloop'};
+        break;
+      case 'colorloop-off':
+        hueParams = {effect: 'none'};
+        break;
+      case 'bri':
+        hueParams = {bri: Number(params.value)};
+        break;
+      case 'sat':
+        hueParams = {sat: Number(params.value)};
+        break;
+      case 'hue':
+        hueParams = {hue: Number(params.value)};
+        break;
+    }
+    return hueParams;
+  };
+
+  var controlHue = function(id, params) {
+    var hueParams = createHueParams(params);
+    switch (params.type) {
+      case DeviceTypes.HUE_DEVICE: return HueAPI.setLightState(id, hueParams);
+      case DeviceTypes.HUE_GROUP: return HueAPI.setGroupAction(id, hueParams);
+      default: return Promise.reject('controlHue: Unsupported type ' + params.type);
+    }
+  };
+
+  var controlZWave = (id, params) => {
+    if (params.action === Actions.ACTION_ON) {
+      return ZWaveAPI.setOn(id);
+
+    } else if (params.action === Actions.ACTION_OFF) {
+      return ZWaveAPI.setOff(id);
+    }
+  };
+
+  return {
+    sensor: getSensor,
+    sensors: getSensors,
+    device: getDevice,
+    devices: getDevices,
+    group: getGroup,
+    groups: getGroups,
+    groupDevices: groupDevices,
+    groupState: groupState,
+    createGenericGroup: createGenericGroup,
+    updateGenericGroup: updateGenericGroup,
+    removeGenericGroup: removeGenericGroup,
+    controlGenericGroup: controlGenericGroup,
+    control: control
+  };
 };
-
-
-ApiWrapper.prototype.controlTelldus = function(id, params) {
-  console.log('controlTelldus ' + params.type + ' ' + params.action);
-  switch (params.action) {
-    case Actions.ACTION_ON:
-      return this.Telldus.turnOn(id);
-
-    case Actions.ACTION_OFF:
-      return this.Telldus.turnOff(id);
-
-    case Actions.ACTION_UP:
-      return this.Telldus.goUp(id);
-
-    case Actions.ACTION_DOWN:
-      return this.Telldus.goDown(id);
-  }
-};
-
-
-ApiWrapper.prototype.controlHue = function(id, params) {
-  console.log('controlHue ' + params.type + ' ' + params.action);
-
-  var message = {};
-  if (params.action === Actions.ACTION_ON) {
-    message = {on: true};
-  } else if (params.action === Actions.ACTION_OFF) {
-    message = {on: false};
-  } else if (params.action === 'colorloop-on') {
-    message = {effect: 'colorloop'}
-  } else if (params.action === 'colorloop-off') {
-    message = {effect: 'none'}
-  } else if (params.action === 'bri') {
-    message = {bri: Number(params.value)};
-  } else if (params.action === 'sat') {
-    message = {sat: Number(params.value)};
-  } else if (params.action === 'hue') {
-    message = {hue: Number(params.value)};
-  }
-
-  if (params.type === DeviceTypes.HUE_DEVICE) {
-    return this.Hue.setLightState(id, message);
-  } else if (params.type === DeviceTypes.HUE_GROUP) {
-    return this.Hue.setGroupAction(id, message);
-  }
-};
-
-
-ApiWrapper.prototype.controlZWave = function(id, params) {
-  if (params.action === Actions.ACTION_ON) {
-    return this.ZWave.setOn(id);
-
-  } else if (params.action === Actions.ACTION_OFF) {
-    return this.ZWave.setOff(id);
-  }
-};
-

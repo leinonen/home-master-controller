@@ -60,3 +60,7 @@ app.listen(config.port);
 console.log('Home Master Controller is running on port %d', config.port);
 
 scheduler.start();
+
+process.on('uncaughtException', function (error) {
+  console.log(error.stack);
+});
