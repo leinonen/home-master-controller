@@ -25,7 +25,6 @@ body {
     width: 40px;
 }
 
-
 .device-list-header,
 .group-list-header,
 .sensor-list-header {
@@ -73,6 +72,17 @@ body {
 
 
 
+.zwave-switch, .zwave-sensor {  background-color: #006c91; }
+.telldus-device, .telldus-group, .telldus-sensor {  background-color: #009149; }
+.hue-device, .hue-group {  background-color: #921a39; }
+
+
+
 .love {
     color: #ff188e;
+}
+
+
+.row-separator {
+    border-bottom: rgba(0,0,0,0.2) 1px solid;
 }

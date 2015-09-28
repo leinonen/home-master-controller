@@ -6,7 +6,7 @@
     <!-- DEVICE -->
     <div class="row device-row">
       <div class="col-sm-6 device-name">{{device.name}}</div>
-      <div class="col-sm-3"><span class="badge">{{device.type}}</span></div>
+      <div class="col-sm-3"><span class="badge {{device.type}}">{{device.type}}</span></div>
       <div class="col-sm-3">
         <button ng-click="ctrl.toggleDevice(device)"
                 type="button"

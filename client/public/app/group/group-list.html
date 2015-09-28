@@ -3,11 +3,11 @@
   <p ng-show="ctrl.groups.length === 0">No groups found</p>
 
   <div ng-repeat="group in ctrl.groups | orderBy:'name'">
-    <div class="row" >
+    <div class="row">
       <div class="col-sm-6 device-name">
         <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a>
       </div>
-      <div class="col-sm-3"><span class="badge">{{group.type}}</span></div>
+      <div class="col-sm-3"><span class="badge {{group.type}}">{{group.type}}</span></div>
       <div class="col-sm-3">
         <button ng-click="ctrl.toggleGroup(group)" type="button"
                 class="btn btn-primary pull-right"
@@ -18,12 +18,14 @@
       </div>
     </div>
 
-    <div class="row" ng-if="group.deviceList">
-      <ul>
-        <li ng-repeat="device in group.deviceList">{{device.name}} - {{device.state.on ? 'On':'Off'}}</li>
-      </ul>
+    <div class="row" ng-if="group.deviceList" ng-repeat="device in group.deviceList">
+      <div class="col-sm-6">
+        * {{device.name}} - {{device.state.on ? 'On':'Off'}}
+      </div>
+      <div class="col-sm-6">
+        <span class="badge {{device.type}}">{{device.type}}</span>
+      </div>
     </div>
-
 
   </div>
 </div>

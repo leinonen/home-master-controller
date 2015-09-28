@@ -2,24 +2,13 @@
 
   <p ng-show="ctrl.sensors.length === 0">No sensors found</p>
 
-  <table class="table">
-    <tr class="row sensor-list-header" ng-show="ctrl.sensors.length > 0">
-      <th class="col-sm-4">Name</th>
-      <th class="col-sm-2 hidden-xs">Type</th>
-      <th class="col-sm-3 hidden-xs">Kind</th>
-      <th class="col-sm-3 hidden-xs"><span class="pull-right">Value</span></th>
-    </tr>
-
-
-    <tr class="row sensor-list" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
-      <td class="col-sm-4">{{sensor.name}}</td>
-      <td class="col-sm-2 hidden-xs"><span class="badge">{{sensor.type}}</span></td>
-      <td class="col-sm-3 hidden-xs">{{sensor.data[0].name}}</td>
-      <td class="col-sm-3">
+      <div class="row device-name row-separator" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
+      <div class="col-sm-6">{{sensor.name}}</div>
+      <div class="col-sm-2"><span class="badge {{sensor.type}}">{{sensor.type}}:{{sensor.data[0].name}}</span></div>
+      <div class="col-sm-4">
         <span class="pull-right">{{sensor.data[0].value}}
-          <span ng-show="sensor.data[0].name === 'temp'">degrees</span>
+          <span ng-show="sensor.data[0].name === 'temp'">&deg; C</span>
         </span>
-      </td>
-    </tr>
-  </table>
-</div>
+      </div>
+    </div>
+  </div>
