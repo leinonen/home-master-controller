@@ -4,105 +4,40 @@
  * @type {exports}
  * @author Peter Leinonen
  */
-var Q = require('q');
+var Promise = require('./util/promise');
 var ApiWrapper = require('./api/api-wrapper');
 var Group = require('../models/group');
 var Schedule = require('../models/schedule');
 var Bus = require('./bus');
+var Events = require('./events');
 
+// API Implementations
 var TelldusAPI = require('./api/telldus');
 var HueAPI = require('./api/hue');
 var ZWaveAPI = require('./api/zwave');
-var Group = require('../models/group');
+var GroupAPI = require('../models/group');
 var GenericAPI = require('./api/generic');
-var Wrapper = new ApiWrapper(TelldusAPI, HueAPI, ZWaveAPI, GenericAPI, Group);
+var Wrapper = new ApiWrapper(TelldusAPI, HueAPI, ZWaveAPI, GenericAPI, GroupAPI);
 
-/**
- * Get all sensors.
- * @returns {*}
- */
 exports.sensors = () => Wrapper.sensors().catch(errorHandler);
-
-/**
- * Get a specific sensor.
- * @param id
- * @param type
- * @returns {*}
- */
 exports.sensor = (id, type) => Wrapper.sensor(id, type).catch(errorHandler);
-
-/**
- * Get all groups.
- */
 exports.groups = () => Wrapper.groups().catch(errorHandler);
-
-/**
- * Get a single group.
- * @param id
- * @param type
- * @returns {*}
- */
 exports.group = (id, type) => Wrapper.group(id, type).catch(errorHandler);
-
-/**
- * Get all devices.
- */
 exports.devices = () => Wrapper.devices().catch(errorHandler);
-
-/**
- * Get a specific device.
- * @param id
- * @param type
- * @returns {*}
- */
-exports.device = (id, type) =>
-  Wrapper.device(id, type).catch(errorHandler);
-
-/**
- * Get all devices for a specific group.
- * @param id
- * @param type
- * @returns {*}
- */
-exports.groupDevices = (id, type) =>
-  Wrapper.groupDevices(id, type).catch(errorHandler);
-
-/**
- * Get the state of a group
- * @param id
- * @returns {*}
- */
-exports.groupState = (id) =>
-  Wrapper.groupState(id).catch(errorHandler);
-
-exports.createGenericGroup = (group) =>
-  Wrapper.createGenericGroup(group).catch(errorHandler);
-
-exports.updateGenericGroup = (id, group) =>
-  Wrapper.updateGenericGroup(id, group).catch(errorHandler);
-
-exports.removeGenericGroup = (id) =>
-  Wrapper.removeGenericGroup(id).catch(errorHandler);
-
-/**
- * Control a device or group.
- * @param id
- * @param params
- */
-exports.control = (id, params) =>
-  Wrapper.control(id, params).catch(errorHandler);
-
+exports.device = (id, type) => Wrapper.device(id, type).catch(errorHandler);
+exports.groupDevices = (id, type) =>  Wrapper.groupDevices(id, type).catch(errorHandler);
+exports.groupState = (id) =>  Wrapper.groupState(id).catch(errorHandler);
+exports.createGenericGroup = (group) =>  Wrapper.createGenericGroup(group).catch(errorHandler);
+exports.updateGenericGroup = (id, group) => Wrapper.updateGenericGroup(id, group).catch(errorHandler);
+exports.removeGenericGroup = (id) =>  Wrapper.removeGenericGroup(id).catch(errorHandler);
+exports.control = (id, params) => Wrapper.control(id, params).catch(errorHandler);
 exports.schedule = (id) => Schedule.findById(id);
-
 exports.schedules = () => Schedule.findAll();
-
 exports.createSchedule = (schedule) => {
   var sch = new Schedule(schedule);
   sch.save();
-  Bus.emit('UpdateScheduler');
-  var def = Q.defer();
-  def.resolve(sch);
-  return def.promise;
+  Bus.emit(Events.UPDATE_SCHEDULER);
+  return Promise.resolve(sch);
 };
 
 exports.updateSchedule = (id, sch) => Schedule.findById(id)
@@ -118,7 +53,7 @@ exports.updateSchedule = (id, sch) => Schedule.findById(id)
     schedule.weekdays = sch.weekdays;
     schedule.items = sch.items;
     schedule.save();
-    Bus.emit('UpdateScheduler');
+    Bus.emit(Events.UPDATE_SCHEDULER);
     return schedule;
   });
 
@@ -126,7 +61,7 @@ exports.updateSchedule = (id, sch) => Schedule.findById(id)
 exports.deleteSchedule = (id) => Schedule.findById(id)
   .then(schedule => {
     schedule.remove();
-    Bus.emit('UpdateScheduler');
+    Bus.emit(Events.UPDATE_SCHEDULER);
     return {};
   });
 
@@ -138,7 +73,6 @@ exports.deleteSchedule = (id) => Schedule.findById(id)
  * @returns {Promise.promise|*}
  */
 function errorHandler(error) {
-  var deferred = Q.defer();
   var msg = {};
   msg.statusCode = error.statusCode || 400;
 
@@ -154,7 +88,5 @@ function errorHandler(error) {
   } else {
     msg.message = error;
   }
-
-  deferred.reject(msg);
-  return deferred.promise;
+  return Promise.reject(msg);
 }
