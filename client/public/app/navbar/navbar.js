@@ -1,8 +1,8 @@
-(function () {
+(function() {
 
   var module = angular.module('navbar', []);
 
-  module.provider('Routes', function () {
+  module.provider('Routes', function() {
     var routes = [
       {
         title: 'Devices',
@@ -52,14 +52,16 @@
         state: 'root.scheduler.create',
         url: '/create',
         templateUrl: 'app/views/scheduler-create.html',
-        position: 'hidden'
+        position: 'hidden',
+        authenticate: true
       },
       {
         title: 'Edit Schedule',
         state: 'root.scheduler.edit',
         url: '/edit/:id',
         templateUrl: 'app/views/scheduler-edit.html',
-        position: 'hidden'
+        position: 'hidden',
+        authenticate: true
       },
       {
         title: 'Configuration',
@@ -67,7 +69,8 @@
         url: '/config',
         templateUrl: 'app/views/configuration.html',
         position: 'right',
-        icon: 'glyphicon glyphicon-cog'
+        icon: 'glyphicon glyphicon-cog',
+        authenticate: true
       },
       {
         title: 'About',
@@ -75,39 +78,47 @@
         url: '/about',
         templateUrl: 'app/views/about.html',
         position: 'right'
+      },
+      {
+        title: 'Login',
+        url: '/login',
+        state: 'root.login',
+        templateUrl: 'app/login/login.html',
+        controller: 'LoginCtrl',
+        position: 'right'
       }
     ];
 
     return {
-      $get: function () {
+      $get: function() {
         return {routes: routes};
       }
     }
 
   });
 
-  module.controller('NavbarCtrl', function (Routes) {
+  module.controller('NavbarCtrl', function(Routes) {
 
     var ctrl = this;
     ctrl.title = 'Master Controller';
 
     ctrl.items = Routes.routes;
 
-    ctrl.getLeftItems = function () {
-      return ctrl.items.filter(function(item){
+    ctrl.getLeftItems = function() {
+      return ctrl.items.filter(function(item) {
         return item.position === 'left';
       });
     };
 
-    ctrl.getRightItems = function () {
-      return ctrl.items.filter(function(item){
+    ctrl.getRightItems = function() {
+      return ctrl.items.filter(function(item) {
         return item.position === 'right';
       });
     };
 
   });
 
-  module.directive('navbar', function () {
+  module.directive('navbar', function() {
     return {
       scope: {},
       templateUrl: 'app/navbar/navbar.html',
