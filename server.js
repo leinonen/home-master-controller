@@ -10,6 +10,7 @@ var mongoose = require('mongoose-q')();
 var fs = require('fs');
 var homedir = require('homedir');
 var User = require('./models/user');
+var auth = require('./server/auth/auth.service');
 
 var controller = require('./server/controller');
 var ScheduleService = require('./models/schedule');
@@ -69,7 +70,7 @@ app.use('/auth', require('./server/auth'));
 app.use('/api/users', require('./server/api/user'));
 
 app.get('/api/configuration', controller.readConfiguration);
-app.post('/api/configuration', controller.saveConfiguration);
+app.post('/api/configuration', auth.isAuthenticated(), controller.saveConfiguration);
 
 app.get('/api/sensors', controller.sensors);
 app.get('/api/sensors/:id', controller.sensor);
@@ -86,14 +87,14 @@ app.post('/api/group/:id', controller.updateGroup);
 app.delete('/api/group/:id', controller.deleteGroup);
 app.get('/api/group/:id/devices', controller.groupDevices);
 
-app.post('/api/control/:id', controller.control);
+app.post('/api/control/:id', auth.isAuthenticated(), controller.control);
 
 // Scheduler
 app.get('/api/schedules', controller.schedules);
-app.post('/api/schedules', controller.createSchedule);
+app.post('/api/schedules', auth.isAuthenticated(), controller.createSchedule);
 app.get('/api/schedules/:id', controller.schedule);
-app.put('/api/schedules/:id', controller.updateSchedule);
-app.delete('/api/schedules/:id', controller.deleteSchedule);
+app.put('/api/schedules/:id', auth.isAuthenticated(), controller.updateSchedule);
+app.delete('/api/schedules/:id', auth.isAuthenticated(), controller.deleteSchedule);
 
 app.use((err, req, res, next) => {
   console.error(err.message);
