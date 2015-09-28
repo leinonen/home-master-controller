@@ -3,6 +3,7 @@
   <p ng-show="ctrl.groups.length === 0">No groups found</p>
 
   <div ng-repeat="group in ctrl.groups | orderBy:'name'">
+    <div class="row-separator">
     <div class="row">
       <div class="col-sm-6 device-name">
         <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a>
@@ -26,6 +27,6 @@
         <span class="badge {{device.type}}">{{device.type}}</span>
       </div>
     </div>
-
+    </div>
   </div>
 </div>

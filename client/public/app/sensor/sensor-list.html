@@ -2,7 +2,7 @@
 
   <p ng-show="ctrl.sensors.length === 0">No sensors found</p>
 
-      <div class="row device-name row-separator" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
+      <div class="row device-name" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
       <div class="col-sm-6">{{sensor.name}}</div>
       <div class="col-sm-2"><span class="badge {{sensor.type}}">{{sensor.type}}:{{sensor.data[0].name}}</span></div>
       <div class="col-sm-4">
