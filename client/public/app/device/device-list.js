@@ -31,20 +31,18 @@
 
 
     function fetchAndUpdate(device) {
-      $timeout(function () {
-        MasterApi.getDevice(device.id, device.type)
-        .then(function(dev) {
-          for(var i=0; i<ctrl.devices.length; i++){
-            if (ctrl.devices[i].id === dev.id) {
-              ctrl.devices[i] = dev;
-              break;
-            }
+      MasterApi.getDevice(device.id, device.type)
+      .then(function(dev) {
+        for(var i=0; i<ctrl.devices.length; i++){
+          if (ctrl.devices[i].id === dev.id) {
+            ctrl.devices[i] = dev;
+            break;
           }
-        })
-        .catch(function (err) {
-          Message.danger(err.data.statusCode + ' : ' + err.data.message);
-        });
-      }, 150);
+        }
+      })
+      .catch(function (err) {
+        Message.danger(err.data.statusCode + ' : ' + err.data.message);
+      });
     }
 
 
@@ -52,7 +50,9 @@
       params.type = device.type;
       MasterApi.control(device.id, params)
       .then(function(status) {
-        fetchAndUpdate(device);
+          $timeout(function() {
+            fetchAndUpdate(device);
+          }, 200);
       })
       .catch(console.error);
     }

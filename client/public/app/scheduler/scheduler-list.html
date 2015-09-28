@@ -35,7 +35,7 @@
     <tr>
       <td colspan="11">
         <ul>
-          <li ng-repeat="device in schedule.devices">{{device.name}}</li>
+          <li ng-repeat="device in schedule.devices">{{device.name}} <span class="badge {{device.type}}">{{device.type}}</span></span> </li>
         </ul>
       </td>
     </tr>

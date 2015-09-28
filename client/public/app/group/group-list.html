@@ -1,6 +1,6 @@
 <div class="group-list">
 
-  <p ng-show="ctrl.groups.length === 0">No groups found</p>
+  <p ng-show="ctrl.groups.length === 0">Loading groups..</p>
 
   <div ng-repeat="group in ctrl.groups | orderBy:'name'">
     <div class="row-separator">

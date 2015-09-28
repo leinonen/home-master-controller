@@ -1,6 +1,6 @@
 <div class="sensor-list">
 
-  <p ng-show="ctrl.sensors.length === 0">No sensors found</p>
+  <p ng-show="ctrl.sensors.length === 0">Loading sensors..</p>
 
       <div class="row device-name" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
       <div class="col-sm-6">{{sensor.name}}</div>
