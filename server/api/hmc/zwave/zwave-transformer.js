@@ -5,6 +5,7 @@ var DeviceTypes = require('./../device-types');
  * @returns {{}}
  */
 var transformZWaveDevice = (device) => {
+  console.log(device);
   var item = {};
   item.id = device.id;
 
@@ -33,10 +34,13 @@ exports.ZWaveDevices = transformZWaveDevices;
  * @returns {{}}
  */
 var transformZWaveSensor = (device) => {
+  console.log(device);
   var item = {};
   item.id = device.id;
 
-  if (device.deviceType === 'sensorMultilevel') {
+  if (device.deviceType === 'sensorBinary') {
+    item.type = DeviceTypes.ZWAVE_SENSOR;
+  } else if (device.deviceType === 'sensorMultilevel') {
     item.type = DeviceTypes.ZWAVE_SENSOR;
   } else {
     item.type = device.deviceType;
@@ -44,12 +48,12 @@ var transformZWaveSensor = (device) => {
   item.name = device.metrics.title;
 
   item.data = [{
-    name: device.metrics.probeTitle,
-    value: device.metrics.level + ' ' + device.metrics.scaleTitle
+    name: device.metrics.probeTitle || 'unkown',
+    value: device.metrics.level + ' ' + (device.metrics.scaleTitle || '')
   }];
 
   return item;
-}
+};
 
 exports.ZWaveSensor = transformZWaveSensor;
 

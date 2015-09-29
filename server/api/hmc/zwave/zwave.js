@@ -72,6 +72,7 @@ var zwave_login_get = (config, uri) => {
       .then(sid => {
         sessionCookie = sid;
         Logger.debug('ZWAVE: Login successful');
+        Logger.debug(sessionCookie);
         return zwave_get(config.endpoint + uri);
       });
   } else {
@@ -105,7 +106,7 @@ var doGet = (path) => Configuration.get()
   .catch(errorHandler);
 
 var isBinarySwitch = (device) => device.deviceType === 'switchBinary';
-var isSensorMultilevel = (device) => device.deviceType === 'sensorMultilevel';
+var isSensor = (device) => device.deviceType === 'sensorMultilevel' || device.deviceType == 'sensorBinary';
 
 var handleResponse = (res) => {
   //console.log(res.message);
@@ -128,7 +129,7 @@ exports.setOff = (id) => doGet(ZWAVE_DEVICES + '/' + id + '/command/off')
   .then(res => handleResponse(res));
 
 exports.sensors = () => doGet(ZWAVE_DEVICES)
-  .then(res => res.data.devices.filter(isSensorMultilevel));
+  .then(res => res.data.devices.filter(isSensor));
 
 exports.sensor = (id) => doGet(ZWAVE_DEVICES + '/' + id)
   .then(res => res.data);
