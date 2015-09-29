@@ -1,42 +1,45 @@
 'use strict';
 
-var Bus = require('./bus');
+var Bus = require('./../../../util/bus');
+var Logger = require('./../../../util/logger');
 var Events = require('./events');
-var Master = require('./master');
-var Config = require('./config');
+var Config = require('./../../../config');
 var SunCalc = require('suncalc');
 
 module.exports = function(service) {
   var _service = service;
-  var _schedulerHandle = null;
+  var _schedulerTimerHandle = null;
   var _schedules = [];
 
   var start = () => {
-    Bus.on(Events.UPDATE_SCHEDULER, () => {
-      setTimeout(() => {
-        fetchSchedules().then(schedules => {
-          _schedules = schedules;
-          console.log('Scheduler refreshed');
-          _schedules.forEach(s => console.log(s.name + ' -> ' + s.time));
-        });
-      }, 5); // Why?
-    });
+    Bus.on(Events.UPDATE_SCHEDULER, updateScheduler);
     Bus.on(Events.SCHEDULE_TRIGGER, scheduleTrigger);
     Bus.emit(Events.UPDATE_SCHEDULER);
 
-    _schedulerHandle = setInterval(() => {
+    _schedulerTimerHandle = setInterval(() => {
       _schedules.forEach((schedule) => {
         runSchedule(new Date(), schedule);
       });
     }, 1000);
+    Logger.info('SCHEDULER: Started');
   };
 
   var stop = () => {
-    clearInterval(_schedulerHandle);
+    clearInterval(_schedulerTimerHandle);
+  };
+
+  var updateScheduler = () => {
+    setTimeout(() => {
+      fetchSchedules().then(schedules => {
+        _schedules = schedules;
+        Logger.info('SCHEDULER: Refreshed');
+        _schedules.forEach(s => Logger.info('SCHEDULER: ' + s.name + ' -> ' + s.time));
+      });
+    }, 5); // Why must I use setTimeout?
   };
 
   var getSchedules   = () => _schedules;
-  var fetchSchedules = () => _service.findAll(); //.then(scheduleList => scheduleList);
+  var fetchSchedules = () => _service.findAll();
 
   var runSchedule = (now, schedule) => {
     let dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -53,17 +56,15 @@ module.exports = function(service) {
     }
 
     if (scheduleTime === currentTime) {
-      Bus.emit(Events.SCHEDULE_TRIGGER, {
-        schedule: schedule,
-        scheduleTime: scheduleTime,
-        currentDay: currentDay,
-        currentTime: currentTime
-      });
+      Bus.emit(Events.SCHEDULE_TRIGGER, { schedule: schedule, scheduleTime: scheduleTime, currentDay: currentDay});
     }
   };
 
-  var triggerSchedule = (schedule, scheduleTime, currentDay, currentTime) => {
-    console.log('Trigger Schedule -> (%s, scheduleTime: %s, random: %d)', schedule.name, scheduleTime, schedule.random);
+  var triggerSchedule = (schedule, scheduleTime, currentDay) => {
+    Logger.info('SCHEDULER: Trigger Schedule -> ('+schedule.name+
+      ', scheduleTime: '+scheduleTime+', random: '+schedule.random+', sunset: '+
+      (schedule.sunset ? 'yes' : 'no')+', sunrise: '+(schedule.sunrise ? 'yes' : 'no')+')');
+
     schedule.weekdays.forEach(wd => {
       if (wd === currentDay) {
         schedule.items.forEach(item => triggerDevice(item, schedule.action));
@@ -72,18 +73,16 @@ module.exports = function(service) {
   };
 
   var scheduleTrigger = (message) =>
-    triggerSchedule(message.schedule,
-      message.scheduleTime,
-      message.currentDay,
-      message.currentTime);
+    triggerSchedule(message.schedule, message.scheduleTime,  message.currentDay);
 
   var triggerDevice = (item, action) => {
-    console.log('scheduler.triggerDevice -> (' + item.id + ', ' + item.type + ', ' + action + ')');
-    var params = {
+    Logger.debug('SCHEDULER: Trigger Device -> (' + item.id + ', ' + item.type + ', ' + action + ')');
+    var message = {
+      id: item.id,
       action: action,
       type: item.type
     };
-    Master.control(item.id, params).then(response => console.log(response));
+    Bus.emit(Events.CONTROL_DEVICE, message);
   };
 
   var timeOffset = (time, offsetMinutes) => {
@@ -99,7 +98,6 @@ module.exports = function(service) {
   var getSun = () => SunCalc.getTimes(new Date(), Config.location.lat, Config.location.lng);
   var getSunsetTime  = () => getTimeStamp(getSun().sunset);
   var getSunriseTime = () => getTimeStamp(getSun().sunrise);
-
 
   return {
     start: start,

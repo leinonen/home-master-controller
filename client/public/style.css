@@ -14,7 +14,7 @@ body {
 
 
 .core-message {
-    position: absolute;
+    position: fixed;
     z-index: 100;
     width: 50%;
     margin-left: 25%;

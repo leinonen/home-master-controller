@@ -1,9 +1,9 @@
 describe('api-wrapper', function() {
 
-  var DeviceTypes = require('../api/device-types');
-  var Actions = require('../api/actions');
+  var DeviceTypes = require('../api/hmc/device-types');
+  var Actions = require('../api/hmc/actions');
 
-  var wrapper = require('../api/api-wrapper-mock');
+  var wrapper = require('../api/hmc/api-wrapper-mock');
 
   beforeEach(function() {
 

@@ -54,7 +54,9 @@
             fetchAndUpdate(device);
           }, 200);
       })
-      .catch(console.error);
+      .catch(function (err) {
+        Message.danger(err.data.statusCode + ' : ' + err.data.message);
+      });
     }
 
     ctrl.showDevices = function () {

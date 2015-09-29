@@ -6,7 +6,7 @@ var config = require('../config');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
-var User = require('../../models/user');
+var User = require('../api/user/user.model.js');
 var validateJwt = expressJwt({ secret: config.secrets.session });
 
 /**

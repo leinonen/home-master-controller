@@ -5,13 +5,13 @@
   module.service('ConfigService', function ($http) {
     var ConfigService = this;
     ConfigService.getConfiguration = function () {
-      return $http.get('/api/configuration').then(function (response) {
+      return $http.get('/api/hmc/configuration').then(function (response) {
         return response.data;
       });
     };
 
     ConfigService.saveConfiguration = function (cfg) {
-      return $http.post('/api/configuration', cfg).then(function (response) {
+      return $http.post('/api/hmc/configuration', cfg).then(function (response) {
         return response.data;
       });
     };

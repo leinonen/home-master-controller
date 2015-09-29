@@ -6,10 +6,18 @@
  * @type {exports}
  * @author Peter Leinonen
  */
-var Promise = require('../util/promise');
+var Transformer = require('./zwave-transformer');
+var Promise = require('../../../util/promise');
 var http = require('request-promise-json');
-var Configuration = require('../../models/configuration');
+var Configuration = require('../configuration/configuration.model.js');
+var Logger = require('../../../util/logger');
+
 var sessionCookie = undefined;
+
+exports.transformDevice = Transformer.ZWaveDevice;
+exports.transformDevices = Transformer.ZWaveDevices;
+exports.transformSensor = Transformer.ZWaveSensor;
+exports.transformSensors = Transformer.ZWaveSensors;
 
 const ZWAVE_DEVICES = '/ZAutomation/api/v1/devices';
 
@@ -21,7 +29,7 @@ var getFormData = (config) => {
     keepme: false,
     default_ui: 1
   };
-}
+};
 
 var zwave_login = (config) => http.request({
     method: 'POST',
@@ -41,14 +49,14 @@ var handleZWaveResponse = (res) => {
   } else {
     return Promise.reject('Some kind of error');
   }
-}
+};
 
 var createLoginHeader = () => {
   return {
     'Accept': 'application/json',
     'Cookie': 'ZWAYSession=' + sessionCookie
   };
-}
+};
 
 var zwave_get = (url) => http.request({
     method: 'GET',
@@ -63,12 +71,13 @@ var zwave_login_get = (config, uri) => {
     return zwave_login(config)
       .then(sid => {
         sessionCookie = sid;
+        Logger.debug('ZWAVE: Login successful');
         return zwave_get(config.endpoint + uri);
       });
   } else {
     return zwave_get(config.endpoint + uri);
   }
-}
+};
 
 var isConnectionError = (code) => [
   'ECONNREFUSED', 'ENETUNREACH', 'ETIMEDOUT'
@@ -78,12 +87,13 @@ var errorHandler = (err) => {
   if (isConnectionError(err.code)) {
     return Promise.reject({
       statusCode: 500,
-      message: 'Unable to connect to Z-Wave endpoint. Check your configuration'
+      message: 'ZWAVE: Unable to connect to Z-Wave endpoint. Check your configuration'
     });
   } else {
+    Logger.error('ZWAVE: ' + err.message);
     return Promise.reject(err);
   }
-}
+};
 
 var doGet = (path) => Configuration.get()
   .then(config => {
@@ -98,11 +108,12 @@ var isBinarySwitch = (device) => device.deviceType === 'switchBinary';
 var isSensorMultilevel = (device) => device.deviceType === 'sensorMultilevel';
 
 var handleResponse = (res) => {
-  console.log(res.message);
+  //console.log(res.message);
+  Logger.info('ZWAVE: Operation successful');
   return {
     status: res.message
   };
-}
+};
 
 exports.devices = () => doGet(ZWAVE_DEVICES)
   .then(res => res.data.devices.filter(isBinarySwitch));
@@ -121,3 +132,5 @@ exports.sensors = () => doGet(ZWAVE_DEVICES)
 
 exports.sensor = (id) => doGet(ZWAVE_DEVICES + '/' + id)
   .then(res => res.data);
+
+exports.transform = require('./zwave-transformer');

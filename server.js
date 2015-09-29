@@ -9,17 +9,19 @@ var mongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose-q')();
 var fs = require('fs');
 var homedir = require('homedir');
-var User = require('./models/user');
+var User = require('./server/api/user/user.model.js');
 var auth = require('./server/auth/auth.service');
 
-var controller = require('./server/controller');
-var ScheduleService = require('./models/schedule');
-var Scheduler = require('./server/scheduler');
+var Logger = require('./server/util/logger');
+
+var controller = require('./server/api/hmc/hmc.controller');
+var ScheduleService = require('./server/api/hmc/scheduler/schedule.model.js');
+var Scheduler = require('./server/api/hmc/scheduler/scheduler');
 var scheduler = new Scheduler(ScheduleService);
 var conf = path.join(homedir(), '/.hmc.conf');
 
 if (!fs.existsSync(conf)) {
-  console.error('Configuration file missing! Create .hmc.conf in your home directory.');
+  Logger.error('Configuration file missing! Create .hmc.conf in your home directory.');
   process.exit(-1);
 }
 
@@ -27,7 +29,7 @@ var config = JSON.parse(fs.readFileSync(conf, 'utf-8'));
 
 mongoose.connect(config.mongo.url, config.mongo.opts);
 mongoose.connection.on('error', function(err) {
-    console.error('MongoDB connection error: ' + err);
+    Logger.error('MongoDB connection error: ' + err);
     process.exit(-1);
   }
 );
@@ -40,18 +42,15 @@ User.find({}).remove(function() {
       email: 'admin@admin.com',
       password: 'admin'
     }, function() {
-      console.log('finished populating users');
+      Logger.info('HMC: Finished populating users');
     }
   );
 });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-//app.use(methodOverride());
 app.use(cookieParser());
-
 app.use(express.static(path.join(__dirname, '/client/public')));
-
 app.use(passport.initialize());
 
 // Persist sessions with mongoStore
@@ -62,39 +61,13 @@ app.use(session({
   saveUninitialized: true,
   store: new mongoStore({
     mongooseConnection: mongoose.connection,
-    db: 'yoapp'
+    db: 'hmc'
   })
 }));
 
 app.use('/auth', require('./server/auth'));
 app.use('/api/users', require('./server/api/user'));
-
-app.get('/api/configuration', controller.readConfiguration);
-app.post('/api/configuration', auth.isAuthenticated(), controller.saveConfiguration);
-
-app.get('/api/sensors', controller.sensors);
-app.get('/api/sensors/:id', controller.sensor);
-
-app.get('/api/devices', controller.devices);
-app.get('/api/device/:id', controller.device);
-
-app.get('/api/groups', controller.groups);
-app.post('/api/groups', controller.createGroup);
-app.get('/api/groupState/:id', controller.groupState);
-
-app.get('/api/group/:id', controller.group);
-app.post('/api/group/:id', controller.updateGroup);
-app.delete('/api/group/:id', controller.deleteGroup);
-app.get('/api/group/:id/devices', controller.groupDevices);
-
-app.post('/api/control/:id', auth.isAuthenticated(), controller.control);
-
-// Scheduler
-app.get('/api/schedules', controller.schedules);
-app.post('/api/schedules', auth.isAuthenticated(), controller.createSchedule);
-app.get('/api/schedules/:id', controller.schedule);
-app.put('/api/schedules/:id', auth.isAuthenticated(), controller.updateSchedule);
-app.delete('/api/schedules/:id', auth.isAuthenticated(), controller.deleteSchedule);
+app.use('/api/hmc', require('./server/api/hmc'));
 
 app.use((err, req, res, next) => {
   console.error(err.message);
@@ -102,10 +75,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(config.port);
-console.log('Home Master Controller is running on port %d', config.port);
+Logger.info('HMC: System running on port ' + config.port);
 
 scheduler.start();
 
-process.on('uncaughtException', function (error) {
-  console.log(error.stack);
-});

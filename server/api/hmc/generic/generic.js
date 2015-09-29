@@ -1,7 +1,16 @@
 'use strict';
 
-var Group = require('../../models/group');
-var Promise = require('../util/promise');
+var Group = require('./group.model.js');
+var Promise = require('../../../util/promise');
+var Transformer = require('./generic-transformer');
+
+exports.transformGroup = Transformer.GenericGroup;
+exports.transformGroups = Transformer.GenericGroups;
+
+
+var group = (id) => Group.findById(id);
+exports.group = group;
+
 /**
  * Get all generic groups.
  * @returns {*}

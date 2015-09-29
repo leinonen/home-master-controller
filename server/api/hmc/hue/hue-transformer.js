@@ -1,6 +1,6 @@
 'use strict';
 
-var DeviceTypes = require('./device-types');
+var DeviceTypes = require('./../device-types');
 
 /**
  * Transform a Hue device to custom format.

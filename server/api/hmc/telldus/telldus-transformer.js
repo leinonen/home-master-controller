@@ -1,4 +1,4 @@
-var DeviceTypes = require('./device-types');
+var DeviceTypes = require('./../device-types');
 var telldusHelper = require('./telldus-helper');
 
 /**

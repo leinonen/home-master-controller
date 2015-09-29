@@ -3,10 +3,13 @@
  * Other errors are propagated to the error handler in master.js
  * @type {exports}
  */
-var Promise = require('../util/promise');
-var Transformer = require('./transformer');
+var Promise = require('../../util/promise');
 var DeviceTypes = require('./device-types');
 var Actions = require('./actions');
+var Schedule = require('./scheduler/schedule.model');
+var Events = require('./scheduler/events');
+var Bus = require('../../util/bus');
+var Logger = require('../../util/logger');
 
 var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) {
   var TelldusAPI = telldus;
@@ -15,28 +18,28 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
   var GroupAPI = group;
   var GenericAPI = generic;
 
-  var ZWAVE_SENSOR  = (id) => ZWaveAPI.sensor(id).then(Transformer.ZWaveSensor).catch(serviceDisabled);
-  var ZWAVE_SENSORS = ()   => ZWaveAPI.sensors().then(Transformer.ZWaveSensors).catch(serviceDisabledArray);
-  var ZWAVE_DEVICE  = (id) => ZWaveAPI.device(id).then(Transformer.ZWaveDevice).catch(serviceDisabled);
-  var ZWAVE_DEVICES = ()   => ZWaveAPI.devices().then(Transformer.ZWaveDevices).catch(serviceDisabledArray);
+  var ZWAVE_SENSOR  = (id) => ZWaveAPI.sensor(id).then(ZWaveAPI.transformSensor).catch(serviceDisabled);
+  var ZWAVE_SENSORS = ()   => ZWaveAPI.sensors().then(ZWaveAPI.transformSensors).catch(serviceDisabledArray);
+  var ZWAVE_DEVICE  = (id) => ZWaveAPI.device(id).then(ZWaveAPI.transformDevice).catch(serviceDisabled);
+  var ZWAVE_DEVICES = ()   => ZWaveAPI.devices().then(ZWaveAPI.transformDevices).catch(serviceDisabledArray);
 
-  var HUE_DEVICE  = (id) => HueAPI.light(id).then(Transformer.HueDevice).catch(serviceDisabled);
-  var HUE_DEVICES = ()   => HueAPI.lights().then(Transformer.HueDevices).catch(serviceDisabledArray);
-  var HUE_GROUP   = (id) => HueAPI.group(id).then(Transformer.HueGroup).catch(serviceDisabled);
-  var HUE_GROUPS  = ()   => HueAPI.groups().then(Transformer.HueGroups).catch(serviceDisabledArray);
+  var HUE_DEVICE  = (id) => HueAPI.light(id).then(HueAPI.transformDevice).catch(serviceDisabled);
+  var HUE_DEVICES = ()   => HueAPI.lights().then(HueAPI.transformDevices).catch(serviceDisabledArray);
+  var HUE_GROUP   = (id) => HueAPI.group(id).then(HueAPI.transformGroup).catch(serviceDisabled);
+  var HUE_GROUPS  = ()   => HueAPI.groups().then(HueAPI.transformGroups).catch(serviceDisabledArray);
 
-  var TELLDUS_DEVICE  = (id) => TelldusAPI.device(id).then(Transformer.TelldusDevice).catch(serviceDisabled);
-  var TELLDUS_DEVICES = ()   => TelldusAPI.devices().then(Transformer.TelldusDevices).catch(serviceDisabledArray);
-  var TELLDUS_GROUP   = (id) => TelldusAPI.group(id).then(Transformer.TelldusGroup).catch(serviceDisabled);
-  var TELLDUS_GROUPS  = ()   => TelldusAPI.groups().then(Transformer.TelldusGroups).catch(serviceDisabledArray);
+  var TELLDUS_DEVICE  = (id) => TelldusAPI.device(id).then(TelldusAPI.transformDevice).catch(serviceDisabled);
+  var TELLDUS_DEVICES = ()   => TelldusAPI.devices().then(TelldusAPI.transformDevices).catch(serviceDisabledArray);
+  var TELLDUS_GROUP   = (id) => TelldusAPI.group(id).then(TelldusAPI.transformGroup).catch(serviceDisabled);
+  var TELLDUS_GROUPS  = ()   => TelldusAPI.groups().then(TelldusAPI.transformGroups).catch(serviceDisabledArray);
   var TELLDUS_SENSOR  = (id) => TelldusAPI.sensor(id).catch(serviceDisabled);
   var TELLDUS_SENSORS = () => TelldusAPI.sensors()
     .then(sensors => Promise.all(sensors.map(sensor => TelldusAPI.sensor(sensor.id))))
-    .then(Transformer.TelldusSensors)
+    .then(TelldusAPI.transformSensors)
     .catch(serviceDisabledArray);
 
-  var GENERIC_GROUP  = (id) => GroupAPI.findById(id).then(Transformer.GenericGroup);
-  var GENERIC_GROUPS = ()   => GenericAPI.groups().then(Transformer.GenericGroups);
+  var GENERIC_GROUP  = (id) => GenericAPI.group(id).then(GenericAPI.transformGroup);
+  var GENERIC_GROUPS = ()   => GenericAPI.groups().then(GenericAPI.transformGroups);
 
   var serviceDisabled = (err) => Promise.reject(err);
   var serviceDisabledArray = (err) => {
@@ -109,7 +112,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
   };
 
   var control = (id, params) => {
-    console.log('Control %s: ' + id + ' -> action: %s', params.type, params.action);
+    Logger.info('HMC: Control ' + params.type + ' ' + id + ' -> ' + params.action);
     switch (params.type) {
       case DeviceTypes.TELLDUS_DEVICE:
       case DeviceTypes.TELLDUS_GROUP:
@@ -251,6 +254,41 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
     }
   };
 
+  var getSchedule = (id) => Schedule.findById(id);
+  var getSchedules = () => Schedule.findAll();
+  var createSchedule = (schedule) => {
+    var sch = new Schedule(schedule);
+    sch.save();
+    Bus.emit(Events.UPDATE_SCHEDULER);
+    return Promise.resolve(sch);
+  };
+
+  var updateSchedule = (id, sch) => Schedule.findById(id)
+    .then(schedule => {
+      schedule.name = sch.name;
+      schedule.action = sch.action;
+      schedule.active = sch.active;
+      schedule.time = sch.time;
+      // sunset and sunrise are booleans
+      schedule.sunset = sch.sunset;
+      schedule.sunrise = sch.sunrise;
+      schedule.random = sch.random;
+      schedule.weekdays = sch.weekdays;
+      schedule.items = sch.items;
+      schedule.save();
+      Bus.emit(Events.UPDATE_SCHEDULER);
+      return schedule;
+    });
+
+
+  var deleteSchedule = (id) => Schedule.findById(id)
+    .then(schedule => {
+      schedule.remove();
+      Bus.emit(Events.UPDATE_SCHEDULER);
+      return {};
+    });
+
+
   return {
     sensor: getSensor,
     sensors: getSensors,
@@ -264,6 +302,11 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
     updateGenericGroup: updateGenericGroup,
     removeGenericGroup: removeGenericGroup,
     controlGenericGroup: controlGenericGroup,
-    control: control
+    control: control,
+    schedule: getSchedule,
+    schedules: getSchedules,
+    createSchedule: createSchedule,
+    updateSchedule: updateSchedule,
+    deleteSchedule: deleteSchedule
   };
 };

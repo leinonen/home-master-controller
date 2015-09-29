@@ -1,4 +1,4 @@
-var DeviceTypes = require('./device-types');
+var DeviceTypes = require('./../device-types');
 
 /**
  * Transform a generic group (as in mongo model) to custom format.

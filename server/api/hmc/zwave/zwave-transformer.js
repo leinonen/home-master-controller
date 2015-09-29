@@ -1,4 +1,4 @@
-var DeviceTypes = require('./device-types');
+var DeviceTypes = require('./../device-types');
 /**
  * Transform a zwave device to custom format.
  * @param device

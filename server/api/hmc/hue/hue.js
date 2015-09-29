@@ -4,10 +4,16 @@
  * @author Peter Leinonen
  */
 
-var Promise = require('../util/promise');
+var Promise = require('../../../util/promise');
 var http = require('request-promise-json');
-var Configuration = require('../../models/configuration');
+var Configuration = require('../configuration/configuration.model.js');
+var Transformer = require('./hue-transformer');
+var Logger = require('../../../util/logger');
 
+exports.transformDevice = Transformer.HueDevice;
+exports.transformDevices = Transformer.HueDevices;
+exports.transformGroup = Transformer.HueGroup;
+exports.transformGroups = Transformer.HueGroups;
 
 var errorHandler = (err) => {
   if (err.code === 'ECONNREFUSED' ||
@@ -20,7 +26,7 @@ var errorHandler = (err) => {
   } else {
     return Promise.reject(err);
   }
-}
+};
 
 var doGet = (path) => Configuration.get().then(config => {
   if (!config.hue.enabled) {
@@ -75,10 +81,10 @@ exports.lights = () =>
   .then(lights => {
     // crude error handling, hue not returning http error codes!
     if (lights.length === 1 && lights[0].hasOwnProperty('error')) {
-      //console.log('hue error: ' + lights[0].error.description);
+      Logger.error('HUE: ' + lights[0].error.description);
       return Promise.reject({
         statusCode: 500,
-        message: 'Hue api - ' + lights[0].error.description + '. Check your configuration'
+        message: 'HUE:' + lights[0].error.description + '. Check your configuration'
       });
     } else {
       return Object.keys(lights).map(key => {
@@ -111,9 +117,14 @@ exports.light = (id) =>
 exports.setLightState = (id, state) =>
   doPut('/lights/' + id + '/state', state)
   .then(response => {
-    // TODO: Make a proper response Transformer
-    console.log(response);
-    return response;
+      if (response[0].error) {
+        return Promise.reject({statusCode: 500,
+          message: response[0].error.description
+        });
+      } else {
+        Logger.info('HUE: Operation successful');
+        return response;
+      }
   });
 
 
@@ -128,7 +139,12 @@ exports.setLightState = (id, state) =>
 exports.setGroupAction = (id, action) =>
   doPut('/groups/' + id + '/action', action)
   .then(response => {
-    // TODO: Make a proper response Transformer
-    console.log(response);
-    return response;
+      if (response[0].error) {
+        return Promise.reject({statusCode: 500,
+          message: response[0].error.description
+        });
+      } else {
+        Logger.info('HUE: Operation successful');
+        return response;
+      }
   });

@@ -6,13 +6,13 @@
  * @type {exports}
  * @author Peter Leinonen
  */
-var Promise = require('../util/promise');
+var Promise = require('../../../util/promise');
 var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
-var Configuration = require('../../models/configuration');
+var Configuration = require('../configuration/configuration.model.js');
+var Transformer = require('./telldus-transformer');
 var Methods = require('./telldus-methods');
-
 var METHODS = Methods.TELLSTICK_TURNON | Methods.TELLSTICK_TURNOFF |
   Methods.TELLSTICK_UP | Methods.TELLSTICK_DOWN | Methods.TELLSTICK_STOP;
 
@@ -66,8 +66,13 @@ var apiCall = (path, params) => {
     let oAuthParams = createOAuthParams(url, params, config);
     return http.get(url + '?' + Qs.stringify(oAuthParams)).catch(errorHandler);
   });
-}
+};
 
+exports.transformDevice = Transformer.TelldusDevice;
+exports.transformDevices = Transformer.TelldusDevices;
+exports.transformGroup = Transformer.TelldusGroup;
+exports.transformGroups = Transformer.TelldusGroups;
+exports.transformSensors = Transformer.TelldusSensors;
 
 
 /**
