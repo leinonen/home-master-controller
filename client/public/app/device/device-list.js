@@ -68,7 +68,11 @@
       if (device.motorized) {
         return device.state.on ? 'Up' : 'Down';
       } else {
-        return device.state.on ? 'On' : 'Off';
+        if (device.state.on !== undefined) {
+          return device.state.on ? 'On' : 'Off';
+        } else {
+          return device.state.level;
+        }
       }
     };
 

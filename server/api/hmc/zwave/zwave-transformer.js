@@ -11,16 +11,22 @@ var transformZWaveDevice = (device) => {
 
   if (device.deviceType === 'switchBinary') {
     item.type = DeviceTypes.ZWAVE_SWITCH;
+  } else if (device.deviceType === 'switchMultilevel') {
+    item.type = DeviceTypes.ZWAVE_SWITCH;
   } else {
     item.type = device.deviceType;
   }
 
   item.name = device.metrics.title;
   item.state = {};
-  item.state.on = device.metrics.level === 'on';
+  if (device.deviceType === 'switchMultilevel') {
+    item.state.level = device.metrics.level
+  } else {
+    item.state.on = device.metrics.level === 'on';
+  }
   item.motorized = false;
   return item;
-}
+};
 exports.ZWaveDevice = transformZWaveDevice;
 
 var transformZWaveDevices = (devices)  => devices.map(transformZWaveDevice);

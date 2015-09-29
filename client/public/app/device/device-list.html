@@ -8,7 +8,8 @@
       <div class="col-sm-6 device-name">{{device.name}}</div>
       <div class="col-sm-3"><span class="badge {{device.type}}">{{device.type}}</span></div>
       <div class="col-sm-3">
-        <button ng-click="ctrl.toggleDevice(device)"
+          <span class="device-name pull-right" ng-show="device.state.level !== undefined">Level: {{device.state.level}}</span>
+        <button ng-click="ctrl.toggleDevice(device)" ng-show="device.state.on !== undefined"
                 type="button"
                 class="btn btn-primary pull-right"
                 ng-class="{'btn-success':device.state.on}">

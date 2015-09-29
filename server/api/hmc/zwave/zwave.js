@@ -105,8 +105,8 @@ var doGet = (path) => Configuration.get()
   })
   .catch(errorHandler);
 
-var isBinarySwitch = (device) => device.deviceType === 'switchBinary';
-var isSensor = (device) => device.deviceType === 'sensorMultilevel' || device.deviceType == 'sensorBinary';
+var isSwitch = (device) => device.deviceType === 'switchBinary' || device.deviceType === 'switchMultilevel';
+var isSensor = (device) => device.deviceType === 'sensorMultilevel' || device.deviceType === 'sensorBinary';
 
 var handleResponse = (res) => {
   //console.log(res.message);
@@ -117,7 +117,7 @@ var handleResponse = (res) => {
 };
 
 exports.devices = () => doGet(ZWAVE_DEVICES)
-  .then(res => res.data.devices.filter(isBinarySwitch));
+  .then(res => res.data.devices.filter(isSwitch));
 
 exports.device = (id) => doGet(ZWAVE_DEVICES + '/' + id)
   .then(res => res.data);
