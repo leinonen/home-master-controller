@@ -109,7 +109,6 @@ var isSwitch = (device) => device.deviceType === 'switchBinary' || device.device
 var isSensor = (device) => device.deviceType === 'sensorMultilevel' || device.deviceType === 'sensorBinary';
 
 var handleResponse = (res) => {
-  //console.log(res.message);
   Logger.info('ZWAVE: Operation successful');
   return {
     status: res.message
@@ -128,10 +127,16 @@ exports.setOn = (id) => doGet(ZWAVE_DEVICES + '/' + id + '/command/on')
 exports.setOff = (id) => doGet(ZWAVE_DEVICES + '/' + id + '/command/off')
   .then(res => handleResponse(res));
 
+exports.setLevel = (id, level) => doGet(ZWAVE_DEVICES + '/' + id + '/command/exact?level=' + level)
+  .then(handleResponse);
+
 exports.sensors = () => doGet(ZWAVE_DEVICES)
   .then(res => res.data.devices.filter(isSensor));
 
 exports.sensor = (id) => doGet(ZWAVE_DEVICES + '/' + id)
   .then(res => res.data);
+
+exports.status = () => doGet('/ZAutomation/api/v1/status').then(res => res.data);
+exports.restart = () => doGet('/ZAutomation/api/v1/restart').then(res => res.data);
 
 exports.transform = require('./zwave-transformer');

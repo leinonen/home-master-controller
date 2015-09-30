@@ -104,6 +104,10 @@
       }
     };
 
+    ctrl.setLevel = function (device) {
+      control(device, {action: 'level', value: device.state.level});
+    };
+
     ctrl.setBrightness = function (device) {
       control(device, {action: 'bri', value: device.state.bri});
     };

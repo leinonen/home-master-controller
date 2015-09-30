@@ -5,7 +5,9 @@ module.exports = {
   HUE_DEVICE : 'hue-device',
   HUE_GROUP : 'hue-group',
   GENERIC_GROUP : 'generic-group',
-  ZWAVE_SWITCH : 'zwave-switch',
-  ZWAVE_SENSOR : 'zwave-sensor'
+  ZWAVE_SWITCH_BINARY : 'zwave-switch-binary',
+  ZWAVE_SWITCH_MULTILEVEL : 'zwave-switch-multilevel',
+  ZWAVE_SENSOR_BINARY : 'zwave-sensor-binary',
+  ZWAVE_SENSOR_MULTILEVEL : 'zwave-sensor-multilevel'
 };
 

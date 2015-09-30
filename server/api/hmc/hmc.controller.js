@@ -8,13 +8,12 @@ var ApiWrapper = require('./api-wrapper');
 var TelldusAPI = require('./telldus/telldus');
 var HueAPI = require('./hue/hue');
 var ZWaveAPI = require('./zwave/zwave');
-var GroupAPI = require('./generic/group.model');
 var GenericAPI = require('./generic/generic');
 var Logger = require('../../util/logger');
 
 // API WRAPPER (Master)
 
-var Master = new ApiWrapper(TelldusAPI, HueAPI, ZWaveAPI, GenericAPI, GroupAPI);
+var Master = new ApiWrapper(TelldusAPI, HueAPI, ZWaveAPI, GenericAPI);
 
 
 // Listen for events here

@@ -11,11 +11,10 @@ var Events = require('./scheduler/events');
 var Bus = require('../../util/bus');
 var Logger = require('../../util/logger');
 
-var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) {
+var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   var TelldusAPI = telldus;
   var HueAPI = hue;
   var ZWaveAPI = zwave;
-  var GroupAPI = group;
   var GenericAPI = generic;
 
   var ZWAVE_SENSOR  = (id) => ZWaveAPI.sensor(id).then(ZWaveAPI.transformSensor).catch(serviceDisabled);
@@ -59,8 +58,13 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
 
   var getSensor = function (id, type) {
     switch (type) {
-      case DeviceTypes.TELLDUS_SENSOR: return TELLDUS_SENSOR(id);
-      case DeviceTypes.ZWAVE_SENSOR:   return ZWAVE_SENSOR(id);
+      case DeviceTypes.TELLDUS_SENSOR:
+        return TELLDUS_SENSOR(id);
+
+      case DeviceTypes.ZWAVE_SENSOR_BINARY:
+      case DeviceTypes.ZWAVE_SENSOR_MULTILEVEL:
+        return ZWAVE_SENSOR(id);
+
       default : return Promise.reject('Unsupported sensor type: ' + type)
     }
   };
@@ -97,7 +101,10 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
       case DeviceTypes.HUE_DEVICE:     return HUE_DEVICE(id);
       case DeviceTypes.HUE_GROUP:      return HUE_GROUP(id);
       case DeviceTypes.GENERIC_GROUP:  return GENERIC_GROUP(id);
-      case DeviceTypes.ZWAVE_SWITCH:   return ZWAVE_DEVICE(id);
+      case DeviceTypes.ZWAVE_SWITCH_BINARY:
+      case DeviceTypes.ZWAVE_SWITCH_MULTILEVEL:
+        return ZWAVE_DEVICE(id);
+
       default: return Promise.reject('Invalid device type ' + device.type);
     }
   };
@@ -125,7 +132,8 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
       case DeviceTypes.GENERIC_GROUP:
         return controlGenericGroup(id, params);
 
-      case DeviceTypes.ZWAVE_SWITCH:
+      case DeviceTypes.ZWAVE_SWITCH_BINARY:
+      case DeviceTypes.ZWAVE_SWITCH_MULTILEVEL:
         return controlZWave(id, params);
 
       default:
@@ -187,7 +195,8 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
             case DeviceTypes.HUE_GROUP:
               return controlHue(item.id, params);
 
-            case DeviceTypes.ZWAVE_SWITCH:
+            case DeviceTypes.ZWAVE_SWITCH_BINARY:
+            case DeviceTypes.ZWAVE_SWITCH_MULTILEVEL:
               return controlZWave(item.id, params);
           }
         });
@@ -239,18 +248,29 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic, group) 
   var controlHue = function(id, params) {
     var hueParams = createHueParams(params);
     switch (params.type) {
-      case DeviceTypes.HUE_DEVICE: return HueAPI.setLightState(id, hueParams);
-      case DeviceTypes.HUE_GROUP: return HueAPI.setGroupAction(id, hueParams);
+      case DeviceTypes.HUE_DEVICE:
+        return HueAPI.setLightState(id, hueParams);
+
+      case DeviceTypes.HUE_GROUP:
+        return HueAPI.setGroupAction(id, hueParams);
+
       default: return Promise.reject('controlHue: Unsupported type ' + params.type);
     }
   };
 
   var controlZWave = (id, params) => {
-    if (params.action === Actions.ACTION_ON) {
-      return ZWaveAPI.setOn(id);
+    switch (params.action) {
+      case Actions.ACTION_ON:
+        return ZWaveAPI.setOn(id);
 
-    } else if (params.action === Actions.ACTION_OFF) {
-      return ZWaveAPI.setOff(id);
+      case Actions.ACTION_OFF:
+        return ZWaveAPI.setOff(id);
+
+      case Actions.ACTION_LEVEL:
+        Logger.info('ZWAVE: setLevel: '+ params.value);
+        return ZWaveAPI.setLevel(id, params.value);
+
+      default: return Promise.reject('Invalid action ' + params.action);
     }
   };
 

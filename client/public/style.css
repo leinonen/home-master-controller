@@ -25,12 +25,6 @@ body {
     width: 40px;
 }
 
-.device-list-header,
-.group-list-header,
-.sensor-list-header {
-    font-weight: bold;
-}
-
 .hue-device .row,
 .zwave-device .row,
 .telldus-device .row {
@@ -47,7 +41,7 @@ body {
     padding-bottom: 10px;
 }
 
-.hue-device .hue-controls .row > div {
+.hue-device-controls .hue-controls .row > div {
     border-top: none;
     line-height: 15px;
     padding-top: 5px;
@@ -71,8 +65,25 @@ body {
 }
 
 
+.generic-group,
+.zwave-switch-binary,
+.zwave-switch-multilevel,
+.zwave-sensor-binary,
+.zwave-sensor-multilevel,
+.telldus-device,
+.telldus-group, 
+.telldus-sensor, 
+.hue-device, 
+.hue-group {
+    padding: 5px 10px;
+    font-size: 14px;
+}
 
-.zwave-switch, .zwave-sensor {  background-color: #006c91; }
+.zwave-switch-binary,
+.zwave-switch-multilevel,
+.zwave-sensor-binary,
+.zwave-sensor-multilevel {  background-color: #006c91; }
+
 .telldus-device, .telldus-group, .telldus-sensor {  background-color: #009149; }
 .hue-device, .hue-group {  background-color: #921a39; }
 

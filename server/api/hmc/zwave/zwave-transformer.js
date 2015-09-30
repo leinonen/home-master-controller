@@ -5,14 +5,14 @@ var DeviceTypes = require('./../device-types');
  * @returns {{}}
  */
 var transformZWaveDevice = (device) => {
-  console.log(device);
+  //console.log(device);
   var item = {};
   item.id = device.id;
 
   if (device.deviceType === 'switchBinary') {
-    item.type = DeviceTypes.ZWAVE_SWITCH;
+    item.type = DeviceTypes.ZWAVE_SWITCH_BINARY;
   } else if (device.deviceType === 'switchMultilevel') {
-    item.type = DeviceTypes.ZWAVE_SWITCH;
+    item.type = DeviceTypes.ZWAVE_SWITCH_MULTILEVEL;
   } else {
     item.type = device.deviceType;
   }
@@ -44,9 +44,9 @@ var transformZWaveSensor = (device) => {
   item.id = device.id;
 
   if (device.deviceType === 'sensorBinary') {
-    item.type = DeviceTypes.ZWAVE_SENSOR;
+    item.type = DeviceTypes.ZWAVE_SENSOR_BINARY;
   } else if (device.deviceType === 'sensorMultilevel') {
-    item.type = DeviceTypes.ZWAVE_SENSOR;
+    item.type = DeviceTypes.ZWAVE_SENSOR_MULTILEVEL;
   } else {
     item.type = device.deviceType;
   }

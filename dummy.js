@@ -1,6 +1,7 @@
 var path = require('path');
 var mongoose = require('mongoose-q')();
 var fs = require('fs');
+var homedir = require('homedir');
 
 var ApiWrapper = require('./server/api/hmc/api-wrapper');
 var Telldus = require('./server/api/hmc/telldus/telldus');
@@ -13,11 +14,7 @@ var Schedule = require('./server/api/hmc/scheduler/schedule.model.js');
 
 var DeviceTypes = require('./server/api/hmc/device-types');
 
-var getUserHome = () => {
-  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
-};
-
-var conf = path.join(getUserHome(), '/.hmc.conf');
+var conf = path.join(homedir(), '/.hmc.conf');
 var config = JSON.parse(fs.readFileSync(conf, 'utf-8'));
 mongoose.connect(config.mongo.url, config.mongo.opts);
 
