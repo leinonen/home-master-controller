@@ -40,7 +40,6 @@ exports.ZWaveDevices = transformZWaveDevices;
  * @returns {{}}
  */
 var transformZWaveSensor = (device) => {
-  console.log(device);
   var item = {};
   item.id = device.id;
 
