@@ -25,6 +25,12 @@
       </div>
     </div>
 
+      <!-- <div ng-show="device.type === 'zwave-switch-multilevel'">
+          <input type='range' min='0' max='100'
+                 ng-model="device.state.level"
+                 ng-change="ctrl.setLevel(device)" />
+      </div> -->
+
     <!-- HUE DEVICE -->
     <div ng-show="device.type === 'hue-device'" class="hue-device-controls">
         <div class="hue-controls" ng-show="ctrl.showControls(device)">
