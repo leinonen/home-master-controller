@@ -18,7 +18,7 @@ angular.module('auth')
         .then( function() {
             console.log('login successful');
           // Logged in, redirect to home
-          $location.path('/config');
+          $location.path('/devices');
         })
         .catch( function(err) {
             console.log(err);

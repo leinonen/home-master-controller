@@ -26,6 +26,7 @@
             ui-sref="{{item.state}}">
           <a href="#"><span ng-show="item.icon" class="{{item.icon}}"></span> {{item.title}}</a>
         </li>
+        <li ng-show="ctrl.isLoggedIn()"><a style="cursor: pointer;" ng-click="ctrl.logout()">Logout</a></li>
       </ul>
 
      </div>

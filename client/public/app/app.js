@@ -100,7 +100,7 @@
 
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-    $state.transitionTo('root.devices', {page: 0});
+    $state.transitionTo('root.devices');
   });
 
 })();
