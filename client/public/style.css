@@ -103,7 +103,7 @@ body {
 .device-card,
 .group-card,
 .sensor-card {
-  min-height: 100px;
+  min-height: 110px;
   border: #222326 1px solid;
   padding: 5px;
   margin-bottom: 10px;
@@ -113,12 +113,20 @@ body {
 }
 
 .group-card {
-  min-height: 110px;
+  min-height: auto;
   background-color: #17181b;
+}
+.group-device-card-container {
+  padding-top: 10px;
 }
 
 .sensor-card {
   min-height: 130px;
+}
+
+.device-card .btn {
+  min-width: 80px;
+  margin-bottom: 5px;
 }
 
 .device-level {
