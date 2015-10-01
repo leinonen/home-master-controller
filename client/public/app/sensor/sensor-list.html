@@ -2,13 +2,22 @@
 
   <p ng-show="ctrl.sensors.length === 0">Loading sensors..</p>
 
-      <div class="row device-name" ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
-      <div class="col-sm-6">{{sensor.name}}</div>
-      <div class="col-sm-2"><span class="badge {{sensor.type}}">{{sensor.type}}:{{sensor.data[0].name}}</span></div>
-      <div class="col-sm-4">
-        <span class="pull-right">{{sensor.data[0].value}}
-          <span ng-show="sensor.data[0].name === 'temp'">&deg; C</span>
-        </span>
+  <div class="row device-name">
+
+    <div class="col-md-4"  ng-repeat="sensor in ctrl.sensors | orderBy:'name'">
+      <div class="sensor-card">
+
+        <div class="col-sm-8">{{sensor.name}}<br/>
+          <span class="badge {{sensor.type}}">{{sensor.type}}:{{sensor.data[0].name}}</span>
+        </div>
+        <div class="col-sm-4">
+          <span class="pull-right device-level">{{sensor.data[0].value}}
+            <span ng-show="sensor.data[0].name === 'temp'">&deg; C</span>
+          </span>
+        </div>
+
       </div>
     </div>
+
   </div>
+</div>

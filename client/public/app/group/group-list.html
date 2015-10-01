@@ -2,31 +2,34 @@
 
   <p ng-show="ctrl.groups.length === 0">Loading groups..</p>
 
-  <div ng-repeat="group in ctrl.groups | orderBy:'name'">
+  <div ng-repeat="group in ctrl.groups | orderBy:'name'" class="group-card">
+
     <div class="row-separator">
-    <div class="row">
-      <div class="col-sm-6 device-name">
-        <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}</a>
-      </div>
-      <div class="col-sm-3"><span class="badge {{group.type}}">{{group.type}}</span></div>
-      <div class="col-sm-3">
-        <button ng-click="ctrl.toggleGroup(group)" type="button"
-                class="btn btn-primary pull-right"
-                ng-class="{'btn-success':group.state.on}">
-          {{ctrl.buttonText(group)}}
-        </button>
+      <div class="row">
+        <div class="col-sm-9 device-name">
+          <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}<br/>
+            <span class="badge {{group.type}}">{{group.type}}</span>
+          </a>
+        </div>
+        <div class="col-sm-3">
+          <button ng-click="ctrl.toggleGroup(group)" type="button"
+                  class="btn btn-primary pull-right"
+                  ng-class="{'btn-success':group.state.on}">
+            {{ctrl.buttonText(group)}}
+          </button>
 
+        </div>
       </div>
-    </div>
 
-    <div class="row" ng-if="group.deviceList" ng-repeat="device in group.deviceList">
-      <div class="col-sm-6">
-        * {{device.name}} - {{device.state.on ? 'On':'Off'}}
-      </div>
-      <div class="col-sm-6">
+      <div class="row">
+        <div class="col-md-4"   ng-if="group.deviceList" ng-repeat="device in group.deviceList">
+          <div class="device-card">
+
+        <span class="device-name">{{device.name}} - {{device.state.on ? 'On':'Off'}}</span><br/>
         <span class="badge {{device.type}}">{{device.type}}</span>
-      </div>
     </div>
     </div>
   </div>
+  </div>
+</div>
 </div>

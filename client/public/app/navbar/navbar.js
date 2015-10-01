@@ -9,7 +9,8 @@
         state: 'root.devices',
         url: '/devices',
         templateUrl: 'app/views/devices.html',
-        position: 'left'
+        position: 'left',
+        authenticate: true
       },
       {
         title: 'Groups',
@@ -17,12 +18,14 @@
         url: '/groups',
         templateUrl: 'app/views/groups.html',
         position: 'left',
+        authenticate: true,
 
         children: [{
           title: 'Create Group',
           state: 'root.groups.create',
           url: '/create',
-          templateUrl: 'app/views/groups-create.html'
+          templateUrl: 'app/views/groups-create.html',
+          authenticate: true
         }]
       },
       {
@@ -30,7 +33,8 @@
         state: 'root.groups.edit',
         url: '/edit/:type/:id',
         templateUrl: 'app/views/group-edit.html',
-        position: 'hidden'
+        position: 'hidden',
+        authenticate: true
       },
 
       {
@@ -38,14 +42,16 @@
         state: 'root.sensors',
         url: '/sensors',
         templateUrl: 'app/views/sensors.html',
-        position: 'left'
+        position: 'left',
+        authenticate: true
       },
       {
         title: 'Scheduler',
         state: 'root.scheduler',
         url: '/scheduler',
         templateUrl: 'app/views/scheduler.html',
-        position: 'left'
+        position: 'left',
+        authenticate: true
       },
       {
         title: 'Create Schedule',

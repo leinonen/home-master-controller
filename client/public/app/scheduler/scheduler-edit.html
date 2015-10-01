@@ -1,6 +1,12 @@
 <div class="row scheduler-form">
   <div class="col-md-8">
 
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Edit Schedule</h3>
+      </div>
+      <div class="panel-body">
+
     <div class="row">
       <div class="col-sm-5">
         <p>Name</p>
@@ -75,13 +81,22 @@
       </div>
     </div>
 
+        </div>
+    </div>
+
   </div>
 
   <div class="col-md-4">
 
     <div class="row">
       <div class="col-sm-12">
-        <p>Selected devices</p>
+
+        <div class="panel panel-default panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Selected devices</h3>
+          </div>
+          <div class="panel-body">
+
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="item in ctrl.selectedDevices track by $index">
           <span class="badge device-remove" ng-click="ctrl.removeDevice($index)"><span
@@ -90,6 +105,9 @@
             {{item.name}}
           </li>
         </ul>
+            </div>
+          </div>
+
       </div>
     </div>
 
