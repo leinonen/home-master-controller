@@ -123,7 +123,8 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     switch (params.type) {
       case DeviceTypes.TELLDUS_DEVICE:
       case DeviceTypes.TELLDUS_GROUP:
-        return controlTelldus(id, params);
+        return getDevice(id, params.type)
+          .then(device => controlTelldus(id, getTelldusParamsForItem(device, params)));
 
       case DeviceTypes.HUE_DEVICE:
       case DeviceTypes.HUE_GROUP:
@@ -171,8 +172,10 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     };
     if (item.motorized) {
       if (params.action === Actions.ACTION_ON) {
+        Logger.debug('Motorized device: ON -> UP');
         telldusParams.action = Actions.ACTION_UP;
       } else if (params.action === Actions.ACTION_OFF) {
+        Logger.debug('Motorized device: OFF -> DOWN');
         telldusParams.action = Actions.ACTION_DOWN;
       }
     }
@@ -209,6 +212,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   };
 
   var controlTelldus = function(id, params) {
+    Logger.info('TELLDUS: Control device -> ' + id + ', action: ' + params.action);
     switch (params.action) {
       case Actions.ACTION_ON:   return TelldusAPI.turnOn(id);
       case Actions.ACTION_OFF:  return TelldusAPI.turnOff(id);
