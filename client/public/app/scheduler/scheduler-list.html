@@ -1,46 +1,46 @@
 <div>
 
-  <h3><button ui-sref="root.scheduler.create" class="btn btn-link pull-right">
-    <span class="glyphicon glyphicon-plus"></span> Create schedule</button></h3>
+  <div><button ui-sref="root.scheduler.create" class="btn btn-link pull-right">
+    <span class="glyphicon glyphicon-plus"></span> Create schedule</button>
+  </div>
 
+  <div ng-repeat="schedule in ctrl.schedules">
+    <div class="col-md-12">
+      <div class="schedule-card">
 
-  <table class="table">
-    <tr>
-      <th>Name</th>
-      <th>Action</th>
-      <th>Time</th>
-      <th>Rnd</th>
-      <th>Mon</th>
-      <th>Tue</th>
-      <th>Wed</th>
-      <th>Thu</th>
-      <th>Fri</th>
-      <th>Sat</th>
-      <th>Sun</th>
-    </tr>
-    <tbody ng-repeat="schedule in ctrl.schedules">
-    <tr>
-      <td><a ui-sref="root.scheduler.edit({id:schedule._id})">{{schedule.name}}</a></td>
-      <td>{{schedule.action}}</td>
-      <td>{{schedule.time}}</td>
-      <td>{{schedule.random || 0}}</td>
-      <td><span class="{{ctrl.getIcon('mon', schedule.weekdays)}}"></span></td>
-      <td><span class="{{ctrl.getIcon('tue', schedule.weekdays)}}"></span></td>
-      <td><span class="{{ctrl.getIcon('wed', schedule.weekdays)}}"></span></td>
-      <td><span class="{{ctrl.getIcon('thu', schedule.weekdays)}}"></span></td>
-      <td><span class="{{ctrl.getIcon('fri', schedule.weekdays)}}"></span></td>
-      <td><span class="{{ctrl.getIcon('sat', schedule.weekdays)}}"></span></td>
-      <td><span class="{{ctrl.getIcon('sun', schedule.weekdays)}}"></span></td>
-    </tr>
-    <tr>
-      <td colspan="11">
-        <ul>
-          <li ng-repeat="device in schedule.devices">{{device.name}} <span class="badge {{device.type}}">{{device.type}}</span></span> </li>
-        </ul>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        <div class="row">
+          <div class="col-sm-6 device-name">
+            <a ui-sref="root.scheduler.edit({id:schedule._id})"><span class="glyphicon glyphicon-pencil"></span> {{schedule.name}}</a>
+          </div>
+          <div class="col-sm-3 device-name"><span class="plusminus">Action:</span> {{schedule.action}}</div>
+          <div class="col-sm-3 device-name"><span class="pull-right">{{schedule.time}} <span class="plusminus">&plusmn;{{schedule.random || 0}} min</span></span></div>
+        </div>
+        <table class="table">
+          <tbody>
+          <tr>
+            <td>Mon <span class="{{ctrl.getIcon('mon', schedule.weekdays)}}"></span></td>
+            <td>Tue <span class="{{ctrl.getIcon('tue', schedule.weekdays)}}"></span></td>
+            <td>Wed <span class="{{ctrl.getIcon('wed', schedule.weekdays)}}"></span></td>
+            <td>Thu <span class="{{ctrl.getIcon('thu', schedule.weekdays)}}"></span></td>
+            <td>Fri <span class="{{ctrl.getIcon('fri', schedule.weekdays)}}"></span></td>
+            <td>Sat <span class="{{ctrl.getIcon('sat', schedule.weekdays)}}"></span></td>
+            <td>Sun <span class="{{ctrl.getIcon('sun', schedule.weekdays)}}"></span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-sm-4" ng-repeat="device in schedule.devices">
+            <div class="group-card">
+              {{device.name}}<br/><span class="badge {{device.type}}">{{device.type}}</span></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 
 
 </div>

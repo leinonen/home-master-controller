@@ -102,7 +102,8 @@ body {
 
 .device-card,
 .group-card,
-.sensor-card {
+.sensor-card,
+.schedule-card {
   min-height: 110px;
   border: #222326 1px solid;
   padding: 5px;
@@ -112,16 +113,26 @@ body {
   border-left: 2px #84bd00 solid;
 }
 
+.schedule-card {
+  min-height: auto;
+}
+
+.schedule-card .plusminus,
+.schedule-card table {
+  color: #6e6f72;
+}
+
 .group-card {
   min-height: auto;
   background-color: #17181b;
 }
+
 .group-device-card-container {
   padding-top: 10px;
 }
 
 .sensor-card {
-  min-height: 130px;
+  min-height: 150px;
 }
 
 .device-card .btn {
