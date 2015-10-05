@@ -1,10 +1,11 @@
 'use strict';
 
-var Bus = require('./../../../util/bus');
-var Logger = require('./../../../util/logger');
-var Events = require('./events');
-var Config = require('./../../../config');
 var SunCalc = require('suncalc');
+
+var Bus = require('../../util/bus');
+var Logger = require('../../util/logger');
+var Events = require('./events');
+var hmcConfig = require('../../hmc.conf');
 
 module.exports = function(service) {
   var _service = service;
@@ -95,7 +96,7 @@ module.exports = function(service) {
 
   var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
   var getTimeStamp = (date) => date.toString().substring(16, 24);
-  var getSun = () => SunCalc.getTimes(new Date(), Config.location.lat, Config.location.lng);
+  var getSun = () => SunCalc.getTimes(new Date(), hmcConfig.location.lat, hmcConfig.location.lng);
   var getSunsetTime  = () => getTimeStamp(getSun().sunset);
   var getSunriseTime = () => getTimeStamp(getSun().sunrise);
 

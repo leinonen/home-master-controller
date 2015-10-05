@@ -1,6 +1,5 @@
-var Configuration = require('./configuration/configuration.model');
 var Bus = require('../../util/bus');
-var Events = require('../../api/hmc/scheduler/events');
+var Events = require('../scheduler/events');
 var ApiWrapper = require('./api-wrapper');
 
 // API Implementations
@@ -93,41 +92,6 @@ exports.control = (req, res) => Master
   .then(response => res.json(response))
   .catch(err => errorHandler(res, err));
 
-// Scheduler
-
-exports.schedule = (req, res) => Master
-  .schedule(req.params.id)
-  .then(schedule => res.json(schedule))
-  .catch(err => errorHandler(res, err));
-
-exports.schedules = (req, res) => Master
-  .schedules()
-  .then(schedules => res.json(schedules))
-  .catch(err => errorHandler(res, err));
-
-exports.createSchedule = (req, res) => Master
-  .createSchedule(req.body)
-  .then(schedule => res.json(schedule))
-  .catch(err => errorHandler(res, err));
-
-exports.updateSchedule = (req, res) => Master
-  .updateSchedule(req.params.id, req.body)
-  .then(schedule => res.json(schedule))
-  .catch(err => errorHandler(res, err));
-
-exports.deleteSchedule = (req, res) => Master
-  .deleteSchedule(req.params.id)
-  .then(response => res.json(response))
-  .catch(err => errorHandler(res, err));
 
 // Configuration
 
-exports.readConfiguration = (req, res) => Configuration
-  .get()
-  .then(cfg => res.json(cfg))
-  .catch(err => errorHandler(res, err));
-
-exports.saveConfiguration = (req, res) => Configuration
-  .saveConfig(req.body._id, req.body)
-  .then(cfg => res.json(cfg))
-  .catch(err => errorHandler(res, err));

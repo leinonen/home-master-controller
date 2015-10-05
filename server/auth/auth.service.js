@@ -2,12 +2,12 @@
 
 var mongoose = require('mongoose');
 var passport = require('passport');
-var config = require('../config');
+var hmcConf = require('../hmc.conf');
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var compose = require('composable-middleware');
 var User = require('../api/user/user.model.js');
-var validateJwt = expressJwt({ secret: config.secrets.session });
+var validateJwt = expressJwt({ secret: hmcConf.secret });
 
 /**
  * Attaches the user object to the request if authenticated
@@ -44,7 +44,7 @@ function hasRole(roleRequired) {
   return compose()
     .use(isAuthenticated())
     .use(function meetsRequirements(req, res, next) {
-      if (config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf(roleRequired)) {
+      if (hmcConf.userRoles.indexOf(req.user.role) >= hmcConf.userRoles.indexOf(roleRequired)) {
         next();
       }
       else {
@@ -57,7 +57,7 @@ function hasRole(roleRequired) {
  * Returns a jwt token signed by the app secret
  */
 function signToken(id) {
-  return jwt.sign({ _id: id }, config.secrets.session, { expiresInMinutes: 60*5 });
+  return jwt.sign({ _id: id }, hmcConf.secret, { expiresInMinutes: 60*5 });
 }
 
 /**

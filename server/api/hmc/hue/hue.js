@@ -6,7 +6,7 @@
 
 var Promise = require('../../../util/promise');
 var http = require('request-promise-json');
-var Configuration = require('../configuration/configuration.model.js');
+var Configuration = require('../../configuration/configuration.model.js');
 var Transformer = require('./hue-transformer');
 var Logger = require('../../../util/logger');
 

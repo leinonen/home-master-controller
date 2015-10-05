@@ -7,27 +7,15 @@ var passport = require('passport');
 var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose-q')();
-var fs = require('fs');
-var homedir = require('homedir');
 var User = require('./server/api/user/user.model.js');
 var auth = require('./server/auth/auth.service');
-
 var Logger = require('./server/util/logger');
-
-var controller = require('./server/api/hmc/hmc.controller');
-var ScheduleService = require('./server/api/hmc/scheduler/schedule.model.js');
-var Scheduler = require('./server/api/hmc/scheduler/scheduler');
+var ScheduleService = require('./server/api/scheduler/schedule.model.js');
+var Scheduler = require('./server/api/scheduler/scheduler');
 var scheduler = new Scheduler(ScheduleService);
-var conf = path.join(homedir(), '/.hmc.conf');
+var hmcConfig = require('./server/hmc.conf');
 
-if (!fs.existsSync(conf)) {
-  Logger.error('Configuration file missing! Create .hmc.conf in your home directory.');
-  process.exit(-1);
-}
-
-var config = JSON.parse(fs.readFileSync(conf, 'utf-8'));
-
-mongoose.connect(config.mongo.url, config.mongo.opts);
+mongoose.connect(hmcConfig.mongo.url, hmcConfig.mongo.opts);
 mongoose.connection.on('error', function(err) {
     Logger.error('MongoDB connection error: ' + err);
     process.exit(-1);
@@ -56,7 +44,7 @@ app.use(passport.initialize());
 // Persist sessions with mongoStore
 // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
 app.use(session({
-  secret: config.secret,
+  secret: hmcConfig.secret,
   resave: true,
   saveUninitialized: true,
   store: new mongoStore({
@@ -68,14 +56,15 @@ app.use(session({
 app.use('/auth', require('./server/auth'));
 app.use('/api/users', require('./server/api/user'));
 app.use('/api/hmc', require('./server/api/hmc'));
+app.use('/api/scheduler', require('./server/api/scheduler'));
+app.use('/api/config', require('./server/api/configuration'));
 
 app.use((err, req, res, next) => {
   console.error(err.message);
   res.sendStatus(err.status || 500);
 });
 
-app.listen(config.port);
-Logger.info('HMC: System running on port ' + config.port);
+app.listen(hmcConfig.port);
+Logger.info('HMC: System running on port ' + hmcConfig.port);
 
 scheduler.start();
-

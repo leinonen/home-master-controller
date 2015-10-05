@@ -6,10 +6,11 @@
  * @type {exports}
  * @author Peter Leinonen
  */
+
+var http = require('request-promise-json');
+var Configuration = require('../../configuration/configuration.model.js');
 var Transformer = require('./zwave-transformer');
 var Promise = require('../../../util/promise');
-var http = require('request-promise-json');
-var Configuration = require('../configuration/configuration.model.js');
 var Logger = require('../../../util/logger');
 
 var sessionCookie = undefined;
@@ -72,7 +73,6 @@ var zwave_login_get = (config, uri) => {
       .then(sid => {
         sessionCookie = sid;
         Logger.debug('ZWAVE: Login successful');
-        Logger.debug(sessionCookie);
         return zwave_get(config.endpoint + uri);
       });
   } else {

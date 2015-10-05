@@ -4,9 +4,9 @@
  */
 var Promise = require('../../util/promise');
 var DeviceTypes = require('./device-types');
-var Actions = require('./actions');
-var Schedule = require('./scheduler/schedule.model');
-var Events = require('./scheduler/events');
+var DeviceActions = require('./device-actions');
+var Schedule = require('../scheduler/schedule.model');
+var Events = require('../scheduler/events');
 var Bus = require('../../util/bus');
 var Logger = require('../../util/logger');
 
@@ -230,8 +230,8 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   var removeGenericGroup = (id) => GenericAPI.remove(id);
 
   var controlGenericGroup = (id, params) => {
-    if (params.action === Actions.ACTION_ON ||
-      params.action === Actions.ACTION_OFF) {
+    if (params.action === DeviceActions.ACTION_ON ||
+        params.action === DeviceActions.ACTION_OFF) {
       return controlDevicesInGroup(id, params);
     }
   };
@@ -242,12 +242,12 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
       type: params.type
     };
     if (item.motorized) {
-      if (params.action === Actions.ACTION_ON) {
+      if (params.action === DeviceActions.ACTION_ON) {
         Logger.debug('Motorized device: ON -> UP');
-        telldusParams.action = Actions.ACTION_UP;
-      } else if (params.action === Actions.ACTION_OFF) {
+        telldusParams.action = DeviceActions.ACTION_UP;
+      } else if (params.action === DeviceActions.ACTION_OFF) {
         Logger.debug('Motorized device: OFF -> DOWN');
-        telldusParams.action = Actions.ACTION_DOWN;
+        telldusParams.action = DeviceActions.ACTION_DOWN;
       }
     }
     return telldusParams;
@@ -284,16 +284,16 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   var controlTelldus = function(id, params) {
     Logger.info('TELLDUS: Control device -> ' + id + ', action: ' + params.action);
     switch (params.action) {
-      case Actions.ACTION_ON:
+      case DeviceActions.ACTION_ON:
         return TelldusAPI.turnOn(id);
 
-      case Actions.ACTION_OFF:
+      case DeviceActions.ACTION_OFF:
         return TelldusAPI.turnOff(id);
 
-      case Actions.ACTION_UP:
+      case DeviceActions.ACTION_UP:
         return TelldusAPI.goUp(id);
 
-      case Actions.ACTION_DOWN:
+      case DeviceActions.ACTION_DOWN:
         return TelldusAPI.goDown(id);
     }
   };
@@ -301,11 +301,11 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   var createHueParams = (params) => {
     var hueParams = {};
     switch (params.action) {
-      case Actions.ACTION_ON:
+      case DeviceActions.ACTION_ON:
         hueParams = {on: true};
         break;
 
-      case Actions.ACTION_OFF:
+      case DeviceActions.ACTION_OFF:
         hueParams = {on: false};
         break;
 
@@ -348,13 +348,13 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
 
   var controlZWave = (id, params) => {
     switch (params.action) {
-      case Actions.ACTION_ON:
+      case DeviceActions.ACTION_ON:
         return ZWaveAPI.setOn(id);
 
-      case Actions.ACTION_OFF:
+      case DeviceActions.ACTION_OFF:
         return ZWaveAPI.setOff(id);
 
-      case Actions.ACTION_LEVEL:
+      case DeviceActions.ACTION_LEVEL:
         Logger.info('ZWAVE: setLevel: ' + params.value);
         return ZWaveAPI.setLevel(id, params.value);
 
@@ -362,44 +362,6 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
         return Promise.reject('Invalid action ' + params.action);
     }
   };
-
-  var getSchedule = (id) => Schedule.findById(id);
-
-  var getSchedules = () => Schedule.findAll();
-
-  var createSchedule = (schedule) => {
-    var sch = new Schedule(schedule);
-    sch.save();
-    Bus.emit(Events.UPDATE_SCHEDULER);
-    return Promise.resolve(sch);
-  };
-
-  var updateSchedule = (id, sch) => Schedule
-    .findById(id)
-    .then(schedule => {
-      schedule.name = sch.name;
-      schedule.action = sch.action;
-      schedule.active = sch.active;
-      schedule.time = sch.time;
-      // sunset and sunrise are booleans
-      schedule.sunset = sch.sunset;
-      schedule.sunrise = sch.sunrise;
-      schedule.random = sch.random;
-      schedule.weekdays = sch.weekdays;
-      schedule.items = sch.items;
-      schedule.save();
-      Bus.emit(Events.UPDATE_SCHEDULER);
-      return schedule;
-    });
-
-
-  var deleteSchedule = (id) => Schedule
-    .findById(id)
-    .then(schedule => {
-      schedule.remove();
-      Bus.emit(Events.UPDATE_SCHEDULER);
-      return {};
-    });
 
 
   return {
@@ -415,11 +377,6 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     updateGenericGroup: updateGenericGroup,
     removeGenericGroup: removeGenericGroup,
     controlGenericGroup: controlGenericGroup,
-    control: control,
-    schedule: getSchedule,
-    schedules: getSchedules,
-    createSchedule: createSchedule,
-    updateSchedule: updateSchedule,
-    deleteSchedule: deleteSchedule
+    control: control
   };
 };

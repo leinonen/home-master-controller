@@ -6,11 +6,12 @@
  * @type {exports}
  * @author Peter Leinonen
  */
-var Promise = require('../../../util/promise');
+
 var Qs = require('querystring');
 var OAuth = require('oauth');
 var http = require('request-promise-json');
-var Configuration = require('../configuration/configuration.model.js');
+var Promise = require('../../../util/promise');
+var Configuration = require('../../configuration/configuration.model.js');
 var Transformer = require('./telldus-transformer');
 var Methods = require('./telldus-methods');
 var METHODS = Methods.TELLSTICK_TURNON | Methods.TELLSTICK_TURNOFF |
@@ -74,66 +75,23 @@ exports.transformGroup = Transformer.TelldusGroup;
 exports.transformGroups = Transformer.TelldusGroups;
 exports.transformSensors = Transformer.TelldusSensors;
 
-
-/**
- * Get all devices.
- * @returns {*}
- */
 exports.devices = () => apiCall('devices/list', {supportedMethods: METHODS})
   .then(response => response.device.filter(device => device.type === 'device'));
 
-/**
- * Get all groups.
- * @returns {*}
- */
 exports.groups = () => apiCall('devices/list',  {supportedMethods: METHODS})
   .then(response => response.device.filter(device => device.type === 'group'));
 
-/**
- * Get a single device.
- * @param id
- * @returns {*}
- */
 exports.device = (id) => apiCall('device/info', {supportedMethods: METHODS, id: id});
 
-/**
- * Get all sensors.
- * @returns {*}
- */
 exports.sensors = () => apiCall('sensors/list', {supportedMethods: TELLSTICK_TEMPERATURE})
   .then(response => response.sensor);
 
-/**
- * Get a single sensor.
- * @param id
- * @returns {*}
- */
 exports.sensor = (id) => apiCall('sensor/info', {supportedMethods: TELLSTICK_TEMPERATURE, id: id});
 
-/**
- * Turn a device on.
- * @param id
- * @returns {*}
- */
 exports.turnOn = (id) => apiCall('device/turnOn', {supportedMethods: METHODS, id: id});
 
-/**
- * Turn a device off.
- * @param id
- * @returns {*}
- */
 exports.turnOff = (id) => apiCall('device/turnOff', {supportedMethods: METHODS, id: id});
 
-/**
- * Make device go up.
- * @param id
- * @returns {*}
- */
 exports.goUp = (id) => apiCall('device/up', {supportedMethods: METHODS, id: id});
 
-/**
- * Make device go down.
- * @param id
- * @returns {*}
- */
 exports.goDown = (id) => apiCall('device/down', {supportedMethods: METHODS, id: id});

@@ -6,31 +6,31 @@
     var service = this;
 
     service.getSchedules = function () {
-      return $http.get('/api/hmc/schedules').then(function (response) {
+      return $http.get('/api/scheduler/schedules').then(function (response) {
         return response.data;
       });
     };
 
     service.getSchedule = function (id) {
-      return $http.get('/api/hmc/schedules/' + id).then(function (response) {
+      return $http.get('/api/scheduler/schedules/' + id).then(function (response) {
         return response.data;
       });
     };
 
     service.updateSchedule = function (id, data) {
-      return $http.put('/api/hmc/schedules/' + id, data).then(function (response) {
+      return $http.put('/api/scheduler/schedules/' + id, data).then(function (response) {
         return response.data;
       });
     };
 
     service.createSchedule = function (schedule) {
-      return $http.post('/api/hmc/schedules', schedule).then(function (response) {
+      return $http.post('/api/scheduler/schedules', schedule).then(function (response) {
         return response.data;
       });
     };
 
     service.deleteSchedule = function (id) {
-      return $http.delete('/api/hmc/schedules/' + id).then(function (response) {
+      return $http.delete('/api/scheduler/schedules/' + id).then(function (response) {
         return response.data;
       });
     };

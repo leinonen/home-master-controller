@@ -10,7 +10,7 @@ var ZWave = require('./server/api/hmc/zwave/zwave');
 
 var Generic = require('./server/api/hmc/generic/generic');
 var Group = require('./server/api/hmc/generic/group.model.js');
-var Schedule = require('./server/api/hmc/scheduler/schedule.model.js');
+var Schedule = require('./server/api/scheduler/schedule.model.js');
 
 var DeviceTypes = require('./server/api/hmc/device-types');
 

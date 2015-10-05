@@ -1,6 +1,6 @@
 describe('Scheduler', function() {
 
-  var Scheduler = require('../api/hmc/scheduler/scheduler');
+  var Scheduler = require('./scheduler');
   var Bus = require('../util/bus');
   var Promise = require('../util/promise');
   var mockSchedules = require('../testdata/schedules.json');
