@@ -3,7 +3,7 @@ describe('Scheduler', function() {
   var Scheduler = require('./scheduler');
   var Bus = require('../util/bus');
   var Promise = require('../util/promise');
-  var mockSchedules = require('../testdata/schedules.json');
+  var mockSchedules = require('testdata/schedules.json');
   var mock = {
     findAll: () => Promise.resolve(mockSchedules)
   };
