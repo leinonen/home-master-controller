@@ -1,8 +1,6 @@
 (function () {
 
-  var module = angular.module('scheduler', []);
-
-  module.service('SchedulerService', function ($http) {
+  angular.module('app').service('SchedulerService', function ($http) {
     var service = this;
 
     service.getSchedules = function () {
@@ -37,7 +35,7 @@
 
   });
 
-  module.service('Weekdays', function(){
+  angular.module('app').service('Weekdays', function(){
     var service = this;
     service.getWorkdays = function () {
       return {

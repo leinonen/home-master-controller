@@ -1,8 +1,6 @@
 (function () {
 
-  var module = angular.module('master', []);
-
-  module.service('MasterApi', function ($http) {
+  angular.module('app').service('MasterApi', function ($http) {
 
     function unwrap(response) {
       return response.data;

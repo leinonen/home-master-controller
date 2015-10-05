@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('configuration', ['message']);
+  var module = angular.module('app');
 
   module.service('ConfigService', function ($http) {
     var ConfigService = this;

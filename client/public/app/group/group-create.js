@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('group');
+  var module = angular.module('app');
 
   module.controller('GroupCreateCtrl', function ($state, $rootScope, MasterApi, Message) {
 

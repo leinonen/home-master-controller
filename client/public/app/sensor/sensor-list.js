@@ -1,8 +1,6 @@
 (function () {
 
-  var module = angular.module('sensor', ['master']);
-
-  module.controller('SensorListCtrl', function (MasterApi, $interval) {
+  angular.module('app').controller('SensorListCtrl', function (MasterApi, $interval) {
     var ctrl = this;
     this.sensors = [];
     MasterApi.getSensors().then(function (sensors) {
@@ -16,7 +14,7 @@
     }, 10000);
   });
 
-  module.directive('sensorList', function () {
+  angular.module('app').directive('sensorList', function () {
     return {
       scope: {},
       templateUrl: 'app/sensor/sensor-list.html',

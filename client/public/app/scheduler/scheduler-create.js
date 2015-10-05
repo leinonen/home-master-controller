@@ -1,8 +1,6 @@
 (function () {
 
-  var module = angular.module('scheduler');
-
-  module.controller('CreateScheduleCtrl', function ($rootScope, $state, SchedulerService, Message, MasterApi, Weekdays) {
+  angular.module('app').controller('CreateScheduleCtrl', function ($rootScope, $state, SchedulerService, Message, MasterApi, Weekdays) {
     var ctrl = this;
     ctrl.devices = [];
     ctrl.selectedDevices = [];
@@ -90,7 +88,7 @@
   });
 
 
-  module.directive('schedulerCreate', function () {
+  angular.module('app').directive('schedulerCreate', function () {
     return {
       replace: true,
       templateUrl: 'app/scheduler/scheduler-create.html',

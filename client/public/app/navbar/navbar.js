@@ -1,8 +1,6 @@
 (function() {
 
-  var module = angular.module('navbar', []);
-
-  module.provider('Routes', function() {
+  angular.module('app').provider('Routes', function() {
     var routes = [
       {
         title: 'Devices',
@@ -79,20 +77,29 @@
         authenticate: true
       },
       {
-        title: 'About',
-        state: 'root.about',
-        url: '/about',
-        templateUrl: 'app/views/about.html',
-        position: 'right'
-      },
-      {
         title: 'Login',
         url: '/login',
         state: 'root.login',
         templateUrl: 'app/login/login.html',
         controller: 'LoginCtrl',
         position: 'right'
-      }
+      },
+      {
+        title: 'Settings',
+        url: '/settings',
+        state: 'root.settings',
+        templateUrl: 'app/account/settings.html',
+        controller: 'LoginCtrl',
+        position: 'right',
+        authenticate: true
+      },
+      {
+        title: 'About',
+        state: 'root.about',
+        url: '/about',
+        templateUrl: 'app/views/about.html',
+        position: 'right'
+      },
     ];
 
     return {
@@ -103,7 +110,7 @@
 
   });
 
-  module.controller('NavbarCtrl', function(Routes, Auth, $state) {
+  angular.module('app').controller('NavbarCtrl', function(Routes, Auth, $state) {
 
     var ctrl = this;
     ctrl.title = 'Master Controller';
@@ -134,7 +141,7 @@
 
   });
 
-  module.directive('navbar', function() {
+  angular.module('app').directive('navbar', function() {
     return {
       scope: {},
       templateUrl: 'app/navbar/navbar.html',

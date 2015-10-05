@@ -1,6 +1,6 @@
 (function() {
 
-  var module = angular.module('group');
+  var module = angular.module('app');
 
   module.controller('EditGroupCtrl', function($rootScope, $q, $state, $stateParams, MasterApi, Message) {
     var ctrl = this;

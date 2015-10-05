@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('common');
+  var module = angular.module('app');
 
   module.controller('SelectItemCtrl', function ($rootScope, $scope) {
     var ctrl = this;

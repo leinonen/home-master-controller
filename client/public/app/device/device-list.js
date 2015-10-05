@@ -1,6 +1,6 @@
 (function () {
 
-  var module = angular.module('device');
+  var module = angular.module('app');
 
   module.controller('DeviceListCtrl', function ($rootScope, $timeout, MasterApi, Message) {
     var ctrl = this;

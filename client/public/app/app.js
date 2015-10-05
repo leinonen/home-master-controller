@@ -1,22 +1,6 @@
 (function () {
 
-  var app = angular.module('app', [
-    'ngCookies',
-    'ngResource',
-    'ui.router',
-    'angular-loading-bar',
-
-    'auth',
-    'common',
-    'message',
-    'configuration',
-    'master',
-    'sensor',
-    'device',
-    'group',
-    'navbar',
-    'scheduler'
-  ]);
+  var app = angular.module('app');
 
   app.config(function ($stateProvider, $urlRouterProvider, RoutesProvider, $httpProvider) {
 

@@ -1,8 +1,6 @@
 (function () {
 
-  var module = angular.module('scheduler');
-
-  module.controller('SchedulerListCtrl', function (SchedulerService, MasterApi) {
+  angular.module('app').controller('SchedulerListCtrl', function (SchedulerService, MasterApi) {
     var ctrl = this;
     ctrl.schedules = [];
 
@@ -51,7 +49,7 @@
   });
 
 
-  module.directive('schedulerList', function () {
+  angular.module('app').directive('schedulerList', function () {
     return {
       replace: true,
       templateUrl: 'app/scheduler/scheduler-list.html',

@@ -1,8 +1,6 @@
 (function () {
 
-  var module = angular.module('message', []);
-
-  module.service('Message', function ($rootScope) {
+  angular.module('app').service('Message', function ($rootScope) {
 
     function emit(msg, type) {
       $rootScope.$emit('message', {msg: msg, type: type});
@@ -26,7 +24,7 @@
 
   });
 
-  module.controller('MessageCtrl', function ($scope, $rootScope, $timeout) {
+  angular.module('app').controller('MessageCtrl', function ($scope, $rootScope, $timeout) {
 
     $scope.msg = {msg: '', type: 'info'};
     $scope.showMessage = false;
@@ -43,7 +41,7 @@
 
   });
 
-  module.directive('message', function () {
+  angular.module('app').directive('message', function () {
     return {
       scope: {},
       restrict: 'E',
