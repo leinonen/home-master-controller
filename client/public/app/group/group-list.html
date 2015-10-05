@@ -24,12 +24,14 @@
       <div class="row group-device-card-container">
         <div class="col-md-4"   ng-if="group.deviceList" ng-repeat="device in group.deviceList">
           <div class="device-card">
+            <span class="device-name">{{device.name}}</span>
+            <span class="device-name device-level pull-right">{{device.state.on ? 'ON':'OFF'}}</span><br/>
+            <span class="badge {{device.type}}">{{device.type}}</span>
+          </div>
+        </div>
+      </div>
 
-        <span class="device-name">{{device.name}} - {{device.state.on ? 'On':'Off'}}</span><br/>
-        <span class="badge {{device.type}}">{{device.type}}</span>
     </div>
-    </div>
+
   </div>
-  </div>
-</div>
 </div>
