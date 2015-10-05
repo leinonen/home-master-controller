@@ -2,11 +2,35 @@
 
   <form ng-submit="ctrl.saveConfiguration()">
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-6 col-sm-offset-3">
+
+        <h3>Edit configuration</h3>
+
+        <div class="panel panel-default" ng-class="{'panel-success': ctrl.config.hue.enabled}">
+          <div class="panel-heading">
+            <h3 class="panel-title">Philips Hue</h3>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <p>Enable Philips Hue integration</p>
+              <input type="checkbox"
+                     ng-model="ctrl.config.hue.enabled"
+                     class="form-control config-checkbox">
+            </div>
+
+            <p>Endpoint url</p>
+            <input class="form-control" type="text"
+                   ng-model="ctrl.config.hue.endpoint"
+                   ng-disabled="!ctrl.config.hue.enabled"
+                   placeholder="hue endpoint"/>
+
+          </div>
+        </div>
+
 
         <div class="panel panel-default" ng-class="{'panel-success': ctrl.config.telldus.enabled}">
           <div class="panel-heading">
-            <h3 class="panel-title">Telldus</h3>
+            <h3 class="panel-title">Telldus Live</h3>
           </div>
           <div class="panel-body">
             <div class="form-group">
@@ -57,34 +81,10 @@
         </div>
 
 
-      </div>
-      <div class="col-sm-6">
-
-        <div class="panel panel-default" ng-class="{'panel-success': ctrl.config.hue.enabled}">
-          <div class="panel-heading">
-            <h3 class="panel-title">Philips Hue</h3>
-          </div>
-          <div class="panel-body">
-            <div class="form-group">
-              <p>Enable Philips Hue integration</p>
-              <input type="checkbox"
-                     ng-model="ctrl.config.hue.enabled"
-                     class="form-control config-checkbox">
-            </div>
-
-            <p>Endpoint url</p>
-            <input class="form-control" type="text"
-                   ng-model="ctrl.config.hue.endpoint"
-                   ng-disabled="!ctrl.config.hue.enabled"
-                   placeholder="hue endpoint"/>
-
-          </div>
-        </div>
-
 
         <div class="panel panel-default" ng-class="{'panel-success': ctrl.config.zwave.enabled}">
           <div class="panel-heading">
-            <h3 class="panel-title">Z-Wave</h3>
+            <h3 class="panel-title">RaZberry Z-Wave Controller</h3>
           </div>
           <div class="panel-body">
             <div class="form-group">
@@ -120,9 +120,11 @@
         </div>
 
 
+        <button class="btn btn-primary btn-lg pull-right" type="submit">Save</button>
+
       </div>
     </div>
-    <button class="btn btn-primary pull-right" type="submit">Save</button>
+
   </form>
 
 </div>

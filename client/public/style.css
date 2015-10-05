@@ -99,6 +99,12 @@ body {
   border-color: #84bd00;
   color: #84bd00;
 }
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  border-color: #355f01;
+  color: #6e6f72;
+  background-color: #222326;
+}
+
 
 .device-card,
 .group-card,
