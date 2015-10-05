@@ -1,5 +1,6 @@
 {
   "port": 8080,
+  "secret": "topsecret",
   "mongo": {
     "url": "<host>:27017/homeMasterController_dev",
     "opts": {
