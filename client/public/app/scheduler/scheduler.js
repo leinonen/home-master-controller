@@ -33,6 +33,12 @@
       });
     };
 
+    service.getSun = function () {
+      return $http.get('/api/scheduler/sun').then(function (response) {
+        return response.data;
+      });
+    };
+
   });
 
   angular.module('app').service('Weekdays', function(){

@@ -26,12 +26,12 @@
                placeholder="00:00" ng-disabled="ctrl.isSunriseOrSunset()"/>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="ctrl.schedule.sunrise">Sunrise
+            <input type="checkbox" ng-model="ctrl.schedule.sunrise">Sunrise ({{ctrl.sun.sunrise}})
           </label>
         </div>
         <div class="checkbox">
           <label>
-            <input type="checkbox" ng-model="ctrl.schedule.sunset">Sunset
+            <input type="checkbox" ng-model="ctrl.schedule.sunset">Sunset ({{ctrl.sun.sunset}})
           </label>
         </div>
       </div>

@@ -16,14 +16,14 @@
           <span class="device-name pull-right device-level" ng-show="device.state.level !== undefined">{{device.state.level}}</span>
         <button ng-click="ctrl.toggleDevice(device)" ng-show="device.state.on !== undefined"
                 type="button"
-                class="btn btn-primary pull-right"
-                ng-class="{'btn-success':device.state.on}">
+                class="btn btn-default pull-right"
+                ng-class="{'btn-primary':device.state.on}">
                 {{ctrl.buttonText(device)}}
         </button>
         <button ng-show="device.type === 'hue-device'"
                 ng-click="ctrl.toggleShowControls(device)"
                 type="button"
-                class="btn btn-primary pull-right"
+                class="btn btn-default pull-right"
                 ng-class="{'btn-default':ctrl.showControls}">
           Modify
         </button>
@@ -86,8 +86,8 @@
                 <div class="col-sm-8">
                   <button ng-click="ctrl.toggleColorLoop(device)"
                           type="button"
-                          class="btn btn-primary"
-                          ng-class="{'btn-success':device.state.effect !== 'none'}">
+                          class="btn btn-default"
+                          ng-class="{'btn-primary':device.state.effect !== 'none'}">
                     {{ctrl.colorLoopText(device)}}
                   </button>
                 </div>

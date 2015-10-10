@@ -1,6 +1,7 @@
 var Schedule = require('./schedule.model');
 var Events = require('./events');
 var Bus = require('../../util/bus');
+var Sun = require('./sun');
 
 var getSchedule = (id) => Schedule.findById(id);
 
@@ -64,3 +65,10 @@ exports.deleteSchedule = (req, res) =>
   deleteSchedule(req.params.id)
   .then(response => res.json(response))
   .catch(err => errorHandler(res, err));
+
+exports.sun = (req, res) => {
+  res.json({
+    sunset: Sun.getSunsetTime(),
+    sunrise: Sun.getSunriseTime()
+  });
+};

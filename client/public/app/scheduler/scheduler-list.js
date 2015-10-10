@@ -45,7 +45,11 @@
 
     ctrl.getIcon = function (day, arr) {
       return ctrl.checkDay(day, arr) ? 'text-success glyphicon glyphicon-ok' : '';
-    }
+    };
+
+    ctrl.getDayClass = function (day, arr) {
+      return ctrl.checkDay(day, arr) ? 'text-success' : '';
+    };
   });
 
 

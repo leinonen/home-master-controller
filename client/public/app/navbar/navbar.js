@@ -68,7 +68,7 @@
         authenticate: true
       },
       {
-        title: 'Configuration',
+        title: 'Config',
         state: 'root.configuration',
         url: '/config',
         templateUrl: 'app/views/configuration.html',
@@ -85,7 +85,7 @@
         position: 'right'
       },
       {
-        title: 'Settings',
+        title: 'Account',
         url: '/settings',
         state: 'root.settings',
         templateUrl: 'app/account/settings.html',
@@ -113,7 +113,7 @@
   angular.module('app').controller('NavbarCtrl', function(Routes, Auth, $state) {
 
     var ctrl = this;
-    ctrl.title = 'Master Controller';
+    ctrl.title = 'HMC';
 
     ctrl.items = Routes.routes;
     ctrl.isLoggedIn = Auth.isLoggedIn;

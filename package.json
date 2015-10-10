@@ -28,5 +28,9 @@
     "q": "^1.3.0",
     "request-promise-json": "^1.0.4",
     "suncalc": "^1.6.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-less": "^1.0.1"
   }
 }

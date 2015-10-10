@@ -16,6 +16,12 @@
       weekdays: []
     };
     ctrl.weekdays = {};
+    ctrl.sun = {};
+
+
+    SchedulerService.getSun().then(function(sun){
+      ctrl.sun = sun;
+    });
 
     function fetchDevices() {
       MasterApi.getDevices().then(function (devices) {
