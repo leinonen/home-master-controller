@@ -22,7 +22,7 @@
           title: 'Create Group',
           state: 'root.groups.create',
           url: '/create',
-          templateUrl: 'app/views/groups-create.html',
+          templateUrl: 'app/views/group-create.html',
           authenticate: true
         }]
       },

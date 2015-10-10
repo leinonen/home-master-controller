@@ -7,11 +7,11 @@
       ctrl.sensors = sensors;
     });
 
-    $interval(function() {
+    //$interval(function() {
       MasterApi.getSensors().then(function (sensors) {
         ctrl.sensors = sensors;
       });
-    }, 10000);
+    //}, 10000);
   });
 
   angular.module('app').directive('sensorList', function () {

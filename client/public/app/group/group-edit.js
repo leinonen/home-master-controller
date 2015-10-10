@@ -2,53 +2,55 @@
 
   var module = angular.module('app');
 
-  module.controller('EditGroupCtrl', function($rootScope, $q, $state, $stateParams, MasterApi, Message) {
+  module.controller('GroupCtrl', function($rootScope, $q, $state, $stateParams, MasterApi, Message) {
     var ctrl = this;
     ctrl.groupDevices = [];
     ctrl.devices = [];
-    ctrl.groups = [];
     ctrl.selectedItems = [];
-
     ctrl.group = {
       name: '',
       items: []
     };
 
+    ctrl.isEditMode = function() {
+      return $stateParams.id !== undefined;
+    };
+
     function fetchDevicesAndGroups() {
       var promises = [];
-      promises.push(MasterApi.getDevices().then(function(devices) {
-        ctrl.devices = devices;
-      }));
-      promises.push(MasterApi.getGroups().then(function(groups) {
-        ctrl.groups = groups.filter(function(grp) {
-          return grp.type !== 'generic-group';
-        });
-      }));
-      return $q.all(promises);
-    }
-
-    function getGroupAndDevices() {
-      MasterApi.getGroup($stateParams.id, $stateParams.type).then(function(group) {
-        ctrl.group = group;
-
-        MasterApi.getGroupDevices(group.id, group.type).then(function(devices) {
-          ctrl.groupDevices = devices;
-          ctrl.groupDevices.forEach(function(device) {
-            ctrl.selectedItems.push(device);
-          });
-        }).catch(function(err) {
-          Message.danger(err.data.message);
-          //$state.go('root.groups');
-        });
-
-      }).catch(function(err) {
-        Message.danger(err.data.message);
-        //$state.go('root.groups');
+      promises.push(MasterApi.getDevices());
+      promises.push(MasterApi.getGroups());
+      return $q.all(promises).then(function(items) {
+        ctrl.devices = items[0].concat(items[1]);
       });
     }
 
+    function getGroupAndDevices() {
+      MasterApi
+        .getGroup($stateParams.id, $stateParams.type)
+        .then(function(group) {
+          ctrl.group = group;
+
+          MasterApi
+            .getGroupDevices(group.id, group.type)
+            .then(function(devices) {
+              ctrl.groupDevices = devices;
+              ctrl.groupDevices.forEach(function(device) {
+                ctrl.selectedItems.push(device);
+              });
+            }).catch(function(err) {
+              Message.danger(err.data.message);
+            });
+
+        }).catch(function(err) {
+          Message.danger(err.data.message);
+        });
+    }
+
     fetchDevicesAndGroups().then(function() {
-      getGroupAndDevices();
+      if (ctrl.isEditMode()) {
+        getGroupAndDevices();
+      }
     });
 
     ctrl.removeItem = function(index) {
@@ -76,35 +78,54 @@
       return valid;
     };
 
-    ctrl.saveGroup = function() {
-      if (!ctrl.isValid()) {
-        return;
-      }
-
-      // Merge devices and groups
+    var addSelectedItems = function() {
       ctrl.group.items = ctrl.selectedItems.map(function(item) {
-        var a = {};
-        a.id = item.id;
-        a.type = item.type;
-        return a;
-      });
-
-      MasterApi.updateGroup(ctrl.group.id, ctrl.group).then(function() {
-        console.log('Saved!');
-        Message.success('Group saved successfully!');
-        ctrl.group.name = '';
-        ctrl.group.items = [];
-        ctrl.selectedItems = [];
-        $state.go('root.groups');
+        return { id: item.id, type: item.type };
       });
     };
 
+    var handleResponse = function() {
+      Message.success('Success!');
+      ctrl.group.name = '';
+      ctrl.group.items = [];
+      ctrl.selectedItems = [];
+      $state.go('root.groups');
+    };
+
+    ctrl.saveGroup = function() {
+      if (ctrl.isValid()) {
+        addSelectedItems();
+        MasterApi
+          .createGroup(ctrl.group)
+          .then(handleResponse);
+      }
+    };
+
+    ctrl.updateGroup = function() {
+      if (ctrl.isValid()) {
+        addSelectedItems();
+        MasterApi
+          .updateGroup(ctrl.group.id, ctrl.group)
+          .then(handleResponse);
+      }
+    };
+
+    ctrl.save = function() {
+      if (ctrl.isEditMode()) {
+        ctrl.updateGroup();
+      } else {
+        ctrl.saveGroup();
+      }
+    };
+
     ctrl.deleteGroup = function() {
-      MasterApi.deleteGroup(ctrl.group.id).then(function(response) {
-        Message.info(response);
-        ctrl.group = {};
-        $state.go('root.groups');
-      });
+      MasterApi
+        .deleteGroup(ctrl.group.id)
+        .then(function(response) {
+          Message.info(response);
+          ctrl.group = {};
+          $state.go('root.groups');
+        });
     }
 
   });
@@ -113,7 +134,7 @@
     return {
       scope: {},
       templateUrl: 'app/group/group-edit.html',
-      controller: 'EditGroupCtrl',
+      controller: 'GroupCtrl',
       controllerAs: 'ctrl'
     }
   });
