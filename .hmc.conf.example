@@ -1,6 +1,13 @@
 {
   "port": 8080,
   "secret": "topsecret",
+  "defaultUser": {
+    "provider": "local",
+    "role": "admin",
+    "name": "Admin",
+    "email": "admin@admin.com",
+    "password": "admin"
+  },
   "mongo": {
     "url": "<host>:27017/homeMasterController_dev",
     "opts": {

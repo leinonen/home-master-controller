@@ -17,22 +17,21 @@ var hmcConfig = require('./server/hmc.conf');
 
 mongoose.connect(hmcConfig.mongo.url, hmcConfig.mongo.opts);
 mongoose.connection.on('error', function(err) {
-    Logger.error('MongoDB connection error: ' + err);
+    Logger.error('MongoDB: Connection error: ' + err);
     process.exit(-1);
   }
 );
 
-User.find({}).remove(function() {
-  User.create({
-      provider: 'local',
-      role: 'admin',
-      name: 'Admin',
-      email: 'admin@admin.com',
-      password: 'admin'
-    }, function() {
-      Logger.info('HMC: Finished populating users');
-    }
-  );
+User.find(function(err, users) {
+  if (users.length === 0) {
+    Logger.info('HMC: No users found in db');
+    User.create(hmcConfig.defaultUser, function() {
+        Logger.info('HMC: Created default user');
+      }
+    );
+  } else {
+    Logger.info('HMC: Default user found');
+  }
 });
 
 app.use(bodyParser.json());
@@ -65,6 +64,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(hmcConfig.port);
-Logger.info('HMC: System running on port ' + hmcConfig.port);
+Logger.info('HMC: HTTP Server running on port ' + hmcConfig.port);
 
 scheduler.start();
