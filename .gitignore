@@ -1,4 +1,5 @@
 node_modules
 .idea
 client/public/lib
+client/coverage
 *.log

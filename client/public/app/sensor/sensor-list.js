@@ -1,20 +1,15 @@
-(function () {
+(function() {
 
-  angular.module('app').controller('SensorListCtrl', function (MasterApi, $interval) {
+  angular.module('app').controller('SensorListCtrl', function(MasterApi) {
     var ctrl = this;
-    this.sensors = [];
-    MasterApi.getSensors().then(function (sensors) {
+    ctrl.sensors = [];
+    MasterApi.getSensors().then(function(sensors) {
       ctrl.sensors = sensors;
     });
 
-    //$interval(function() {
-      MasterApi.getSensors().then(function (sensors) {
-        ctrl.sensors = sensors;
-      });
-    //}, 10000);
   });
 
-  angular.module('app').directive('sensorList', function () {
+  angular.module('app').directive('sensorList', function() {
     return {
       scope: {},
       templateUrl: 'app/sensor/sensor-list.html',
