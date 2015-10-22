@@ -18,7 +18,7 @@ var Master = new ApiWrapper(TelldusAPI, HueAPI, ZWaveAPI, GenericAPI);
 // Listen for events here
 
 Bus.on(Events.CONTROL_DEVICE, function(message) {
-  Master.control(message.id, message);
+  Master.control(message.id, message, 'scheduler');
 });
 
 
@@ -88,7 +88,7 @@ exports.deleteGroup = (req, res) => Master
 // Control any device
 
 exports.control = (req, res) => Master
-  .control(req.params.id, req.body)
+  .control(req.params.id, req.body, 'user')
   .then(response => res.json(response))
   .catch(err => errorHandler(res, err));
 

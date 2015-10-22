@@ -189,8 +189,8 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     }
   };
 
-  var control = (id, params) => {
-    Logger.info('HMC: Control ' + params.type + ' ' + id + ' -> ' + params.action);
+  var control = (id, params, initiator) => {
+    Logger.info('HMC: Control ' + params.type + ' ' + id + ' -> ' + params.action + '. Triggered by: ' + initiator);
     switch (params.type) {
       case DeviceTypes.TELLDUS_DEVICE:
       case DeviceTypes.TELLDUS_GROUP:
