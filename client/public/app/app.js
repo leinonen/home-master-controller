@@ -1,6 +1,11 @@
 (function () {
 
-  var app = angular.module('app');
+  var app = angular.module('app', [
+    'ngCookies',
+    'ngResource',
+    'ui.router',
+    'angular-loading-bar'
+  ]);
 
   app.config(function ($stateProvider, $urlRouterProvider, RoutesProvider, $httpProvider) {
 
