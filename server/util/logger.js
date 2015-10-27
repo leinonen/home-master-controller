@@ -1,9 +1,10 @@
 // Very basic logger :)
 
 var log = (level, message) => {
-  var now = new Date();
-  var dateStr = now.toISOString().substring(0,10);
-  var timeStr = now.toISOString().substring(11,19);
+  var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+  var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
+  var dateStr = localISOTime.substring(0,10);
+  var timeStr = localISOTime.substring(11,19);
   var nowIso = dateStr + ' ' + timeStr;
   console.log('[%s][%s] ' + message, level, nowIso);
 };
