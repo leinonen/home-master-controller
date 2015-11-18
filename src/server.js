@@ -19,7 +19,7 @@ var Scheduler = require('./server/api/scheduler/scheduler');
 var scheduler = new Scheduler(ScheduleService);
 
 var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
-mongoose.connect(nconf.get('mongo:url'), mongoOpts);
+mongoose.connect(nconf.get('MONGO_URL'), mongoOpts);
 mongoose.connection.on('error', function(err) {
     winston.error('MongoDB: Connection error: ' + err);
     process.exit(-1);
