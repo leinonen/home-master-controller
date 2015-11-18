@@ -11,7 +11,7 @@ RUN npm install -g gulp bower
 
 # Install app dependencies
 RUN npm install && \
-    bower install
+    bower install --allow-root
 
 # Generate stylesheet
 RUN gulp less
