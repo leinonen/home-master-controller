@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app/device/device-list.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">app/device/device-list.js</span></h1>
+    <h2>
+        Statements: <span class="metric">11.29% <small>(7 / 62)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">0% <small>(0 / 28)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">4% <small>(1 / 25)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">11.29% <small>(7 / 62)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">app/device/</a> &#187; device-list.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function () {
+&nbsp;
+  var module = angular.module('app');
+&nbsp;
+  module.controller('DeviceListCtrl', <span class="fstat-no" title="function not covered" >function ($rootScope, $timeout, MasterApi, Message) {</span>
+<span class="cstat-no" title="statement not covered" >    var ctrl = this;</span>
+<span class="cstat-no" title="statement not covered" >    ctrl.devices = [];</span>
+<span class="cstat-no" title="statement not covered" >    ctrl.controlsActive = {};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.showControls = <span class="fstat-no" title="function not covered" >function(device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return ctrl.controlsActive[device.id] === true;</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.toggleShowControls = <span class="fstat-no" title="function not covered" >function(device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (ctrl.controlsActive[device.id] === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        ctrl.controlsActive[device.id] = true;</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        ctrl.controlsActive[device.id] = !ctrl.controlsActive[device.id];</span>
+      }
+    };
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function fetchDevices() {</span>
+<span class="cstat-no" title="statement not covered" >      MasterApi.getDevices().then(<span class="fstat-no" title="function not covered" >function (devices) {</span></span>
+<span class="cstat-no" title="statement not covered" >        ctrl.devices = devices;</span>
+      }).catch(<span class="fstat-no" title="function not covered" >function (err) {</span>
+<span class="cstat-no" title="statement not covered" >        Message.danger(err.data.statusCode + ' : ' + err.data.message);</span>
+      });
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    fetchDevices();</span>
+&nbsp;
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function fetchAndUpdate(device) {</span>
+<span class="cstat-no" title="statement not covered" >      MasterApi.getDevice(device.id, device.type)</span>
+      .then(<span class="fstat-no" title="function not covered" >function(dev) {</span>
+<span class="cstat-no" title="statement not covered" >        for(var i=0; i&lt;ctrl.devices.length; i++){</span>
+<span class="cstat-no" title="statement not covered" >          if (ctrl.devices[i].id === dev.id) {</span>
+<span class="cstat-no" title="statement not covered" >            ctrl.devices[i] = dev;</span>
+<span class="cstat-no" title="statement not covered" >            break;</span>
+          }
+        }
+      })
+      .catch(<span class="fstat-no" title="function not covered" >function (err) {</span>
+<span class="cstat-no" title="statement not covered" >        Message.danger(err.data.statusCode + ' : ' + err.data.message);</span>
+      });
+    }
+&nbsp;
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function control(device, params) {</span>
+<span class="cstat-no" title="statement not covered" >      params.type = device.type;</span>
+<span class="cstat-no" title="statement not covered" >      MasterApi.control(device.id, params)</span>
+      .then(<span class="fstat-no" title="function not covered" >function(status) {</span>
+<span class="cstat-no" title="statement not covered" >          $timeout(<span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >            fetchAndUpdate(device);</span>
+          }, 200);
+      })
+      .catch(<span class="fstat-no" title="function not covered" >function (err) {</span>
+<span class="cstat-no" title="statement not covered" >        Message.danger(err.data.statusCode + ' : ' + err.data.message);</span>
+      });
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.showDevices = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >      return ctrl.devices.length &gt; 0;</span>
+    };
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.getState = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (device.motorized) {</span>
+<span class="cstat-no" title="statement not covered" >        return device.state.on ? 'Up' : 'Down';</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        if (device.state.on !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >          return device.state.on ? 'On' : 'Off';</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          return device.state.level;</span>
+        }
+      }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.buttonText = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (device.motorized) {</span>
+<span class="cstat-no" title="statement not covered" >        return device.state.on ? 'Bring Down' : 'Bring Up';</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        return device.state.on ? 'Turn Off' : 'Turn On';</span>
+      }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.colorLoopText = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return device.state.effect === 'none' ? 'Enable' : 'Disable';</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.toggleColorLoop = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (device.state.effect === 'none') {</span>
+<span class="cstat-no" title="statement not covered" >        control(device, {action: 'colorloop-on'});</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        control(device, {action: 'colorloop-off'});</span>
+      }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.toggleDevice = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (device.state.on) {</span>
+<span class="cstat-no" title="statement not covered" >        control(device, {action: device.motorized ? 'down' : 'off'});</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        control(device, {action: device.motorized ? 'up' : 'on'});</span>
+      }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.setLevel = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      control(device, {action: 'level', value: device.state.level});</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.setBrightness = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      control(device, {action: 'bri', value: device.state.bri});</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.setSaturation = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      control(device, {action: 'sat', value: device.state.sat});</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.setHue = <span class="fstat-no" title="function not covered" >function (device) {</span></span>
+<span class="cstat-no" title="statement not covered" >      control(device, {action: 'hue', value: device.state.hue});</span>
+    };
+&nbsp;
+  });
+&nbsp;
+  module.directive('deviceList', <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      scope: {},
+      templateUrl: 'app/device/device-list.html',
+      replace: true,
+      controller: 'DeviceListCtrl',
+      controllerAs: 'ctrl'
+    };
+  });
+&nbsp;
+})();
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 13 2015 21:45:39 GMT+0200 (CEST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

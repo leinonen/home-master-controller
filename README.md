@@ -25,7 +25,7 @@ Uses MongoDB for storage. Make sure you have it!
 
 ## Installation
 
-Copy .hmc.conf.example to .hmc.conf in your home directory, and edit to fit your needs.
+Edit config.json to fit your needs.
 
 ```
 sudo npm install

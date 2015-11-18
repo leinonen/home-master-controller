@@ -1,0 +1,13 @@
+hmc:
+  build: .
+#  links:
+#    - mongo
+  expose:
+    - 80
+  environment:
+    - PORT=80
+
+#mongo:
+#  image: dhermanns/rpi-mongo
+#  ports:
+#   - "27017:27017"

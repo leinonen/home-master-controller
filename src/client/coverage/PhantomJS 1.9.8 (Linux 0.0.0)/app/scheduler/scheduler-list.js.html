@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app/scheduler/scheduler-list.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">app/scheduler/scheduler-list.js</span></h1>
+    <h2>
+        Statements: <span class="metric">10.71% <small>(3 / 28)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">0% <small>(0 / 12)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">8.33% <small>(1 / 12)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">10.71% <small>(3 / 28)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">app/scheduler/</a> &#187; scheduler-list.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function () {
+&nbsp;
+  angular.module('app').controller('SchedulerListCtrl', <span class="fstat-no" title="function not covered" >function (SchedulerService, MasterApi) {</span>
+<span class="cstat-no" title="statement not covered" >    var ctrl = this;</span>
+<span class="cstat-no" title="statement not covered" >    ctrl.schedules = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    SchedulerService.getSchedules().then(<span class="fstat-no" title="function not covered" >function (schedules) {</span></span>
+<span class="cstat-no" title="statement not covered" >      ctrl.schedules = schedules;</span>
+<span class="cstat-no" title="statement not covered" >      ctrl.schedules</span>
+        .filter(<span class="fstat-no" title="function not covered" >function (s) {</span>
+<span class="cstat-no" title="statement not covered" >          return s.items.length &gt; 0;</span>
+        })
+        .forEach(<span class="fstat-no" title="function not covered" >function (s) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (s.sunset) {</span>
+<span class="cstat-no" title="statement not covered" >            s.time = 'Sunset';</span>
+          } else <span class="cstat-no" title="statement not covered" >if (s.sunrise) {</span>
+<span class="cstat-no" title="statement not covered" >            s.time = 'Sunrise';</span>
+          }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          s.items</span>
+            .forEach(<span class="fstat-no" title="function not covered" >function (item) {</span>
+<span class="cstat-no" title="statement not covered" >              MasterApi</span>
+                .getDevice(item.id, item.type)
+                .then(<span class="fstat-no" title="function not covered" >function (device) {</span>
+<span class="cstat-no" title="statement not covered" >                  console.log(s.name + ' : ' + device.name);</span>
+<span class="cstat-no" title="statement not covered" >                  for (var x = 0; x &lt; ctrl.schedules.length; x++) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (ctrl.schedules[x]._id === s._id) {</span>
+<span class="cstat-no" title="statement not covered" >                      ctrl.schedules[x].devices = ctrl.schedules[x].devices || [];</span>
+<span class="cstat-no" title="statement not covered" >                      ctrl.schedules[x].devices.push(device);</span>
+                    }
+                  }
+                });
+            });
+&nbsp;
+        });
+&nbsp;
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.checkDay = <span class="fstat-no" title="function not covered" >function (day, arr) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return arr.filter(<span class="fstat-no" title="function not covered" >function (a) {</span></span>
+<span class="cstat-no" title="statement not covered" >          return a === day;</span>
+        }).length &gt; 0;
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.getIcon = <span class="fstat-no" title="function not covered" >function (day, arr) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return ctrl.checkDay(day, arr) ? 'text-success glyphicon glyphicon-ok' : '';</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    ctrl.getDayClass = <span class="fstat-no" title="function not covered" >function (day, arr) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return ctrl.checkDay(day, arr) ? 'text-success' : '';</span>
+    };
+  });
+&nbsp;
+&nbsp;
+  angular.module('app').directive('schedulerList', <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      replace: true,
+      templateUrl: 'app/scheduler/scheduler-list.html',
+      controller: 'SchedulerListCtrl',
+      controllerAs: 'ctrl'
+    }
+  })
+&nbsp;
+})();</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 13 2015 21:45:39 GMT+0200 (CEST)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
