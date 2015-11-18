@@ -2,8 +2,10 @@ hmc:
   build: .
 #  links:
 #    - mongo
-  expose:
-    - 80
+#  expose:
+#    - 80
+  ports:
+    - "80:80"
   environment:
     - PORT=80
 
