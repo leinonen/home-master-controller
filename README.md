@@ -32,14 +32,14 @@ Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 
 If you want to use Z-Wave, make sure you have installed your RaZberry z-wave controller first.
 
-Edit config.json to fit your needs. Default username and password.
+Edit config.json to fit your needs, for example default username and password.
 
 ```
 $ cd src
 $ sudo npm install
 $ bower install
 ```
-And now, you run the appication:
+And now, you run the application:
 
 ```
 $ node server.js
