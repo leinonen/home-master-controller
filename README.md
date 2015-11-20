@@ -49,8 +49,8 @@ $ node server.js --PORT=8000 --MONGO_URL=mongoserver.myhost:27017/hmc_test
 I prefer using HypriotOS, because docker and docker-compose are pre-installed.
 The docker-compose.yml uses a linked mongodb image, so you don't need to have it installed.
 ```
-docker-compose build
-docker-compose up
+$ docker-compose build
+$ docker-compose up
 ```
 
 Also, make sure the time is set correctly on your system for the scheduler to work properly.
