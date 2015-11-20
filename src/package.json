@@ -20,7 +20,7 @@
     "jsonwebtoken": "^5.0.5",
     "lodash": "^3.10.1",
     "mongoose": "^4.0.2",
-    "mongoose-q": "0.0.17",
+    "mongoose-q": "0.1.0",
     "nconf": "^0.8.2",
     "oauth": "^0.9.12",
     "passport": "^0.3.0",

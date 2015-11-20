@@ -7,98 +7,36 @@
 var Promise = require('../../util/promise');
 var DeviceTypes = require('./device-types');
 var DeviceActions = require('./device-actions');
-var Schedule = require('../scheduler/schedule.model');
-var Events = require('../scheduler/events');
-var Bus = require('../../util/bus');
 var winston = require('winston');
 
-var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
-  var TelldusAPI = telldus;
-  var HueAPI = hue;
-  var ZWaveAPI = zwave;
-  var GenericAPI = generic;
+module.exports = function(Telldus, Hue, ZWave, Generic) {
 
-  var ZWAVE_SENSOR = (id) => ZWaveAPI
-    .sensor(id)
-    .then(ZWaveAPI.transformSensor)
-    .catch(serviceDisabled);
+  let ZWAVE_SENSOR = (id) => ZWave.sensor(id).then(ZWave.transformSensor).catch(noService);
+  let ZWAVE_SENSORS = () => ZWave.sensors().then(ZWave.transformSensors).catch(noServices);
+  let ZWAVE_DEVICE = (id) => ZWave.device(id).then(ZWave.transformDevice).catch(noService);
+  let ZWAVE_DEVICES = () => ZWave.devices().then(ZWave.transformDevices).catch(noServices);
 
-  var ZWAVE_SENSORS = () => ZWaveAPI
-    .sensors()
-    .then(ZWaveAPI.transformSensors)
-    .catch(serviceDisabledArray);
+  let HUE_DEVICE = (id) => Hue.light(id) .then(Hue.transformDevice).catch(noService);
+  let HUE_DEVICES = () => Hue.lights().then(Hue.transformDevices).catch(noServices);
+  let HUE_GROUP = (id) => Hue.group(id).then(Hue.transformGroup).catch(noService);
+  let HUE_GROUPS = () => Hue.groups().then(Hue.transformGroups).catch(noServices);
 
-  var ZWAVE_DEVICE = (id) => ZWaveAPI
-    .device(id)
-    .then(ZWaveAPI.transformDevice)
-    .catch(serviceDisabled);
+  let TELLDUS_DEVICE = (id) => Telldus.device(id).then(Telldus.transformDevice).catch(noService);
+  let TELLDUS_DEVICES = () => Telldus.devices().then(Telldus.transformDevices).catch(noServices);
+  var TELLDUS_GROUP = (id) => Telldus.group(id).then(Telldus.transformGroup).catch(noService);
+  var TELLDUS_GROUPS = () => Telldus.groups().then(Telldus.transformGroups).catch(noServices);
+  var TELLDUS_SENSOR = (id) => Telldus.sensor(id).catch(noService);
+  var TELLDUS_SENSORS = () => Telldus.sensors()
+    .then(sensors => Promise.all(sensors.map(sensor => Telldus.sensor(sensor.id))))
+    .then(Telldus.transformSensors)
+    .catch(noServices);
 
-  var ZWAVE_DEVICES = () => ZWaveAPI
-    .devices()
-    .then(ZWaveAPI.transformDevices)
-    .catch(serviceDisabledArray);
+  var GENERIC_GROUP  = (id) => Generic.group(id).then(Generic.transformGroup);
+  var GENERIC_GROUPS = () => Generic.groups().then(Generic.transformGroups);
 
-  var HUE_DEVICE = (id) => HueAPI
-    .light(id)
-    .then(HueAPI.transformDevice)
-    .catch(serviceDisabled);
+  var noService = (err) => Promise.reject(err);
 
-  var HUE_DEVICES = () => HueAPI
-    .lights()
-    .then(HueAPI.transformDevices)
-    .catch(serviceDisabledArray);
-
-  var HUE_GROUP = (id) => HueAPI
-    .group(id)
-    .then(HueAPI.transformGroup)
-    .catch(serviceDisabled);
-
-  var HUE_GROUPS = () => HueAPI
-    .groups()
-    .then(HueAPI.transformGroups)
-    .catch(serviceDisabledArray);
-
-  var TELLDUS_DEVICE = (id) => TelldusAPI
-    .device(id)
-    .then(TelldusAPI.transformDevice)
-    .catch(serviceDisabled);
-
-  var TELLDUS_DEVICES = () => TelldusAPI
-    .devices()
-    .then(TelldusAPI.transformDevices)
-    .catch(serviceDisabledArray);
-
-  var TELLDUS_GROUP = (id) => TelldusAPI
-    .group(id)
-    .then(TelldusAPI.transformGroup)
-    .catch(serviceDisabled);
-
-  var TELLDUS_GROUPS = () => TelldusAPI
-    .groups()
-    .then(TelldusAPI.transformGroups)
-    .catch(serviceDisabledArray);
-
-  var TELLDUS_SENSOR = (id) => TelldusAPI
-    .sensor(id)
-    .catch(serviceDisabled);
-
-  var TELLDUS_SENSORS = () => TelldusAPI
-    .sensors()
-    .then(sensors => Promise.all(sensors.map(sensor => TelldusAPI.sensor(sensor.id))))
-    .then(TelldusAPI.transformSensors)
-    .catch(serviceDisabledArray);
-
-  var GENERIC_GROUP = (id) => GenericAPI
-    .group(id)
-    .then(GenericAPI.transformGroup);
-
-  var GENERIC_GROUPS = ()   => GenericAPI
-    .groups()
-    .then(GenericAPI.transformGroups);
-
-  var serviceDisabled = (err) => Promise.reject(err);
-
-  var serviceDisabledArray = (err) => {
+  var noServices = (err) => {
     if (err.serviceDisabled && err.serviceDisabled === true) {
       return [];
     } else {
@@ -107,9 +45,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   };
 
   var getSensors = () => {
-    var promises = [];
-    promises.push(TELLDUS_SENSORS());
-    promises.push(ZWAVE_SENSORS());
+    let promises = [TELLDUS_SENSORS(), ZWAVE_SENSORS()];
     return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
   };
 
@@ -128,10 +64,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   };
 
   var getGroups = () => {
-    var promises = [];
-    promises.push(TELLDUS_GROUPS());
-    promises.push(HUE_GROUPS());
-    promises.push(GENERIC_GROUPS());
+    let promises = [TELLDUS_GROUPS(), HUE_GROUPS(), GENERIC_GROUPS()];
     return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
   };
 
@@ -149,10 +82,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   };
 
   var getDevices = () => {
-    var promises = [];
-    promises.push(TELLDUS_DEVICES());
-    promises.push(HUE_DEVICES());
-    promises.push(ZWAVE_DEVICES());
+    let promises = [TELLDUS_DEVICES(), HUE_DEVICES(), ZWAVE_DEVICES()];
     return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
   };
 
@@ -184,7 +114,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
 
   var groupDevices = (id, type) => {
     if (type === DeviceTypes.GENERIC_GROUP) {
-      return GenericAPI.groupDevices(id)
+      return Generic.groupDevices(id)
         .then(devices => Promise.all(devices.map(device => getDevice(device.id, device.type))));
     } else {
       return Promise.reject(type + ' not implemented');
@@ -192,12 +122,11 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   };
 
   var control = (id, params, initiator) => {
-    winston.info('HMC: Control ' + params.type + ' ' + id + ' -> ' + params.action + '. Triggered by: ' + initiator);
+    winston.info('HMC: Control %s %s -> %s. Triggered by: %s', params.type, id, params.action, initiator);
     switch (params.type) {
       case DeviceTypes.TELLDUS_DEVICE:
       case DeviceTypes.TELLDUS_GROUP:
-        return getDevice(id, params.type)
-          .then(device => controlTelldus(id, createTelldusParams(device, params)));
+        return getDevice(id, params.type).then(device => controlTelldus(id, telldusParam(device, params)));
 
       case DeviceTypes.HUE_DEVICE:
       case DeviceTypes.HUE_GROUP:
@@ -215,7 +144,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     }
   };
 
-  var groupState = (id) => GenericAPI.groupDevices(id)
+  var groupState = (id) => Generic.groupDevices(id)
     .then(items => Promise.all(items.map(item => getDevice(item.id, item.type))).then(devices => {
       return {
         id: id,
@@ -227,9 +156,9 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
       }
     }));
 
-  var createGenericGroup = (group) => GenericAPI.create(group);
-  var updateGenericGroup = (id, group) => GenericAPI.update(id, group);
-  var removeGenericGroup = (id) => GenericAPI.remove(id);
+  var createGenericGroup = (group) => Generic.create(group);
+  var updateGenericGroup = (id, group) => Generic.update(id, group);
+  var removeGenericGroup = (id) => Generic.remove(id);
 
   var controlGenericGroup = (id, params) => {
     if (params.action === DeviceActions.ACTION_ON ||
@@ -238,7 +167,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     }
   };
 
-  var createTelldusParams = (item, params) => {
+  var telldusParam = (item, params) => {
     var telldusParams = {
       action: params.action,
       type: params.type
@@ -255,7 +184,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     return telldusParams;
   };
 
-  var controlDevicesInGroup = (id, params) => GenericAPI
+  var controlDevicesInGroup = (id, params) => Generic
     .groupDevices(id)
     .then(items => Promise.all(items.map(item => getDevice(item.id, item.type))))
     .then(items => {
@@ -265,7 +194,7 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
         switch (item.type) {
           case DeviceTypes.TELLDUS_DEVICE:
           case DeviceTypes.TELLDUS_GROUP:
-            return controlTelldus(item.id, createTelldusParams(item, params));
+            return controlTelldus(item.id, telldusParam(item, params));
 
           case DeviceTypes.HUE_DEVICE:
           case DeviceTypes.HUE_GROUP:
@@ -287,16 +216,16 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     winston.info('TELLDUS: Control device -> ' + id + ', action: ' + params.action);
     switch (params.action) {
       case DeviceActions.ACTION_ON:
-        return TelldusAPI.turnOn(id);
+        return Telldus.turnOn(id);
 
       case DeviceActions.ACTION_OFF:
-        return TelldusAPI.turnOff(id);
+        return Telldus.turnOff(id);
 
       case DeviceActions.ACTION_UP:
-        return TelldusAPI.goUp(id);
+        return Telldus.goUp(id);
 
       case DeviceActions.ACTION_DOWN:
-        return TelldusAPI.goDown(id);
+        return Telldus.goDown(id);
     }
   };
 
@@ -338,10 +267,10 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
     var hueParams = createHueParams(params);
     switch (params.type) {
       case DeviceTypes.HUE_DEVICE:
-        return HueAPI.setLightState(id, hueParams);
+        return Hue.setLightState(id, hueParams);
 
       case DeviceTypes.HUE_GROUP:
-        return HueAPI.setGroupAction(id, hueParams);
+        return Hue.setGroupAction(id, hueParams);
 
       default:
         return Promise.reject('controlHue: Unsupported type ' + params.type);
@@ -351,14 +280,14 @@ var ApiWrapper = module.exports = function(telldus, hue, zwave, generic) {
   var controlZWave = (id, params) => {
     switch (params.action) {
       case DeviceActions.ACTION_ON:
-        return ZWaveAPI.setOn(id);
+        return ZWave.setOn(id);
 
       case DeviceActions.ACTION_OFF:
-        return ZWaveAPI.setOff(id);
+        return ZWave.setOff(id);
 
       case DeviceActions.ACTION_LEVEL:
         winston.info('ZWAVE: setLevel: ' + params.value);
-        return ZWaveAPI.setLevel(id, params.value);
+        return ZWave.setLevel(id, params.value);
 
       default:
         return Promise.reject('Invalid action ' + params.action);

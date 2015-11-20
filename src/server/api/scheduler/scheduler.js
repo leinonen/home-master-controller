@@ -1,18 +1,19 @@
 'use strict';
 
-var SunCalc = require('suncalc');
-
-var Bus = require('../../util/bus');
+var Sun     = require('./sun');
+var Bus     = require('../../util/bus');
+var Events  = require('./events');
+var nconf   = require('nconf');
 var winston = require('winston');
-var Events = require('./events');
-var nconf = require('nconf');
+
+let dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
 module.exports = function(service) {
-  var _service = service;
-  var _schedulerTimerHandle = null;
-  var _schedules = [];
+  let _service = service;
+  let _schedulerTimerHandle = null;
+  let _schedules = [];
 
-  var start = () => {
+  let start = () => {
     Bus.on(Events.UPDATE_SCHEDULER, updateScheduler);
     Bus.on(Events.SCHEDULE_TRIGGER, scheduleTrigger);
     Bus.emit(Events.UPDATE_SCHEDULER);
@@ -25,11 +26,9 @@ module.exports = function(service) {
     winston.info('SCHEDULER: Started');
   };
 
-  var stop = () => {
-    clearInterval(_schedulerTimerHandle);
-  };
+  let stop = () => clearInterval(_schedulerTimerHandle);
 
-  var updateScheduler = () => {
+  let updateScheduler = () => {
     setTimeout(() => {
       fetchSchedules().then(schedules => {
         _schedules = schedules;
@@ -43,7 +42,6 @@ module.exports = function(service) {
   var fetchSchedules = () => _service.findAll();
 
   var runSchedule = (now, schedule) => {
-    let dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     let currentDay = dayMap[now.getDay()];
     let currentTime = getTimeStamp(now);
     let offset = getRandomInt(0, schedule.random || 0);
@@ -51,20 +49,23 @@ module.exports = function(service) {
 
     // Handle sunrise or sunset
     if (schedule.sunrise) {
-      scheduleTime = getSunriseTime();
+      scheduleTime = Sun.sunriseTime();
+
     } else if (schedule.sunset) {
-      scheduleTime = getSunsetTime();
+      scheduleTime = Sun.sunsetTime();
     }
 
     if (scheduleTime === currentTime) {
-      Bus.emit(Events.SCHEDULE_TRIGGER, { schedule: schedule, scheduleTime: scheduleTime, currentDay: currentDay});
+      Bus.emit(Events.SCHEDULE_TRIGGER, {
+        schedule: schedule,
+        scheduleTime: scheduleTime,
+        currentDay: currentDay
+      });
     }
   };
 
   var triggerSchedule = (schedule, scheduleTime, currentDay) => {
-    winston.info('SCHEDULER: Trigger Schedule -> ('+schedule.name+
-      ', scheduleTime: '+scheduleTime+', random: '+schedule.random+', sunset: '+
-      (schedule.sunset ? 'yes' : 'no')+', sunrise: '+(schedule.sunrise ? 'yes' : 'no')+')');
+    winston.info('SCHEDULER: Trigger Schedule');
 
     schedule.weekdays.forEach(wd => {
       if (wd === currentDay) {
@@ -73,19 +74,18 @@ module.exports = function(service) {
     });
   };
 
-  var scheduleTrigger = (message) =>
-    triggerSchedule(message.schedule, message.scheduleTime,  message.currentDay);
+  let scheduleTrigger = (msg) => triggerSchedule(msg.schedule, msg.scheduleTime,  msg.currentDay);
 
-  var triggerDevice = (item, action) => {
-    winston.debug('SCHEDULER: Trigger Device -> (' + item.id + ', ' + item.type + ', ' + action + ')');
-    var message = {
+  let triggerDevice = (item, action) => {
+    Bus.emit(Events.CONTROL_DEVICE, {
       id: item.id,
       action: action,
       type: item.type
-    };
-    Bus.emit(Events.CONTROL_DEVICE, message);
+    });
+    winston.info('SCHEDULER: Trigger Device -> (%s, %s, %s)', item.id, item.type, action);
   };
 
+  // TODO: refctor this ugly hack!
   var timeOffset = (time, offsetMinutes) => {
     let d = new Date();
     d.setHours(time.substring(0, 2));
@@ -94,26 +94,20 @@ module.exports = function(service) {
     return d.toString().substring(16, 21);
   };
 
-  var getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-  var getTimeStamp = (date) => date.toString().substring(16, 24);
-  var getSun = () => SunCalc.getTimes(
-    new Date(),
-    nconf.get('location:lat'),
-    nconf.get('location:lng')
-  );
-  var getSunsetTime  = () => getTimeStamp(getSun().sunset);
-  var getSunriseTime = () => getTimeStamp(getSun().sunrise);
+  let getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
+  let getTimeStamp = (date) => date.toString().substring(16, 24);
 
   return {
-    start: start,
-    stop: stop,
-    getSchedules: getSchedules,
-    fetchSchedules: fetchSchedules,
-    timeOffset: timeOffset,
-    getTimeStamp: getTimeStamp,
-    runSchedule: runSchedule,
-    triggerSchedule:triggerSchedule,
-    scheduleTrigger:scheduleTrigger,
-    triggerDevice:triggerDevice
+    stop:            stop,
+    start:           start,
+    timeOffset:      timeOffset,
+    runSchedule:     runSchedule,
+    getSchedules:    getSchedules,
+    getTimeStamp:    getTimeStamp,
+    triggerDevice:   triggerDevice,
+    fetchSchedules:  fetchSchedules,
+    scheduleTrigger: scheduleTrigger,
+    triggerSchedule: triggerSchedule
   };
 };

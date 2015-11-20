@@ -19,22 +19,19 @@ var Scheduler = require('./server/api/scheduler/scheduler');
 var scheduler = new Scheduler(ScheduleService);
 
 var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
-winston.info('Connecting to database: ' + nconf.get('MONGO_URL'));
+winston.info('Connecting to database: %s', nconf.get('MONGO_URL'));
 
 mongoose.connect(nconf.get('MONGO_URL'), mongoOpts);
-mongoose.connection.on('error', function(err) {
+mongoose.connection.on('error', err => {
     winston.error('MongoDB: Connection error: ' + err);
     process.exit(-1);
   }
 );
 
-User.find(function(err, users) {
+User.find((err, users) => {
   if (users.length === 0) {
     winston.info('HMC: No users found in db');
-    User.create(nconf.get('defaultUser'), function() {
-        winston.info('HMC: Created default user');
-      }
-    );
+    User.create(nconf.get('defaultUser'), () => winston.info('HMC: Created default user'));
   } else {
     winston.info('HMC: Default user found');
   }
@@ -43,8 +40,10 @@ User.find(function(err, users) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/client/public')));
 app.use(passport.initialize());
+
+// Serve static content
+app.use(express.static(path.join(__dirname, '/client/public')));
 
 // Persist sessions with mongoStore
 // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
@@ -70,6 +69,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(nconf.get('PORT'));
-winston.info('HMC: HTTP Server running on port ' + nconf.get('PORT'));
+winston.info('HMC: HTTP Server running on port %d', nconf.get('PORT'));
 
 scheduler.start();
