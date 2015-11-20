@@ -1,6 +1,6 @@
 {
   "PORT": 8080,
-  "MONGO_URL": "192.168.83.155:27017/homeMasterController_dev",
+  "MONGO_URL": "mongo:27017/hmc_test",
   "location": {
     "lat": 57.7,
     "lng": 11.9667

@@ -1,4 +1,4 @@
-FROM hypriot/rpi-node:4.1.2
+FROM hypriot/rpi-node:4.1.2-slim
 
 # Adding source files into container
 ADD src/ /src
