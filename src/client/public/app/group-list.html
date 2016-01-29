@@ -1,0 +1,42 @@
+<div>
+<div class="col-sm-12 hmc-button-row">
+  <button ui-sref="root.groups.create" class="btn btn-default pull-right">
+    <span class="glyphicon glyphicon-plus"></span> Create group</button>
+</div>
+<div class="group-list">
+  <p ng-show="ctrl.groups.length === 0">Loading groups..</p>
+
+  <div ng-repeat="group in ctrl.groups | orderBy:'name'" class="group-card">
+
+    <div class="row-separator">
+      <div class="row">
+        <div class="col-sm-9 device-name">
+          <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}<br/>
+            <span class="badge {{group.type}}">{{group.type}}</span>
+          </a>
+        </div>
+        <div class="col-sm-3">
+          <button ng-click="ctrl.toggleGroup(group)" type="button"
+                  class="btn btn-default pull-right"
+                  ng-class="{'btn-primary':group.state.on}">
+            {{ctrl.buttonText(group)}}
+          </button>
+
+        </div>
+      </div>
+
+      <div class="row group-device-card-container">
+        <div class="col-md-4"   ng-if="group.deviceList" ng-repeat="device in group.deviceList">
+          <div class="device-card">
+            <span class="device-name">{{device.name}}</span>
+            <span class="device-name device-level pull-right">{{device.state.on ? 'ON':'OFF'}}</span><br/>
+            <span class="badge {{device.type}}">{{device.type}}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>

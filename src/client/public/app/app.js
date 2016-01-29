@@ -27,12 +27,17 @@
     });
 
     function addRoute(route){
+      var containerNode = {};
+      if (route.template) {
+        containerNode.template = route.template;
+      } else if (route.templateUrl) {
+        containerNode.templateUrl = route.templateUrl;
+      }
+
       $stateProvider.state(route.state, {
         url: route.url,
         views: {
-          'container@': {
-            templateUrl: route.templateUrl
-          }
+          'container@': containerNode
         },
         authenticate: route.authenticate || false
       });

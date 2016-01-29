@@ -1,0 +1,51 @@
+<div class="panel panel-default" ng-class="{'panel-success': ctrl.telldus.enabled}">
+  <div class="panel-heading">
+    <h3 class="panel-title">Telldus Live</h3>
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+      <p>Enable telldus integration</p>
+      <input type="checkbox"
+             ng-model="ctrl.telldus.enabled"
+             class="form-control config-checkbox">
+    </div>
+
+    <div class="form-group">
+      <p>Endpoint</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.telldus.endpoint"
+             ng-disabled="!ctrl.telldus.enabled"
+             placeholder="Endpoint"/>
+    </div>
+
+    <div class="form-group">
+      <p>Public key</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.telldus.publicKey"
+             ng-disabled="!ctrl.telldus.enabled"
+             placeholder="public key"/>
+    </div>
+    <div class="form-group">
+      <p>Private key</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.telldus.privateKey"
+             ng-disabled="!ctrl.telldus.enabled"
+             placeholder="private key"/>
+    </div>
+    <div class="form-group">
+      <p>Access token</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.telldus.accessToken"
+             ng-disabled="!ctrl.telldus.enabled"
+             placeholder="access token"/>
+    </div>
+    <div class="form-group">
+      <p>Access token secret</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.telldus.accessTokenSecret"
+             ng-disabled="!ctrl.telldus.enabled"
+             placeholder="access token secret"/>
+    </div>
+
+  </div>
+</div>

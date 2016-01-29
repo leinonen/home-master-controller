@@ -1,0 +1,12 @@
+<div class="sensor-card">
+
+  <div class="col-sm-8">{{ctrl.sensor.name}}<br/>
+    <span class="badge {{ctrl.sensor.type}}">{{ctrl.sensor.type}}:{{ctrl.sensor.data[0].name}}</span>
+  </div>
+  <div class="col-sm-4">
+    <span class="pull-right device-level">{{ctrl.sensor.data[0].value}}
+      <span ng-show="ctrl.isTemperatureSensor()">&deg; C</span>
+    </span>
+  </div>
+
+</div>

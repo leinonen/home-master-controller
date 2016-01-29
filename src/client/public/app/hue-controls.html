@@ -1,0 +1,66 @@
+<div class="hue-device-controls">
+  <div class="hue-controls">
+
+    <div class="panel panel-default">
+      <!--<div class="panel-heading">{{ctrl.device.manufacturername}} {{ctrl.device.modelid}}</div>-->
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-4">Brightness: {{ctrl.device.state.bri}}</div>
+          <div class="col-sm-8">
+            <input type='range'
+                   min='0'
+                   max='254'
+                   ng-model="ctrl.device.state.bri"
+                   ng-change="ctrl.setBrightness()"
+                   ng-disabled="ctrl.deviceDisabled()"/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">Saturation: {{ctrl.device.state.sat}}</div>
+          <div class="col-sm-8">
+            <input type='range'
+                   min='0'
+                   max='254'
+                   ng-model="device.state.sat"
+                   ng-change="ctrl.setSaturation()"
+                   ng-disabled="ctrl.deviceDisabled()"/>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">Hue: {{ctr.device.state.hue}}</div>
+          <div class="col-sm-8">
+            <select class="form-control"
+                    ng-model="ctrl.device.state.hue"
+                    ng-change="ctrl.setHue()"
+                    ng-disabled="ctrl.deviceDisabled()">
+              <option value="3000">Deep Orange</option>
+              <option value="12750">Yellow</option>
+              <option value="25500">Green</option>
+              <option value="46920">Blue</option>
+              <option value="56100">Pink</option>
+              <option value="65280">Red</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-4">Color looping</div>
+          <div class="col-sm-8">
+            <button ng-click="ctrl.toggleColorLoop()"
+                    type="button"
+                    class="btn btn-default"
+                    ng-class="{'btn-primary':ctrl.device.state.effect !== 'none'}">
+              {{ctrl.colorLoopText(device)}}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

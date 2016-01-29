@@ -1,0 +1,36 @@
+<div class="panel panel-default" ng-class="{'panel-success': ctrl.zwave.enabled}">
+  <div class="panel-heading">
+    <h3 class="panel-title">RaZberry Z-Wave Controller</h3>
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+      <p>Enable Z-Wave integration</p>
+      <input type="checkbox"
+             ng-model="ctrl.zwave.enabled"
+             class="form-control config-checkbox">
+    </div>
+
+    <div class="form-group">
+      <p>Endpoint url</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.zwave.endpoint"
+             ng-disabled="!ctrl.zwave.enabled"
+             placeholder="zwave endpoint"/>
+    </div>
+
+    <div class="form-group">
+      <p>Username</p>
+      <input class="form-control" type="text"
+             ng-model="ctrl.zwave.username"
+             ng-disabled="!ctrl.zwave.enabled"
+             placeholder="Username"/>
+    </div>
+    <div class="form-group">
+      <p>Password</p>
+      <input class="form-control" type="password"
+             ng-model="ctrl.zwave.password"
+             ng-disabled="!ctrl.zwave.enabled"
+             placeholder="zwave password"/>
+    </div>
+  </div>
+</div>
