@@ -3,7 +3,8 @@
   angular.module('app').directive('deviceCard', function () {
     return {
       scope: {
-        device: '='
+        device: '=',
+        controls: '='
       },
       templateUrl: 'app/device/device-card.html',
       replace: true,
@@ -12,6 +13,10 @@
 
       controller: function (DeviceManager) {
         var ctrl = this;
+
+        ctrl.controlsEnabled = function() {
+          return ctrl.controls === true;
+        };
 
         ctrl.canToggleDevice = function() {
           return ctrl.device.state.on !== undefined;

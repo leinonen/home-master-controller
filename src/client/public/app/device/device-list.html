@@ -2,6 +2,6 @@
   <p ng-show="!ctrl.showDevices()">Loading devices..</p>
 
   <div ng-repeat="device in ctrl.devices() | orderBy:'name'">
-      <device-card device="device"></device-card>
+      <device-card device="device" controls="true"></device-card>
   </div>
 </div>

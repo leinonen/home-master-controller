@@ -7,15 +7,16 @@
       </div>
       <div class="col-sm-3">
         <span class="device-name pull-right device-level" ng-show="ctrl.showDeviceLevel()">{{ctrl.device.state.level}}</span>
+        <span class="device-name device-level pull-right" ng-if="!ctrl.controlsEnabled()">{{ctrl.device.state.on ? 'ON':'OFF'}}</span><br/>
         <div class="btn-group pull-right">
-          <button ng-if="ctrl.isHueDevice()"
+          <button ng-if="ctrl.controlsEnabled() && ctrl.isHueDevice()"
                   ng-click="ctrl.toggleShowControls()"
                   type="button"
                   class="btn btn-default"
                   ng-class="{'btn-default':ctrl.showControls}">
             Modify
           </button>
-        <button ng-click="ctrl.toggleDevice()" ng-show="ctrl.canToggleDevice()"
+        <button ng-click="ctrl.toggleDevice()" ng-if="ctrl.controlsEnabled() && ctrl.canToggleDevice()"
                 type="button"
                 class="btn btn-default"
                 ng-class="{'btn-primary':ctrl.device.state.on}">

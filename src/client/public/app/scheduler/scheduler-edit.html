@@ -55,23 +55,16 @@
         </div>
 
         <div class="row group-device-card-container">
-          <div class="col-md-4" ng-repeat="device in ctrl.selectedDevices track by $index">
-            <div class="device-card">
-              <span class="device-name">{{device.name}}</span>
-              <span class="device-name device-level pull-right">{{device.state.on ? 'ON':'OFF'}}</span><br/>
-              <span class="badge {{device.type}}">{{device.type}}</span>
-            </div>
-          </div>
+          <device-card device="device" controls="false" ng-repeat="device in ctrl.selectedDevices track by $index"/>
         </div>
 
         <div class="row">
           <div class="col-sm-12 hmc-button-row">
-            <button type="button"
+            <button type="button" class="btn btn-danger pull"
                     ng-show="ctrl.isEditMode()"
-                    class="btn btn-danger pull" ng-click="ctrl.deleteSchedule(ctrl.schedule._id)">Delete Schedule
+                    ng-click="ctrl.deleteSchedule(ctrl.schedule._id)">Delete Schedule
             </button>
-            <button type="button"
-                    class="btn btn-primary pull-right"
+            <button type="button" class="btn btn-primary pull-right"
                     ng-click="ctrl.saveButtonClick()">Save
             </button>
 
@@ -82,33 +75,5 @@
     </div>
 
   </div>
-
-  <!--<div class="col-md-4">
-
-    <div class="row">
-      <div class="col-sm-12">
-
-        <div class="panel panel-default panel-success">
-          <div class="panel-heading">
-            <h3 class="panel-title">Selected devices</h3>
-          </div>
-          <div class="panel-body">
-
-        <ul class="list-group">
-          <li class="list-group-item" ng-repeat="item in ctrl.selectedDevices track by $index">
-          <span class="badge device-remove" ng-click="ctrl.removeDevice($index)"><span
-            class="glyphicon glyphicon-remove"></span></span>
-            <span class="badge">{{item.type}}</span>
-            {{item.name}}
-          </li>
-        </ul>
-            </div>
-          </div>
-
-      </div>
-    </div>
-
-  </div>-->
-
 
 </div>
