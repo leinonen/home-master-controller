@@ -1,7 +1,7 @@
 {
   "name": "home-master-controller",
   "version": "2.1.0",
-  "description": "",
+  "description": "Home automation in NodeJS",
   "main": "server.js",
   "scripts": {
     "test": "jasmine-node server/**/*.spec.js"
@@ -17,8 +17,6 @@
     "express": "^4.12.3",
     "express-jwt": "^3.1.0",
     "express-session": "^1.11.3",
-    "gulp-concat": "^2.6.0",
-    "gulp-cssnano": "^2.1.0",
     "jsonwebtoken": "^5.0.5",
     "lodash": "^3.10.1",
     "mongoose": "^4.0.2",
@@ -34,6 +32,8 @@
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-less": "^3.0.3"
+    "gulp-less": "^3.0.3",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.1.0"
   }
 }
