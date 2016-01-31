@@ -70,7 +70,7 @@ exports.deleteSchedule = (req, res) =>
 
 exports.sun = (req, res) => {
   res.json({
-    sunset: Sun.getSunsetTime(),
-    sunrise: Sun.getSunriseTime()
+    sunset: Sun.sunsetTime(),
+    sunrise: Sun.sunriseTime()
   });
 };

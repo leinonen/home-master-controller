@@ -14,20 +14,18 @@
             <input type="text" ng-model="ctrl.schedule.name" class="form-control" placeholder="Name.."/>
           </div>
           <div class="col-sm-7">
-            <p>Select devices</p>
-            <item-selector items="ctrl.devices"></item-selector>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-5">
             <p>Action</p>
             <select class="form-control" ng-model="ctrl.schedule.action">
               <option value="on">On</option>
               <option value="off">Off</option>
             </select>
           </div>
-          <div class="col-sm-4">
+        </div>
+
+        <weekday-selector weekdays="ctrl.weekdays"/>
+
+        <div class="row">
+          <div class="col-sm-3">
             <p>Time</p>
             <input type="text"
                    ng-model="ctrl.schedule.time"
@@ -50,42 +48,11 @@
             <p>Randomize (mins)</p>
             <input type="text" ng-model="ctrl.schedule.random" class="form-control" placeholder="0"/>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col-sm-12">
-            <p>Weekdays</p>
-            <table class="table">
-              <tr>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-                <th>Sun</th>
-              </tr>
-              <tr>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.mon" class="checkbox-inline"/></td>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.tue" class="checkbox-inline"/></td>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.wed" class="checkbox-inline"/></td>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.thu" class="checkbox-inline"/></td>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.fri" class="checkbox-inline"/></td>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.sat" class="checkbox-inline"/></td>
-                <td><input type="checkbox" ng-model="ctrl.weekdays.sun" class="checkbox-inline"/></td>
-              </tr>
-            </table>
-
-            <div class="btn-group pull-right" role="group" aria-label="...">
-              <button type="button" class="btn btn-default" ng-click="ctrl.selectWorkdays()">Workdays</button>
-              <button type="button" class="btn btn-default" ng-click="ctrl.selectWeekend()">Weekend</button>
-              <button type="button" class="btn btn-default" ng-click="ctrl.selectFullWeek()">All</button>
-            </div>
-
-
+          <div class="col-sm-6">
+            <p>Select devices</p>
+            <item-selector items="ctrl.devices"></item-selector>
           </div>
         </div>
-
 
         <div class="row group-device-card-container">
           <div class="col-md-4" ng-repeat="device in ctrl.selectedDevices track by $index">
