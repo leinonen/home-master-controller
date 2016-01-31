@@ -5,7 +5,7 @@
       scope: {
         device: '='
       },
-      templateUrl: 'app/device-card.html',
+      templateUrl: 'app/device/device-card.html',
       replace: true,
       controllerAs: 'ctrl',
       bindToController: true,

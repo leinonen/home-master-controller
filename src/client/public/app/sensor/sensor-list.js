@@ -12,7 +12,7 @@
   angular.module('app').directive('sensorList', function() {
     return {
       scope: {},
-      templateUrl: 'app/sensor-list.html',
+      templateUrl: 'app/sensor/sensor-list.html',
       replace: true,
       controller: 'SensorListCtrl',
       controllerAs: 'ctrl'

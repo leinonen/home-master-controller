@@ -135,7 +135,7 @@
   module.directive('groupEdit', function() {
     return {
       scope: {},
-      templateUrl: 'app/group-edit.html',
+      templateUrl: 'app/group/group-edit.html',
       controller: 'GroupCtrl',
       controllerAs: 'ctrl'
     }

@@ -75,7 +75,7 @@
   module.directive('groupList', function () {
     return {
       scope: {},
-      templateUrl: 'app/group-list.html',
+      templateUrl: 'app/group/group-list.html',
       replace: true,
       controller: 'GroupListCtrl',
       controllerAs: 'ctrl'

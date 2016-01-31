@@ -165,7 +165,7 @@
   angular.module('app').directive('schedulerEdit', function() {
     return {
       replace: true,
-      templateUrl: 'app/scheduler-edit.html',
+      templateUrl: 'app/scheduler/scheduler-edit.html',
       controller: 'ScheduleCtrl',
       controllerAs: 'ctrl'
     }

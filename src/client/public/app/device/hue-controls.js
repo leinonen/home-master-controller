@@ -5,7 +5,7 @@
       scope: {
         device: '='
       },
-      templateUrl: 'app/hue-controls.html',
+      templateUrl: 'app/device/hue-controls.html',
       replace: true,
       controllerAs: 'ctrl',
       bindToController: true,

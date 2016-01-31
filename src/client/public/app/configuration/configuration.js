@@ -60,7 +60,7 @@
   module.directive('editConfiguration', function () {
     return {
       scope: {},
-      templateUrl: 'app/configuration-form.html',
+      templateUrl: 'app/configuration/configuration-form.html',
       controller: 'EditConfigCtrl',
       controllerAs: 'ctrl'
     }

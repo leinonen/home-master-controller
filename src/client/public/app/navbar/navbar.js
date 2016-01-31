@@ -113,7 +113,7 @@
   angular.module('app').directive('navbar', function() {
     return {
       scope: {},
-      templateUrl: 'app/navbar.html',
+      templateUrl: 'app/navbar/navbar.html',
       replace: true,
       controllerAs: 'ctrl',
       bindToController: true,

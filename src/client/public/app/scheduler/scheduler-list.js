@@ -56,7 +56,7 @@
   angular.module('app').directive('schedulerList', function () {
     return {
       replace: true,
-      templateUrl: 'app/scheduler-list.html',
+      templateUrl: 'app/scheduler/scheduler-list.html',
       controller: 'SchedulerListCtrl',
       controllerAs: 'ctrl'
     }

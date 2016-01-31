@@ -5,7 +5,7 @@
       scope: {
         sensor: '='
       },
-      templateUrl: 'app/sensor-card.html',
+      templateUrl: 'app/sensor/sensor-card.html',
       replace: true,
       controllerAs: 'ctrl',
       bindToController: true,

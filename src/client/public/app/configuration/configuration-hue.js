@@ -6,7 +6,7 @@
         scope: {
           hue: '='
         },
-        templateUrl: 'app/configuration-hue.html',
+        templateUrl: 'app/configuration/configuration-hue.html',
         controllerAs: 'ctrl',
         bindToController: true,
         controller: function() {

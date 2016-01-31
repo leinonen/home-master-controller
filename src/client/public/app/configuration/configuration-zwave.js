@@ -6,7 +6,7 @@
       scope: {
         zwave: '='
       },
-      templateUrl: 'app/configuration-zwave.html',
+      templateUrl: 'app/configuration/configuration-zwave.html',
       controllerAs: 'ctrl',
       bindToController: true,
       controller: function() {

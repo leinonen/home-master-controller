@@ -4,7 +4,7 @@ angular.module('app')
   .directive('settings', function() {
     return {
       scope: {},
-      templateUrl: 'app/settings.html',
+      templateUrl: 'app/user/settings.html',
       replace: true,
       controllerAs: 'ctrl',
       controller: function ($scope, User, Auth, Message) {

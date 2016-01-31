@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home Master Controller - BETA!</title>
+  <title>Home Master Controller</title>
   <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="lib/angular-loading-bar/build/loading-bar.css">
@@ -26,35 +26,36 @@
 
 <script src="app/app.js"></script>
 
-<script src="app/configuration.js"></script>
-<script src="app/configuration-hue.js"></script>
-<script src="app/configuration-zwave.js"></script>
-<script src="app/configuration-telldus.js"></script>
+<script src="app/configuration/configuration.js"></script>
+<script src="app/configuration/configuration-hue.js"></script>
+<script src="app/configuration/configuration-zwave.js"></script>
+<script src="app/configuration/configuration-telldus.js"></script>
 
-<script src="app/auth.service.js"></script>
-<script src="app/user.service.js"></script>
+<script src="app/user/auth.service.js"></script>
+<script src="app/user/user.service.js"></script>
+<script src="app/user/login.js"></script>
+<script src="app/user/settings.js"></script>
 
-<script src="app/login.js"></script>
-<script src="app/settings.js"></script>
+<script src="app/common/master-api.js"></script>
+<script src="app/common/message.js"></script>
+<script src="app/common/item-selector.js"></script>
 
-<script src="app/master-api.js"></script>
-<script src="app/message.js"></script>
-<script src="app/item-selector.js"></script>
-<script src="app/navbar.js"></script>
-<script src="app/sensor-card.js"></script>
-<script src="app/sensor-list.js"></script>
+<script src="app/navbar/navbar.js"></script>
 
-<script src="app/device-manager.js"></script>
-<script src="app/hue-controls.js"></script>
-<script src="app/device-card.js"></script>
-<script src="app/device-list.js"></script>
+<script src="app/sensor/sensor-card.js"></script>
+<script src="app/sensor/sensor-list.js"></script>
 
-<script src="app/group-list.js"></script>
-<script src="app/group-edit.js"></script>
+<script src="app/device/device-manager.js"></script>
+<script src="app/device/hue-controls.js"></script>
+<script src="app/device/device-card.js"></script>
+<script src="app/device/device-list.js"></script>
 
-<script src="app/scheduler.js"></script>
-<script src="app/scheduler-list.js"></script>
-<script src="app/scheduler-edit.js"></script>
+<script src="app/group/group-list.js"></script>
+<script src="app/group/group-edit.js"></script>
+
+<script src="app/scheduler/scheduler.js"></script>
+<script src="app/scheduler/scheduler-list.js"></script>
+<script src="app/scheduler/scheduler-edit.js"></script>
 
 </body>
 </html>

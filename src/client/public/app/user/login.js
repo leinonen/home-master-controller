@@ -4,7 +4,7 @@ angular.module('app')
   .directive('login', function() {
     return {
       scope: {},
-      templateUrl: 'app/login.html',
+      templateUrl: 'app/user/login.html',
       replace: true,
       controllerAs: 'ctrl',
       bindToController: true,

@@ -6,7 +6,7 @@
       scope: {
         items: '='
       },
-      templateUrl: 'app/item-selector.html',
+      templateUrl: 'app/common/item-selector.html',
       controllerAs: 'ctrl',
       bindToController: true,
       controller: function ($rootScope) {

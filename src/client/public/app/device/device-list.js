@@ -18,7 +18,7 @@
   module.directive('deviceList', function () {
     return {
       scope: {},
-      templateUrl: 'app/device-list.html',
+      templateUrl: 'app/device/device-list.html',
       replace: true,
       controller: 'DeviceListCtrl',
       controllerAs: 'ctrl'
