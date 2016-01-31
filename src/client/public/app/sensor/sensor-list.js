@@ -1,11 +1,11 @@
 (function() {
 
-  angular.module('app').controller('SensorListCtrl', function(MasterApi) {
+  angular.module('app').controller('SensorListCtrl', function(MasterApi, ErrorHandler) {
     var ctrl = this;
     ctrl.sensors = [];
     MasterApi.getSensors().then(function(sensors) {
       ctrl.sensors = sensors;
-    });
+    }).catch(ErrorHandler.handle);
 
   });
 

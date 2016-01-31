@@ -1,21 +1,23 @@
 (function() {
 
   angular.module('app')
-    .service('DeviceManager', function($rootScope, $timeout, MasterApi, Message) {
+    .service('DeviceManager', function($rootScope, $timeout, MasterApi, ErrorHandler) {
       var devices = [];
       var controlsEnabled = {};
 
       var fetchDevices = function() {
-        MasterApi.getDevices().then(function(deviceList) {
-          devices = deviceList;
-        });
+        devices = [];
+        MasterApi.getDevices()
+          .then(function(deviceList) {
+            devices = deviceList;
+          })
+        .catch(ErrorHandler.handle);
       };
 
       fetchDevices();
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
         if (toState.name === 'root.devices') {
-          console.log('fetching devices');
           fetchDevices();
         }
       });
@@ -29,9 +31,7 @@
             }
           }
         })
-        .catch(function(err) {
-          Message.danger(err.data.statusCode + ' : ' + err.data.message);
-        });
+        .catch(ErrorHandler.handle);
       };
 
       var control = function(device, params) {
@@ -41,9 +41,7 @@
             updateDevice(device);
           }, 200);
         })
-        .catch(function(err) {
-          Message.danger(err.data.statusCode + ' : ' + err.data.message);
-        });
+        .catch(ErrorHandler.handle);
       };
 
       this.getDevices = function() {

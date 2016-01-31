@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('app').controller('SchedulerListCtrl', function (SchedulerService, MasterApi) {
+  angular.module('app').controller('SchedulerListCtrl', function (SchedulerService, MasterApi, ErrorHandler) {
     var ctrl = this;
     ctrl.schedules = [];
 
@@ -18,24 +18,23 @@
             s.time = 'Sunrise';
           }
 
-          s.items
-            .forEach(function (item) {
-              MasterApi
-                .getDevice(item.id, item.type)
-                .then(function (device) {
-                  console.log(s.name + ' : ' + device.name);
-                  for (var x = 0; x < ctrl.schedules.length; x++) {
-                    if (ctrl.schedules[x]._id === s._id) {
-                      ctrl.schedules[x].devices = ctrl.schedules[x].devices || [];
-                      ctrl.schedules[x].devices.push(device);
-                    }
+          s.items.forEach(function (item) {
+            MasterApi
+              .getDevice(item.id, item.type)
+              .then(function (device) {
+                console.log(s.name + ' : ' + device.name);
+                for (var x = 0; x < ctrl.schedules.length; x++) {
+                  if (ctrl.schedules[x]._id === s._id) {
+                    ctrl.schedules[x].devices = ctrl.schedules[x].devices || [];
+                    ctrl.schedules[x].devices.push(device);
                   }
-                });
-            });
+                }
+              }).catch(ErrorHandler.handle);
+          });
 
         });
 
-    });
+    }).catch(ErrorHandler.handle);
 
     ctrl.checkDay = function (day, arr) {
       return arr.filter(function (a) {

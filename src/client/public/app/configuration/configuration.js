@@ -19,7 +19,7 @@
 
   });
 
-  module.controller('EditConfigCtrl', function (ConfigService, Message) {
+  module.controller('EditConfigCtrl', function (ConfigService, Message, ErrorHandler) {
     var ctrl = this;
     ctrl.config = {
       telldus: {
@@ -43,17 +43,16 @@
 
     ConfigService.getConfiguration().then(function (cfg) {
       ctrl.config = cfg;
-    }).catch(function (err) {
-      Message.danger(err.data);
-    });
+    }).catch(ErrorHandler.handle);
 
     ctrl.saveConfiguration = function () {
-      console.log('Saving configuration');
-      ConfigService.saveConfiguration(ctrl.config).then(function (cfg) {
-        ctrl.config = cfg;
-        console.log('Configuration saved');
-        Message.success('Configuration saved!');
-      });
+      ConfigService.saveConfiguration(ctrl.config)
+        .then(function (cfg) {
+          ctrl.config = cfg;
+          console.log('Configuration saved');
+          Message.success('Configuration saved!');
+        })
+        .catch(ErrorHandler.handle);
     }
   });
 

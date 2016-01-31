@@ -2,7 +2,7 @@
 
   var module = angular.module('app');
 
-  module.controller('GroupListCtrl', function (MasterApi) {
+  module.controller('GroupListCtrl', function (MasterApi, ErrorHandler) {
     var ctrl = this;
     this.groups = [];
 
@@ -12,7 +12,8 @@
         ctrl.groups.filter(function(g){
           return g.type === 'generic-group';
         }).forEach(function(g){
-          MasterApi.getGroupState(g.id).then(function(group){
+          MasterApi.getGroupState(g.id)
+            .then(function(group) {
             for (var i=0; i<ctrl.groups.length; i++){
               if (ctrl.groups[i].id === group.id){
                 ctrl.groups[i].state.on = group.state.on;
@@ -20,9 +21,9 @@
                 break;
               }
             }
-          });
+          }).catch(ErrorHandler.handle);
         });
-      });
+      }).catch(ErrorHandler.handle);
     }
 
     updateGroups();
@@ -31,7 +32,7 @@
       MasterApi.control(id, params).then(function (status) {
         console.log(status);
         setTimeout(updateGroups, 250);
-      }).catch(console.error);
+      }).catch(ErrorHandler.handle);
     }
 
     ctrl.buttonText = function (group) {

@@ -2,7 +2,7 @@
 
   angular.module('app')
     .controller('ScheduleCtrl',
-    function($rootScope, $state, $stateParams, SchedulerService, Message, MasterApi, Weekdays) {
+    function($rootScope, $state, $stateParams, SchedulerService, Message, ErrorHandler, MasterApi, Weekdays) {
       var ctrl = this;
       ctrl.devices = [];
       ctrl.selectedDevices = [];
@@ -40,7 +40,7 @@
               ctrl.selectedDevices.push(device);
             });
           })
-        });
+        }).catch(ErrorHandler.handle);
       }
 
 
@@ -80,7 +80,7 @@
         SchedulerService.deleteSchedule(id).then(function() {
           Message.success('Schedule deleted');
           $state.go('root.scheduler');
-        });
+        }).catch(ErrorHandler.handle);
       };
 
       ctrl.createSchedule = function() {
@@ -111,10 +111,7 @@
           console.log('create successful');
           Message.success('Successfully created schedule');
           $state.go('root.scheduler');
-        }).catch(function(err) {
-          console.error(err.data);
-          Message.danger(err.data);
-        });
+        }).catch(ErrorHandler.handle);
       };
 
       ctrl.updateSchedule = function() {
@@ -145,10 +142,7 @@
           console.log('update successful');
           Message.success('Successfully updated schedule');
           $state.go('root.scheduler');
-        }).catch(function(err) {
-          console.error(err.data);
-          Message.danger(err.data);
-        });
+        }).catch(ErrorHandler.handle);
       };
 
       ctrl.saveButtonClick = function(){
