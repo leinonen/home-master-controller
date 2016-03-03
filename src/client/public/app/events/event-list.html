@@ -1,0 +1,10 @@
+<div class="event-list">
+    <div class="col-sm-12 hmc-button-row">
+        <button ui-sref="root.events.create" class="btn btn-default pull-right">
+            <span class="glyphicon glyphicon-plus"></span> Create event</button>
+    </div>
+    <h1>Event list</h1>
+    <div ng-repeat="event in ctrl.events">
+        {{event.name}}
+    </div>
+</div>

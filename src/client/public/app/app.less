@@ -142,3 +142,57 @@ body {
 .group-edit .device-card {
   background-color: #17181b;
 }
+
+
+
+
+.btn.ng-enter, .btn.ng-leave, .btn.ng-move {
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+}
+
+.btn.ng-enter, .btn.ng-move {
+  opacity: 0;
+}
+
+.btn.ng-move.ng-move-active, .btn.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.btn.ng-leave {
+  opacity: 1;
+}
+
+.btn.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+// ---
+
+.device-card.animate-enter,
+.device-card.animate-leave
+{
+  -webkit-transition: 1300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -moz-transition: 1300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -ms-transition: 1300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -o-transition: 1300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  transition: 1300ms cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  position: relative;
+  display: block;
+}
+
+.device-card.animate-enter.animate-enter-active,
+.device-card.animate-leave {
+  opacity: 1;
+  top: 0;
+  height: 30px;
+}
+
+.device-card.animate-leave.animate-leave-active,
+.device-card.animate-enter {
+  opacity: 0;
+  top: -50px;
+  height: 0px;
+}

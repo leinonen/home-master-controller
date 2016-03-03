@@ -11,8 +11,21 @@
       controllerAs: 'ctrl',
       bindToController: true,
 
-      controller: function (DeviceManager) {
+      controller: function ($rootScope, Devices, Link) {
         var ctrl = this;
+
+        ctrl.hasLink = function(rel) {
+          return Link.hasLink(ctrl.device, rel);
+        };
+
+        ctrl.getLink = function(rel) {
+          return Link.getLink(ctrl.device, rel);
+        };
+
+        ctrl.handleLink = function(rel, value) {
+          var link = ctrl.getLink(rel);
+          Link.linkAction(link, value);
+        };
 
         ctrl.controlsEnabled = function() {
           return ctrl.controls === true;
@@ -26,44 +39,12 @@
           return ctrl.device.type === 'hue-device';
         };
 
-        ctrl.toggleShowControls = function() {
-          DeviceManager.toggleShowControls(ctrl.device);
-        };
-
-        ctrl.showControls = function() {
-          return DeviceManager.showControls(ctrl.device);
-        };
-
-        ctrl.deviceDisabled = function() {
-          return ctrl.device.state.on === false;
-        };
-
-        ctrl.showDeviceLevel = function() {
-          return ctrl.device.state.level !== undefined;
-        };
-
-        ctrl.setLevel = function () {
-          DeviceManager.setLevel(ctrl.device);
-        };
-
-        ctrl.toggleDevice = function () {
-          DeviceManager.toggleDevice(ctrl.device);
-        };
-
-        ctrl.getState = function () {
-          return DeviceManager.getState(ctrl.device);
-        };
-
         ctrl.buttonText = function () {
           if (ctrl.device.motorized) {
             return ctrl.device.state.on ? 'Bring Down' : 'Bring Up';
           } else {
             return ctrl.device.state.on ? 'Turn Off' : 'Turn On';
           }
-        };
-
-        ctrl.setLevel = function () {
-          DeviceManager.setLevel(ctrl.device);
         };
 
       }

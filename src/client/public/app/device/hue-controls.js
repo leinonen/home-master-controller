@@ -10,14 +10,30 @@
       controllerAs: 'ctrl',
       bindToController: true,
 
-      controller: function (DeviceManager) {
+      controller: function (DeviceManager, Link) {
         var ctrl = this;
+
+        ctrl.hasLink = function(rel) {
+          return Link.hasLink(ctrl.device, rel);
+        };
+
+        ctrl.getLink = function(rel) {
+          return Link.getLink(ctrl.device, rel);
+        };
+
+        ctrl.handleLink = function(rel, value) {
+          var link = ctrl.getLink(rel);
+          Link.linkAction(link, value).then(function(data) {
+            console.log(data);
+            //DeviceManager.refresh();
+          })
+        };
 
         ctrl.colorLoopText = function () {
           return ctrl.device.state.effect === 'none' ? 'Enable' : 'Disable';
         };
 
-        ctrl.toggleColorLoop = function () {
+/*        ctrl.toggleColorLoop = function () {
           DeviceManager.toggleColorLoop(ctrl.device);
         };
 
@@ -31,7 +47,7 @@
 
         ctrl.setHue = function () {
           DeviceManager.setHue(ctrl.device);
-        };
+        };*/
 
       }
     };

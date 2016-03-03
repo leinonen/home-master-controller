@@ -76,6 +76,23 @@
         icon: 'glyphicon glyphicon-cog',
         authenticate: true
       },
+/*      {
+        title: 'Events',
+        state: 'root.events',
+        url: '/events',
+        template: '<event-list/>',
+        position: 'left',
+        authenticate: true,
+        children:[{
+          title: 'Create Event',
+          state: 'root.events.create',
+          url: '/create',
+          template: '<create-event/>',
+          position: 'left',
+          hidden: true,
+          authenticate: true
+        }]
+      }, */
       {
         title: 'Login',
         url: '/login',

@@ -2,15 +2,17 @@
 
   var module = angular.module('app');
 
-  module.controller('DeviceListCtrl', function (DeviceManager) {
+  module.controller('DeviceListCtrl', function ($rootScope, Devices) {
     var ctrl = this;
 
+    $rootScope.$emit('fetchDevices');
+
     ctrl.devices = function() {
-      return DeviceManager.getDevices();
+      return Devices.getDevices();
     };
 
     ctrl.showDevices = function () {
-      return DeviceManager.getDevices().length > 0;
+      return Devices.getDevices().length > 0;
     };
 
   });

@@ -2,38 +2,34 @@
 
   var module = angular.module('app');
 
-  module.controller('GroupListCtrl', function (MasterApi, ErrorHandler) {
+  module.controller('GroupListCtrl', function ($rootScope, Groups, ErrorHandler, Link) {
     var ctrl = this;
-    this.groups = [];
 
-    function updateGroups() {
-      MasterApi.getGroups().then(function (groups) {
-        ctrl.groups = groups;
-        ctrl.groups.filter(function(g){
-          return g.type === 'generic-group';
-        }).forEach(function(g){
-          MasterApi.getGroupState(g.id)
-            .then(function(group) {
-            for (var i=0; i<ctrl.groups.length; i++){
-              if (ctrl.groups[i].id === group.id){
-                ctrl.groups[i].state.on = group.state.on;
-                ctrl.groups[i].deviceList = group.devices;
-                break;
-              }
-            }
-          }).catch(ErrorHandler.handle);
-        });
-      }).catch(ErrorHandler.handle);
-    }
+    $rootScope.$emit('fetchGroups');
 
-    updateGroups();
+    ctrl.hasGroups = function() {
+      return Groups.getGroups().length > 0;
+    };
 
-    function control(id, params) {
-      MasterApi.control(id, params).then(function (status) {
-        console.log(status);
-        setTimeout(updateGroups, 250);
-      }).catch(ErrorHandler.handle);
-    }
+    ctrl.getGroups = function() {
+      return Groups.getGroups();
+    };
+
+    ctrl.hasLink = function(group, rel) {
+      return Link.hasLink(group, rel);
+    };
+
+    ctrl.getLink = function(group, rel) {
+      return Link.getLink(group, rel);
+    };
+
+    ctrl.handleLink = function(group, rel, value) {
+      var link = ctrl.getLink(group, rel);
+      Link.linkAction(link, value).then(function(data) {
+        console.log(data);
+        //DeviceManager.refresh();
+      })
+    };
 
     ctrl.buttonText = function (group) {
       if (group.motorized) {
@@ -55,21 +51,7 @@
       return group.type === 'generic-group';
     };
 
-    ctrl.sendOn = function (group) {
-      control(group.id, {type: group.type, action: 'on'});
-    };
 
-    ctrl.sendOff = function (group) {
-      control(group.id, {type: group.type, action: 'off'});
-    };
-
-    ctrl.toggleGroup = function (group) {
-      if (group.state.on) {
-        control(group.id, {type: group.type, action: group.motorized ? 'down' : 'off'});
-      } else {
-        control(group.id, {type: group.type, action: group.motorized ? 'up' : 'on'});
-      }
-    };
 
   });
 

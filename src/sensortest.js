@@ -8,11 +8,15 @@
 */
 var bus = require('./server/util/bus');
 var mongoose = require('mongoose-q')();
-var hmcConfig = require('./server/hmc.conf');
-var ZWaveAPI = require('./server/api/hmc/zwave/zwave');
-var Hue = require('./server/api/hmc/hue/hue');
-mongoose.connect(hmcConfig.mongo.url, hmcConfig.mongo.opts);
+var ZWaveAPI = require('./server/components/device/zwave/zwave');
+var Hue = require('./server/components/device/hue/hue');
+var nconf = require('nconf');
+nconf.argv().env().file({ file: 'config.json' });
 
+var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
+console.log('Connecting to database: %s', nconf.get('MONGO_URL'));
+
+mongoose.connect(nconf.get('MONGO_URL'), mongoOpts);
 let previousValue = undefined;
 
 bus.on('sensor_change', (msg) => {
