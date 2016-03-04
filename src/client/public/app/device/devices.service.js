@@ -4,6 +4,7 @@
     .service('Devices', function($rootScope, $http, $timeout, ErrorHandler, Link, DevicesResource) {
       var service = this;
       var model = {};
+      var selectedDevice;
 
       $rootScope.$on('fetchDevices', function(event, message) {
         $timeout(function() {
@@ -22,6 +23,14 @@
 
       service.getDevices = function() {
         return model.devices || [];
+      };
+
+      service.selectDevice = function(device) {
+        selectedDevice = device;
+      };
+
+      service.isDeviceSelected = function(device) {
+        return selectedDevice && device.id === selectedDevice.id;
       };
 
       service.getLinks = function() {

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-9">
       <select class="form-control" ng-model="ctrl.selectedItem">
-        <option ng-repeat="item in ctrl.items track by $index" value="{{item}}">{{item.name}}</option>
+        <option ng-repeat="item in ctrl.items track by $index" value="{{item}}">{{item.name}} - {{item.type}}</option>
       </select>
     </div>
     <div class="col-sm-3">

@@ -87,7 +87,7 @@ body {
 .group-card,
 .sensor-card,
 .schedule-card {
-  min-height: 110px;
+  min-height: 24vh;
   border: #222326 1px solid;
   padding: 10px;
   margin-bottom: 20px;
@@ -143,8 +143,13 @@ body {
   background-color: #17181b;
 }
 
-
-
+.hue-device-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 45;
+  box-shadow: #000 0px 0px 34px;
+}
 
 .btn.ng-enter, .btn.ng-leave, .btn.ng-move {
   -webkit-transition: 0.5s linear all;

@@ -10,7 +10,7 @@
       controllerAs: 'ctrl',
       bindToController: true,
 
-      controller: function (DeviceManager, Link) {
+      controller: function (Link) {
         var ctrl = this;
 
         ctrl.hasLink = function(rel) {

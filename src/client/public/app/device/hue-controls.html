@@ -1,7 +1,10 @@
 <div class="hue-device-controls">
   <div class="hue-controls">
 
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Modify parameters</h3>
+      </div>
       <!--<div class="panel-heading">{{ctrl.device.manufacturername}} {{ctrl.device.modelid}}</div>-->
       <div class="panel-body">
 
@@ -46,10 +49,10 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" ng-if="ctrl.hasLink('colorloop-on')">
           <div class="col-sm-4">Color looping</div>
           <div class="col-sm-8">
-            <button ng-click="ctrl.toggleColorLoop()"
+            <button ng-click="ctrl.handleLink('colorloop-on', ctrl.device.state.effect)"
                     type="button"
                     class="btn btn-default"
                     ng-class="{'btn-primary':ctrl.device.state.effect !== 'none'}">

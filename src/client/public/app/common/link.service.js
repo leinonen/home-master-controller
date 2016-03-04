@@ -40,10 +40,7 @@
       return this._linkAction(link, value)
         .then(function(data) {
           if (link.method === 'POST') {
-            console.log('emit fetchDevices');
             $rootScope.$emit('fetchDevices');
-
-            console.log('emit fetchGroups');
             $rootScope.$emit('fetchGroups');
           }
           return data;

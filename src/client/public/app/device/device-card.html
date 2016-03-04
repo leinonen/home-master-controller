@@ -1,13 +1,17 @@
 <div class="col-md-4">
   <div class="device-card">
     <div class="row device-row">
-      <div class="col-sm-9 device-name">
+      <div class="col-sm-12 device-name">
         {{ctrl.device.name}}<br/>
-        <span class="badge {{ctrl.device.type}}">{{ctrl.device.type}}</span>
       </div>
-      <div class="col-sm-3">
-        <span class="device-name pull-right device-level" ng-show="ctrl.showDeviceLevel()">{{ctrl.device.state.level}}</span>
-        <span class="device-name device-level pull-right" ng-if="!ctrl.controlsEnabled()">{{ctrl.device.state.on ? 'ON':'OFF'}}</span><br/>
+      <div class="col-sm-6"><span class="badge {{ctrl.device.type}}">{{ctrl.device.type}}</span></div>
+      <div class="col-sm-6">
+        <span class="device-name device-level"
+              ng-show="ctrl.showDeviceLevel()">{{ctrl.device.state.level}}</span>
+
+        <span class="device-name device-level pull-right"
+              ng-if="!ctrl.controlsEnabled()">{{ctrl.device.state.on ? 'ON':'OFF'}}</span><br/>
+
         <div class="btn-group pull-right">
           <button ng-if="ctrl.controlsEnabled() && ctrl.isHueDevice()"
                   ng-click="ctrl.toggleShowControls()"
@@ -24,6 +28,7 @@
           </button>
 
           <button type="button" class="btn btn-default"
+                  ng-class="{'btn-primary': ctrl.device.state.on === true}"
                   ng-if="ctrl.hasLink('disable')"
                   ng-click="ctrl.handleLink('disable')">
             Disable

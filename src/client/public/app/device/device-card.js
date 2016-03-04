@@ -14,6 +14,18 @@
       controller: function ($rootScope, Devices, Link) {
         var ctrl = this;
 
+        ctrl.showControls = function() {
+          return Devices.isDeviceSelected(ctrl.device);
+        };
+
+        ctrl.toggleShowControls = function() {
+          if (Devices.isDeviceSelected(ctrl.device)) {
+            Devices.selectDevice(null);
+          } else {
+            Devices.selectDevice(ctrl.device);
+          }
+        };
+
         ctrl.hasLink = function(rel) {
           return Link.hasLink(ctrl.device, rel);
         };
