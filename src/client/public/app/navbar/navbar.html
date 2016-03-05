@@ -14,7 +14,7 @@
     <div class="navbar-collapse" ng-class="{collapse: navCollapsed}">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in ctrl.getLeftItems()"
-            ui-sref-active="active"
+            ui-sref-active="active animated tada"
             ui-sref="{{item.state}}">
           <a href="#">{{item.title}}</a>
         </li>
@@ -22,7 +22,7 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li ng-repeat="item in ctrl.getRightItems()"
-            ui-sref-active="active"
+            ui-sref-active="active animated tada"
             ui-sref="{{item.state}}">
           <a href="#"><span ng-show="item.icon" class="{{item.icon}}"></span> {{item.title}}</a>
         </li>

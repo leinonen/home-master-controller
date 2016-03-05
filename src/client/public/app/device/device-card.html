@@ -2,7 +2,14 @@
   <div class="device-card animated fadeIn">
     <div class="row device-row">
       <div class="col-sm-12 device-name">
-        {{ctrl.device.name}}<br/>
+        {{ctrl.device.name}}
+        <button ng-if="ctrl.controlsEnabled() && ctrl.isHueDevice()"
+                ng-click="ctrl.toggleShowControls()"
+                type="button"
+                class="btn-link pull-right"
+                ng-class="{'btn-default':ctrl.showControls}">
+          <span class="glyphicon glyphicon-cog"></span>
+        </button>
       </div>
       <div class="col-sm-6"><span class="badge {{ctrl.device.type}}">{{ctrl.device.type}}</span></div>
       <div class="col-sm-6">
@@ -13,13 +20,6 @@
               ng-if="!ctrl.controlsEnabled()">{{ctrl.device.state.on ? 'ON':'OFF'}}</span><br/>
 
         <div class="btn-group pull-right">
-          <button ng-if="ctrl.controlsEnabled() && ctrl.isHueDevice()"
-                  ng-click="ctrl.toggleShowControls()"
-                  type="button"
-                  class="btn btn-default"
-                  ng-class="{'btn-default':ctrl.showControls}">
-            Modify
-          </button>
 
           <button type="button" class="btn btn-default"
                   ng-if="ctrl.hasLink('enable')"
