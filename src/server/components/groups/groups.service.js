@@ -22,6 +22,7 @@ var GENERIC_GROUPS = () =>
         .all(group.items.map(item => DeviceService.getDevice(item.id, item.type)))
         .then(function(items) {
           group.items = items;
+          group.state.on = items.every(item => item.state.on === true);
           return group;
         }))
     ));
