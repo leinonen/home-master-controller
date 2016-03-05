@@ -18,19 +18,27 @@
              placeholder="zwave endpoint"/>
     </div>
 
-    <div class="form-group">
-      <p>Username</p>
-      <input class="form-control" type="text"
-             ng-model="ctrl.zwave.username"
-             ng-disabled="!ctrl.zwave.enabled"
-             placeholder="Username"/>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <p>Username</p>
+          <input class="form-control" type="text"
+                 ng-model="ctrl.zwave.username"
+                 ng-disabled="!ctrl.zwave.enabled"
+                 placeholder="Username"/>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <p>Password</p>
+          <input class="form-control" type="password"
+                 ng-model="ctrl.zwave.password"
+                 ng-disabled="!ctrl.zwave.enabled"
+                 placeholder="zwave password"/>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <p>Password</p>
-      <input class="form-control" type="password"
-             ng-model="ctrl.zwave.password"
-             ng-disabled="!ctrl.zwave.enabled"
-             placeholder="zwave password"/>
-    </div>
+
+
   </div>
 </div>
