@@ -1,6 +1,6 @@
 {
   "PORT": 8080,
-  "MONGO_URL": "mongo:27017/hmc_test",
+  "MONGO_URL": "db.pharatropic:27017/hmc_leinonen_dev",
   "location": {
     "lat": 57.7,
     "lng": 11.9667

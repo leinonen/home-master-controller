@@ -1,7 +1,5 @@
 'use strict';
 
-// Sensor test using RxJS Observables. Fun stuff!
-
 const
   Rx = require('rx'),
   bus = require('./server/util/bus'),

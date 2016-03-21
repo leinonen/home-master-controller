@@ -37,6 +37,21 @@ User.find((err, users) => {
   }
 });
 
+process.on('SIGINT', function() {
+  console.log('PROCESS INTERRUPTED');
+  process.exit();
+});
+
+process.on('SIGTERM', function() {
+  console.log('PROCESS TERMINATED');
+  process.exit();
+});
+
+process.on('SIGHUP', function() {
+  console.log('PROCESS TERMINATED');
+  process.exit();
+});
+
 app
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({extended: false}))
