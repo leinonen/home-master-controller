@@ -76,23 +76,23 @@
         icon: 'glyphicon glyphicon-cog',
         authenticate: true
       },
-/*      {
-        title: 'Events',
-        state: 'root.events',
-        url: '/events',
-        template: '<event-list/>',
-        position: 'left',
-        authenticate: true,
-        children:[{
-          title: 'Create Event',
-          state: 'root.events.create',
-          url: '/create',
-          template: '<create-event/>',
-          position: 'left',
-          hidden: true,
-          authenticate: true
-        }]
-      }, */
+      /*      {
+       title: 'Events',
+       state: 'root.events',
+       url: '/events',
+       template: '<event-list/>',
+       position: 'left',
+       authenticate: true,
+       children:[{
+       title: 'Create Event',
+       state: 'root.events.create',
+       url: '/create',
+       template: '<create-event/>',
+       position: 'left',
+       hidden: true,
+       authenticate: true
+       }]
+       }, */
       {
         title: 'Login',
         url: '/login',
@@ -127,13 +127,10 @@
 
   });
 
-  angular.module('app').directive('navbar', function() {
-    return {
-      scope: {},
+  angular.module('app')
+    .component('navbar', {
+      bindings: {},
       templateUrl: 'app/navbar/navbar.html',
-      replace: true,
-      controllerAs: 'ctrl',
-      bindToController: true,
       controller: function(Routes, Auth, $state) {
 
         var ctrl = this;
@@ -141,7 +138,7 @@
 
         ctrl.items = Routes.routes;
         ctrl.isLoggedIn = Auth.isLoggedIn;
-        ctrl.logout = function(){
+        ctrl.logout = function() {
           Auth.logout();
           $state.transitionTo('root.devices');
         };
@@ -159,12 +156,11 @@
 
         ctrl.getRightItems = function() {
           return ctrl.items.filter(function(item) {
-            return item.position === 'right'  && hideLogin(item);
+            return item.position === 'right' && hideLogin(item);
           });
         };
 
       }
-    };
-  });
+    });
 
 })();

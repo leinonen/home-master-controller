@@ -3,69 +3,69 @@
 
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title" ng-show="!ctrl.isEditMode()">Create Schedule</h3>
-        <h3 class="panel-title" ng-show="ctrl.isEditMode()">Edit Schedule</h3>
+        <h3 class="panel-title" ng-show="!$ctrl.isEditMode()">Create Schedule</h3>
+        <h3 class="panel-title" ng-show="$ctrl.isEditMode()">Edit Schedule</h3>
       </div>
       <div class="panel-body">
 
         <div class="row">
           <div class="col-sm-5">
             <p>Name</p>
-            <input type="text" ng-model="ctrl.schedule.name" class="form-control" placeholder="Name.."/>
+            <input type="text" ng-model="$ctrl.schedule.name" class="form-control" placeholder="Name.."/>
           </div>
           <div class="col-sm-7">
             <p>Action</p>
-            <select class="form-control" ng-model="ctrl.schedule.action">
+            <select class="form-control" ng-model="$ctrl.schedule.action">
               <option value="on">On</option>
               <option value="off">Off</option>
             </select>
           </div>
         </div>
 
-        <weekday-selector weekdays="ctrl.weekdays"/>
+        <weekday-selector weekdays="$ctrl.weekdays"></weekday-selector>
 
         <div class="row">
           <div class="col-sm-3">
             <p>Time</p>
             <input type="text"
-                   ng-model="ctrl.schedule.time"
+                   ng-model="$ctrl.schedule.time"
                    class="form-control"
                    placeholder="00:00"
-                   ng-disabled="ctrl.isSunriseOrSunset()"/>
+                   ng-disabled="$ctrl.isSunriseOrSunset()"/>
 
             <div class="checkbox">
               <label>
-                <input type="checkbox" ng-model="ctrl.schedule.sunrise">Sunrise ({{ctrl.sun.sunrise}})
+                <input type="checkbox" ng-model="$ctrl.schedule.sunrise">Sunrise ({{$ctrl.sun.sunrise}})
               </label>
             </div>
             <div class="checkbox">
               <label>
-                <input type="checkbox" ng-model="ctrl.schedule.sunset">Sunset ({{ctrl.sun.sunset}})
+                <input type="checkbox" ng-model="$ctrl.schedule.sunset">Sunset ({{$ctrl.sun.sunset}})
               </label>
             </div>
           </div>
           <div class="col-sm-3">
             <p>Randomize (mins)</p>
-            <input type="text" ng-model="ctrl.schedule.random" class="form-control" placeholder="0"/>
+            <input type="text" ng-model="$ctrl.schedule.random" class="form-control" placeholder="0"/>
           </div>
           <div class="col-sm-6">
             <p>Select devices</p>
-            <item-selector items="ctrl.devices"></item-selector>
+            <item-selector items="$ctrl.devices"></item-selector>
           </div>
         </div>
 
         <div class="row group-device-card-container">
-          <device-card device="device" controls="false" ng-repeat="device in ctrl.selectedDevices track by $index"/>
+          <device-card device="device" controls="false" ng-repeat="device in $ctrl.selectedDevices track by $index"/>
         </div>
 
         <div class="row">
           <div class="col-sm-12 hmc-button-row">
             <button type="button" class="btn btn-danger pull"
-                    ng-show="ctrl.isEditMode()"
-                    ng-click="ctrl.deleteSchedule(ctrl.schedule._id)">Delete Schedule
+                    ng-show="$ctrl.isEditMode()"
+                    ng-click="$ctrl.deleteSchedule($ctrl.schedule._id)">Delete Schedule
             </button>
             <button type="button" class="btn btn-primary pull-right"
-                    ng-click="ctrl.saveButtonClick()">Save
+                    ng-click="$ctrl.saveButtonClick()">Save
             </button>
 
           </div>

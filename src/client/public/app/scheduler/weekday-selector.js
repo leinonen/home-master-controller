@@ -1,14 +1,11 @@
 (function() {
 
-  angular.module('app').directive('weekdaySelector', function() {
-    return {
-      scope: {
+  angular.module('app')
+    .component('weekdaySelector', {
+      bindings: {
         weekdays: '='
       },
-      replace: true,
       templateUrl: 'app/scheduler/weekday-selector.html',
-      controllerAs: 'ctrl',
-      bindToController: true,
       controller: function(Weekdays) {
         var ctrl = this;
 
@@ -24,7 +21,6 @@
           ctrl.weekdays = Weekdays.getFullWeek();
         };
       }
-    }
-  })
+    })
 
 })();

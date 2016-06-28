@@ -1,16 +1,13 @@
-(function () {
+(function() {
 
-  angular.module('app').directive('hueControls', function () {
-    return {
-      scope: {
+  angular.module('app')
+    .component('hueControls', {
+      bindings: {
         device: '='
       },
       templateUrl: 'app/device/hue-controls.html',
-      replace: true,
-      controllerAs: 'ctrl',
-      bindToController: true,
 
-      controller: function (Link) {
+      controller: function(Link) {
         var ctrl = this;
 
         ctrl.hasLink = function(rel) {
@@ -29,28 +26,27 @@
           })
         };
 
-        ctrl.colorLoopText = function () {
+        ctrl.colorLoopText = function() {
           return ctrl.device.state.effect === 'none' ? 'Enable' : 'Disable';
         };
 
-/*        ctrl.toggleColorLoop = function () {
-          DeviceManager.toggleColorLoop(ctrl.device);
-        };
+        /*        ctrl.toggleColorLoop = function () {
+         DeviceManager.toggleColorLoop(ctrl.device);
+         };
 
-        ctrl.setBrightness = function () {
-          DeviceManager.setBrightness(ctrl.device);
-        };
+         ctrl.setBrightness = function () {
+         DeviceManager.setBrightness(ctrl.device);
+         };
 
-        ctrl.setSaturation = function () {
-          DeviceManager.setSaturation(ctrl.device);
-        };
+         ctrl.setSaturation = function () {
+         DeviceManager.setSaturation(ctrl.device);
+         };
 
-        ctrl.setHue = function () {
-          DeviceManager.setHue(ctrl.device);
-        };*/
+         ctrl.setHue = function () {
+         DeviceManager.setHue(ctrl.device);
+         };*/
 
       }
-    };
-  });
+    });
 
 })();

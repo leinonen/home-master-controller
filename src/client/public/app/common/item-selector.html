@@ -1,12 +1,12 @@
 <div class="item-selector">
   <div class="row">
     <div class="col-sm-9">
-      <select class="form-control" ng-model="ctrl.selectedItem">
-        <option ng-repeat="item in ctrl.items track by $index" value="{{item}}">{{item.name}} - {{item.type}}</option>
+      <select class="form-control" ng-model="$ctrl.selectedItem">
+        <option ng-repeat="item in $ctrl.items track by $index" value="{{item}}">{{item.name}} - {{item.type}}</option>
       </select>
     </div>
     <div class="col-sm-3">
-      <button type="button" ng-click="ctrl.addItem(ctrl.selectedItem)" class="btn btn-default btn-block">Add</button>
+      <button type="button" ng-click="$ctrl.addItem($ctrl.selectedItem)" class="btn btn-default btn-block">Add</button>
     </div>
   </div>
 </div>

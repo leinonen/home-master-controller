@@ -5,7 +5,7 @@
     <span class="glyphicon glyphicon-plus"></span> Create schedule</button>
   </div>
 
-  <div ng-repeat="schedule in ctrl.schedules">
+  <div ng-repeat="schedule in $ctrl.schedules">
     <div class="col-xs-12">
       <div class="schedule-card animated fadeIn">
 
@@ -23,13 +23,13 @@
         <table class="table">
           <tbody>
           <tr>
-            <td class="{{ctrl.getDayClass('mon', schedule.weekdays)}}">MON</td>
-            <td class="{{ctrl.getDayClass('tue', schedule.weekdays)}}">TUE</td>
-            <td class="{{ctrl.getDayClass('wed', schedule.weekdays)}}">WED</td>
-            <td class="{{ctrl.getDayClass('thu', schedule.weekdays)}}">THU</td>
-            <td class="{{ctrl.getDayClass('fri', schedule.weekdays)}}">FRI</td>
-            <td class="{{ctrl.getDayClass('sat', schedule.weekdays)}}">SAT</td>
-            <td class="{{ctrl.getDayClass('sun', schedule.weekdays)}}">SUN</td>
+            <td class="{{$ctrl.getDayClass('mon', schedule.weekdays)}}">MON</td>
+            <td class="{{$ctrl.getDayClass('tue', schedule.weekdays)}}">TUE</td>
+            <td class="{{$ctrl.getDayClass('wed', schedule.weekdays)}}">WED</td>
+            <td class="{{$ctrl.getDayClass('thu', schedule.weekdays)}}">THU</td>
+            <td class="{{$ctrl.getDayClass('fri', schedule.weekdays)}}">FRI</td>
+            <td class="{{$ctrl.getDayClass('sat', schedule.weekdays)}}">SAT</td>
+            <td class="{{$ctrl.getDayClass('sun', schedule.weekdays)}}">SUN</td>
           </tr>
           </tbody>
         </table>

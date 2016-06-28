@@ -16,15 +16,15 @@
   "dependencies": {
     "angular-loading-bar": "~0.7.1",
     "bootstrap": "~3.3.4",
-    "angular": "^1.4.9",
-    "angular-mocks": "^1.4.9",
-    "angular-ui-router": "~0.2.15",
-    "angular-resource": "^1.4.9",
-    "angular-cookies": "^1.4.9",
-    "angular-animate": "^1.4.9",
+    "angular": "^1.5.7",
+    "angular-mocks": "^1.5.7",
+    "angular-resource": "^1.5.7",
+    "angular-cookies": "^1.5.7",
+    "angular-animate": "^1.5.7",
+    "angular-ui-router": "^0.3.1",
     "animate.css": "animate-css#^3.5.1"
   },
   "resolutions": {
-    "angular": "1.4.9"
+    "angular": "1.5.7"
   }
 }

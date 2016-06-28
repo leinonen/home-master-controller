@@ -1,12 +1,9 @@
 'use strict';
 
 angular.module('app')
-  .directive('settings', function() {
-    return {
-      scope: {},
+  .component('settings', {
+      bindings: {},
       templateUrl: 'app/user/settings.html',
-      replace: true,
-      controllerAs: 'ctrl',
       controller: function ($scope, User, Auth, Message) {
         var ctrl = this;
         ctrl.errors = {};
@@ -27,6 +24,5 @@ angular.module('app')
               });
           }
         };
-      }
     }
   });

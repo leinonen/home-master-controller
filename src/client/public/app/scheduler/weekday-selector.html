@@ -12,20 +12,20 @@
         <th>Sun</th>
       </tr>
       <tr>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.mon" class="form-control"/></td>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.tue" class="form-control"/></td>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.wed" class="form-control"/></td>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.thu" class="form-control"/></td>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.fri" class="form-control"/></td>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.sat" class="form-control"/></td>
-        <td><input type="checkbox" ng-model="ctrl.weekdays.sun" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.mon" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.tue" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.wed" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.thu" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.fri" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.sat" class="form-control"/></td>
+        <td><input type="checkbox" ng-model="$ctrl.weekdays.sun" class="form-control"/></td>
       </tr>
     </table>
 
     <div class="btn-group pull-right" role="group" aria-label="...">
-      <button type="button" class="btn btn-default" ng-click="ctrl.selectWorkdays()">Workdays</button>
-      <button type="button" class="btn btn-default" ng-click="ctrl.selectWeekend()">Weekend</button>
-      <button type="button" class="btn btn-default" ng-click="ctrl.selectFullWeek()">All</button>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.selectWorkdays()">Workdays</button>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.selectWeekend()">Weekend</button>
+      <button type="button" class="btn btn-default" ng-click="$ctrl.selectFullWeek()">All</button>
     </div>
 
 

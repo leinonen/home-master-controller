@@ -5,40 +5,40 @@
       <div class="panel-heading">
         <h3 class="panel-title"><span class="glyphicon glyphicon-cog"></span> Modify parameters</h3>
       </div>
-      <!--<div class="panel-heading">{{ctrl.device.manufacturername}} {{ctrl.device.modelid}}</div>-->
+      <!--<div class="panel-heading">{{$ctrl.device.manufacturername}} {{$ctrl.device.modelid}}</div>-->
       <div class="panel-body">
 
-        <div class="row" ng-if="ctrl.hasLink('set-brightness')">
-          <div class="col-sm-4">Brightness: {{ctrl.device.state.bri}}</div>
+        <div class="row" ng-if="$ctrl.hasLink('set-brightness')">
+          <div class="col-sm-4">Brightness: {{$ctrl.device.state.bri}}</div>
           <div class="col-sm-8">
             <input type='range'
                    min='0'
                    max='254'
-                   ng-model="ctrl.device.state.bri"
-                   ng-change="ctrl.handleLink('set-brightness', ctrl.device.state.bri)"
-                   ng-disabled="ctrl.deviceDisabled()"/>
+                   ng-model="$ctrl.device.state.bri"
+                   ng-change="$ctrl.handleLink('set-brightness', $ctrl.device.state.bri)"
+                   ng-disabled="$ctrl.deviceDisabled()"/>
           </div>
         </div>
 
-        <div class="row" ng-if="ctrl.hasLink('set-saturation')">
-          <div class="col-sm-4">Saturation: {{ctrl.device.state.sat}}</div>
+        <div class="row" ng-if="$ctrl.hasLink('set-saturation')">
+          <div class="col-sm-4">Saturation: {{$ctrl.device.state.sat}}</div>
           <div class="col-sm-8">
             <input type='range'
                    min='0'
                    max='254'
                    ng-model="device.state.sat"
-                   ng-change="ctrl.handleLink('set-saturation', ctrl.device.state.sat)"
-                   ng-disabled="ctrl.deviceDisabled()"/>
+                   ng-change="$ctrl.handleLink('set-saturation', $ctrl.device.state.sat)"
+                   ng-disabled="$ctrl.deviceDisabled()"/>
           </div>
         </div>
 
-        <div class="row" ng-if="ctrl.hasLink('set-hue')">
-          <div class="col-sm-4">Hue: {{ctrl.device.state.hue}}</div>
+        <div class="row" ng-if="$ctrl.hasLink('set-hue')">
+          <div class="col-sm-4">Hue: {{$ctrl.device.state.hue}}</div>
           <div class="col-sm-8">
             <select class="form-control"
-                    ng-model="ctrl.device.state.hue"
-                    ng-change="ctrl.handleLink('set-hue', ctrl.device.state.hue)"
-                    ng-disabled="ctrl.deviceDisabled()">
+                    ng-model="$ctrl.device.state.hue"
+                    ng-change="$ctrl.handleLink('set-hue', $ctrl.device.state.hue)"
+                    ng-disabled="$ctrl.deviceDisabled()">
               <option value="3000">Deep Orange</option>
               <option value="12750">Yellow</option>
               <option value="25500">Green</option>
@@ -49,14 +49,14 @@
           </div>
         </div>
 
-        <div class="row" ng-if="ctrl.hasLink('colorloop-on')">
+        <div class="row" ng-if="$ctrl.hasLink('colorloop-on')">
           <div class="col-sm-4">Color looping</div>
           <div class="col-sm-8">
-            <button ng-click="ctrl.handleLink('colorloop-on', ctrl.device.state.effect)"
+            <button ng-click="$ctrl.handleLink('colorloop-on', $ctrl.device.state.effect)"
                     type="button"
                     class="btn btn-default"
-                    ng-class="{'btn-primary':ctrl.device.state.effect !== 'none'}">
-              {{ctrl.colorLoopText(device)}}
+                    ng-class="{'btn-primary':$ctrl.device.state.effect !== 'none'}">
+              {{$ctrl.colorLoopText(device)}}
             </button>
           </div>
         </div>

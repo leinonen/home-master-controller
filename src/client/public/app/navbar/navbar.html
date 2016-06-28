@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top animated slideInDown">
-  <div class="container-fluid" ng-init="navCollapsed=true" ng-click="navCollapsed=!navCollapsed">
+  <div class="container-fluid" ng-init="$ctrl.navCollapsed=true" ng-click="$ctrl.navCollapsed=!$ctrl.navCollapsed">
 
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed">
@@ -8,12 +8,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#/devices"><span class="glyphicon glyphicon-home love"></span> {{ctrl.title}}</a>
+      <a class="navbar-brand" href="#/devices"><span class="glyphicon glyphicon-home love"></span> {{$ctrl.title}}</a>
     </div>
 
-    <div class="navbar-collapse" ng-class="{collapse: navCollapsed}">
+    <div class="navbar-collapse" ng-class="{collapse: $ctrl.navCollapsed}">
       <ul class="nav navbar-nav">
-        <li ng-repeat="item in ctrl.getLeftItems()"
+        <li ng-repeat="item in $ctrl.getLeftItems()"
             ui-sref-active="active animated tada"
             ui-sref="{{item.state}}">
           <a href="#">{{item.title}}</a>
@@ -21,12 +21,12 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li ng-repeat="item in ctrl.getRightItems()"
+        <li ng-repeat="item in $ctrl.getRightItems()"
             ui-sref-active="active animated tada"
             ui-sref="{{item.state}}">
           <a href="#"><span ng-show="item.icon" class="{{item.icon}}"></span> {{item.title}}</a>
         </li>
-        <li ng-show="ctrl.isLoggedIn()"><a style="cursor: pointer;" ng-click="ctrl.logout()">Logout</a></li>
+        <li ng-show="$ctrl.isLoggedIn()"><a style="cursor: pointer;" ng-click="$ctrl.logout()">Logout</a></li>
       </ul>
 
      </div>

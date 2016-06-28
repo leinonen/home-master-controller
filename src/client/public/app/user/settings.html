@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-6 col-sm-offset-3">
-      <form class="form" name="form" ng-submit="ctrl.changePassword(form)" novalidate>
+      <form class="form" name="form" ng-submit="$ctrl.changePassword(form)" novalidate>
 
         <div class="panel panel-default panel-success">
           <div class="panel-heading">
@@ -12,7 +12,7 @@
         <div class="form-group">
           <label>Current Password</label>
 
-          <input type="password" name="password" class="form-control" ng-model="ctrl.user.oldPassword"
+          <input type="password" name="password" class="form-control" ng-model="$ctrl.user.oldPassword"
                  mongoose-error/>
           <p class="help-block" ng-show="form.password.$error.mongoose">
             {{ errors.other }}
@@ -22,7 +22,7 @@
         <div class="form-group">
           <label>New Password</label>
 
-          <input type="password" name="newPassword" class="form-control" ng-model="ctrl.user.newPassword"
+          <input type="password" name="newPassword" class="form-control" ng-model="$ctrl.user.newPassword"
                  ng-minlength="3"
                  required/>
           <p class="help-block"

@@ -1,23 +1,20 @@
 (function () {
 
-  angular.module('app').directive('itemSelector', function () {
-    return {
-      replace: true,
-      scope: {
+  angular.module('app')
+    .component('itemSelector', {
+      bindings: {
         items: '='
       },
       templateUrl: 'app/common/item-selector.html',
-      controllerAs: 'ctrl',
-      bindToController: true,
       controller: function ($rootScope) {
         var ctrl = this;
+        console.log(ctrl.items);
         ctrl.selectedItem = {};
         ctrl.addItem = function (item) {
           $rootScope.$emit('item.selected', (typeof item === 'string') ? JSON.parse(item) : item);
           ctrl.selectedItem = {};
         };
       }
-    };
   });
 
 })();
