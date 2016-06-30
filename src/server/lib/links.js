@@ -5,7 +5,8 @@ const
   DeviceTypes = require('./device-types'),
   util = require('util');
 
-let baseUrl = (req) => req.protocol + '://localhost:8080';
+//let baseUrl = (req) => req.protocol + '://localhost:8080';
+let baseUrl = (req) => req.protocol + '://' + req.get('host');
 
 let makeLink = (base, method, name, url) => {
   return {
