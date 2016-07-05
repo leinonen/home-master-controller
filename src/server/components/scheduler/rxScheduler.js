@@ -2,7 +2,7 @@
 
 const
   Rx = require('rx'),
-  bus = require('../../util/bus'),
+  Bus = require('../../util/bus'),
   SchedulerModel = require('./schedule.model'),
   SchedulerEvents  = require('./events'),
   Sun = require('./sun');
