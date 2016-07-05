@@ -2,7 +2,7 @@
 
 const
   Rx = require('rx'),
-  Bus = require('../../util/bus'),
+  bus = require('../../util/bus'),
   SchedulerModel = require('./schedule.model'),
   SchedulerEvents  = require('./events'),
   Sun = require('./sun');
@@ -57,7 +57,7 @@ const runSchedule = (now, schedule) => {
   }
 
   if (scheduleTime === currentTime) {
-    Bus.emit(Events.SCHEDULE_TRIGGER, {
+    bus.emit(Events.SCHEDULE_TRIGGER, {
       schedule: schedule,
       scheduleTime: scheduleTime,
       currentDay: currentDay
@@ -66,7 +66,7 @@ const runSchedule = (now, schedule) => {
 };
 
 let triggerDevice = (item, action) => {
-  Bus.emit(Events.CONTROL_DEVICE, {
+  bus.emit(Events.CONTROL_DEVICE, {
     id: item.id,
     action: action,
     type: item.type
