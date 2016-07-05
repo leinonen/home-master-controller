@@ -2,20 +2,32 @@
 
 const
   Rx = require('rx'),
-  bus = require('./server/util/bus'),
-  SchedulerModel = require('./server/components/scheduler/schedule.model'),
-  SchedulerEvents  = require('./server/components/scheduler/events'),
-  Sun = require('./server/components/scheduler/sun'),
-  mongoose = require('mongoose-q')(),
-  nconf = require('nconf');
+  bus = require('../../util/bus'),
+  SchedulerModel = require('./schedule.model'),
+  SchedulerEvents  = require('./events'),
+  Sun = require('./sun');
+//  mongoose = require('mongoose-q')(),
+//  nconf = require('nconf');
 
-nconf.argv().env().file({ file: 'config.json' });
+//nconf.argv().env().file({ file: 'config.json' });
 
-console.log('Connecting to database: %s', nconf.get('MONGO_URL'));
-mongoose.connect(nconf.get('MONGO_URL'), {server: {socketOptions: { keepAlive: 1 }}});
-
+//console.log('rx Connecting to database: %s', nconf.get('MONGO_URL'));
+//mongoose.connect(nconf.get('MONGO_URL'), {server: {socketOptions: { keepAlive: 1 }}});
 
 const dayMap = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+function Scheduler() {
+  return {
+    start: start
+  }
+}
+
+module.exports = function() {
+  return new Scheduler();
+};
+
+
+
 let shceduleList = [];
 
 const timeOffsetMinutes = (time, offsetMinutes) => {
@@ -78,18 +90,20 @@ const updateSchedules = (schedules) => {
   console.log('scheduler updated');
 };
 
-Rx.Observable
-  .interval(1000)
-  .subscribe(tick => runSchedules());
+const start = () => {
+  Rx.Observable
+    .interval(1000)
+    .subscribe(tick => runSchedules());
 
-Rx.Observable
-  .fromEvent(bus, SchedulerEvents.SCHEDULE_TRIGGER)
-  .subscribe(schedule => triggerSchedule(schedule));
+  Rx.Observable
+    .fromEvent(bus, SchedulerEvents.SCHEDULE_TRIGGER)
+    .subscribe(schedule => triggerSchedule(schedule));
 
-Rx.Observable
-  .fromEvent(bus, SchedulerEvents.UPDATE_SCHEDULER)
-  .flatMap(x => Rx.Observable.fromPromise(SchedulerModel.findAll()))
-  .subscribe(schedules => updateSchedules(schedules));
+  Rx.Observable
+    .fromEvent(bus, SchedulerEvents.UPDATE_SCHEDULER)
+    .flatMap(x => Rx.Observable.fromPromise(SchedulerModel.findAll()))
+    .subscribe(schedules => updateSchedules(schedules));
 
-console.log('updating scheduler in 3 sec..');
-setTimeout(() => bus.emit(SchedulerEvents.UPDATE_SCHEDULER), 3000);
+  console.log('updating scheduler in 3 sec..');
+  setTimeout(() => bus.emit(SchedulerEvents.UPDATE_SCHEDULER), 3000);
+};

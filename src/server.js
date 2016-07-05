@@ -13,11 +13,10 @@ const
   session = require('express-session'),
   mongoStore = require('connect-mongo')(session),
   mongoose = require('mongoose-q')(),
-  User = require('./server/components/user/user.model.js');
+  User = require('./server/components/user/user.model.js'),
+  Scheduler = require('./server/components/scheduler/rxScheduler');
 
-//var ScheduleService = require('./server/components/scheduler/schedule.model.js');
-//var Scheduler = require('./server/components/scheduler/scheduler');
-//var scheduler = new Scheduler(ScheduleService);
+let scheduler = new Scheduler();
 
 winston.info('Connecting to database: %s', nconf.get('MONGO_URL'));
 var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
@@ -107,4 +106,4 @@ app
 
 winston.info('HMC: HTTP Server running on port %d', nconf.get('PORT'));
 
-//scheduler.start();
+scheduler.start();
