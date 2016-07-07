@@ -20,15 +20,12 @@ function Scheduler() {
         .interval(1000)
         .subscribe(() => {
           scheduleList.forEach(schedule => {
-            let now = new Date();
-            let currentTime = moment(now).millisecond(0);
-            let currentDay = dayMap[currentTime.day()];
-
+            let currentTime = moment(new Date()).millisecond(0);
             if (SchedulerHelper.isScheduleTime(currentTime, schedule)) {
               bus.emit(Events.SCHEDULE_TRIGGER, {
                 schedule: schedule,
                 scheduleTime: currentTime,
-                currentDay: currentDay
+                currentDay: dayMap[currentTime.day()]
               });
             }
           });
@@ -38,12 +35,13 @@ function Scheduler() {
         .fromEvent(bus, Events.SCHEDULE_TRIGGER)
         .tap(x => console.log('Trigger schedule'))
         .subscribe(msg => {
-          let weekdays = msg.schedule.weekdays.filter(wd => wd === msg.currentDay);
-          weekdays
+          msg.schedule.weekdays
+            .filter(wd => wd === msg.currentDay)
+            .map(() => msg.schedule.items)
             .forEach(wd => msg.schedule.items.forEach(
               item => bus.emit(Events.CONTROL_DEVICE, {
                 id: item.id,
-                action: action,
+                action: item.action,
                 type: item.type
               })
             ));
