@@ -38,14 +38,11 @@ function Scheduler() {
           msg.schedule.weekdays
             .filter(wd => wd === msg.currentDay)
             .map(() => msg.schedule.items)
-            .forEach(wd => msg.schedule.items.forEach(
-              item => bus.emit(Events.CONTROL_DEVICE, {
-                id: item.id,
-                action: item.action,
-                type: item.type
-              })
-            ));
-        });
+            .forEach(
+              wd => msg.schedule.items.forEach(
+                item => bus.emit(Events.CONTROL_DEVICE, item)
+              ));
+          });
 
       Rx.Observable
         .fromEvent(bus, Events.UPDATE_SCHEDULER)
@@ -55,7 +52,7 @@ function Scheduler() {
 
       Rx.Observable
         .fromEvent(bus, Events.CONTROL_DEVICE)
-        .tap(x => console.log('Control device'))
+        .tap(device => console.log('Control device', device.id, device.type, device.action))
         .subscribe(device =>
           HMC.control(device.id, {action: device.action, type: device.type})
         );
