@@ -10,10 +10,17 @@ var getSchedule = (id) => Schedule.findById(id);
 
 var getSchedules = () => Schedule.findAll();
 
+var updateScheduler = () => {
+  setTimeout(() => {
+    console.log('timed out event');
+    Bus.emit(Events.UPDATE_SCHEDULER);
+  }, 1000);
+}
+
 var createSchedule = (schedule) => {
   var sch = new Schedule(schedule);
   sch.save();
-  Bus.emit(Events.UPDATE_SCHEDULER);
+  updateScheduler();
   return Promise.resolve(sch);
 };
 
@@ -31,7 +38,7 @@ var updateSchedule = (id, sch) => Schedule
     schedule.weekdays = sch.weekdays;
     schedule.items = sch.items;
     schedule.save();
-    Bus.emit(Events.UPDATE_SCHEDULER);
+    updateScheduler();
     return schedule;
   });
 
@@ -40,7 +47,7 @@ var deleteSchedule = (id) =>
   Schedule.findById(id)
   .then(schedule => {
     schedule.remove();
-    Bus.emit(Events.UPDATE_SCHEDULER);
+    updateScheduler();
     return {};
   });
 
@@ -71,7 +78,7 @@ exports.deleteSchedule = (req, res) =>
 
 exports.sun = (req, res) => {
   res.json({
-    sunset: Sun.sunsetTime(),
-    sunrise: Sun.sunriseTime()
+    sunset: Sun.sunsetTime().format('HH:mm:ss'),
+    sunrise: Sun.sunriseTime().format('HH:mm:ss')
   });
 };

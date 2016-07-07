@@ -2,14 +2,9 @@
 
 let suncalc = require('suncalc');
 let nconf = require('nconf');
+let moment = require('moment');
 
-let timeStamp = (date) => date.toString().substring(16, 24);
+let getSun = () => suncalc.getTimes(new Date(), nconf.get('location:lat'), nconf.get('location:lng'));
 
-let getSun = () => suncalc.getTimes(
-  new Date(),
-  nconf.get('location:lat'),
-  nconf.get('location:lng')
-);
-
-exports.sunsetTime  = () => timeStamp(getSun().sunset);
-exports.sunriseTime = () => timeStamp(getSun().sunrise);
+exports.sunsetTime  = () => moment(getSun().sunset);
+exports.sunriseTime = () => moment(getSun().sunrise);
