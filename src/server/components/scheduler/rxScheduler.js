@@ -41,7 +41,7 @@ function Scheduler() {
             .forEach(wd => msg.schedule.items.forEach(
               item => bus.emit(Events.CONTROL_DEVICE, {
                 id: item.id,
-                action: schedule.action,
+                action: msg.schedule.action,
                 type: item.type
               })
             ));
