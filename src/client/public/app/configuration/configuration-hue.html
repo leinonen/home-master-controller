@@ -1,13 +1,10 @@
-<div class="panel panel-default" ng-class="{'panel-success': ctrl.hue.enabled}">
+<div class="panel panel-success">
   <div class="panel-heading">
     <h3 class="panel-title">Philips Hue</h3>
   </div>
   <div class="panel-body">
     <div class="form-group">
-      <p>Enable Philips Hue integration</p>
-      <input type="checkbox"
-             ng-model="ctrl.hue.enabled"
-             class="form-control config-checkbox">
+      <sexy-checkbox checked="ctrl.hue.enabled" text="Enable Philips Hue integration"></sexy-checkbox>
     </div>
 
     <p>Endpoint url</p>

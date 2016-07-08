@@ -21,14 +21,14 @@
 
         <div class="btn-group pull-right">
 
-          <button type="button" class="btn btn-default"
+          <button type="button" class="btn sexy-button"
                   ng-if="$ctrl.hasLink('enable')"
                   ng-click="$ctrl.handleLink('enable')">
             Enable
           </button>
 
-          <button type="button" class="btn btn-default"
-                  ng-class="{'btn-primary': $ctrl.device.state.on === true}"
+          <button type="button" class="btn sexy-button"
+                  ng-class="{'active': $ctrl.device.state.on === true}"
                   ng-if="$ctrl.hasLink('disable')"
                   ng-click="$ctrl.handleLink('disable')">
             Disable

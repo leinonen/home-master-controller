@@ -1,13 +1,10 @@
-<div class="panel panel-default" ng-class="{'panel-success': ctrl.telldus.enabled}">
+<div class="panel panel-success">
   <div class="panel-heading">
     <h3 class="panel-title">Telldus Live</h3>
   </div>
   <div class="panel-body">
     <div class="form-group">
-      <p>Enable telldus integration</p>
-      <input type="checkbox"
-             ng-model="ctrl.telldus.enabled"
-             class="form-control config-checkbox">
+      <sexy-checkbox checked="ctrl.telldus.enabled" text="Enable telldus integration"></sexy-checkbox>
     </div>
 
     <div class="form-group">

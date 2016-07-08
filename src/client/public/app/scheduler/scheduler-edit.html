@@ -1,5 +1,5 @@
 <div class="row scheduler-form">
-  <div class="col-sm-10 col-sm-offset-1">
+  <div class="col-sm-12">
 
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
@@ -9,11 +9,11 @@
       <div class="panel-body">
 
         <div class="row">
-          <div class="col-sm-5">
+          <div class="col-sm-6">
             <p>Name</p>
             <input type="text" ng-model="$ctrl.schedule.name" class="form-control" placeholder="Name.."/>
           </div>
-          <div class="col-sm-7">
+          <div class="col-sm-6">
             <p>Action</p>
             <select class="form-control" ng-model="$ctrl.schedule.action">
               <option value="on">On</option>
@@ -33,16 +33,8 @@
                    placeholder="00:00"
                    ng-disabled="$ctrl.isSunriseOrSunset()"/>
 
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="$ctrl.schedule.sunrise">Sunrise ({{$ctrl.sun.sunrise}})
-              </label>
-            </div>
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="$ctrl.schedule.sunset">Sunset ({{$ctrl.sun.sunset}})
-              </label>
-            </div>
+            <sexy-checkbox checked="$ctrl.schedule.sunrise" text="Sunrise ({{$ctrl.sun.sunrise}})"></sexy-checkbox>
+            <sexy-checkbox checked="$ctrl.schedule.sunset" text="Sunset ({{$ctrl.sun.sunset}})"></sexy-checkbox>
           </div>
           <div class="col-sm-3">
             <p>Randomize (mins)</p>
@@ -60,11 +52,11 @@
 
         <div class="row">
           <div class="col-sm-12 hmc-button-row">
-            <button type="button" class="btn btn-danger pull"
+            <button type="button" class="btn btn-lg btn-danger pull"
                     ng-show="$ctrl.isEditMode()"
                     ng-click="$ctrl.deleteSchedule($ctrl.schedule._id)">Delete Schedule
             </button>
-            <button type="button" class="btn btn-primary pull-right"
+            <button type="button" class="btn btn-lg btn-primary pull-right"
                     ng-click="$ctrl.saveButtonClick()">Save
             </button>
 
