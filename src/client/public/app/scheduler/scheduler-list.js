@@ -50,7 +50,7 @@
         };
 
         ctrl.getDayClass = function(day, arr) {
-          return ctrl.checkDay(day, arr) ? 'text-success' : '';
+          return ctrl.checkDay(day, arr) ? 'active-day' : '';
         };
       }
     })

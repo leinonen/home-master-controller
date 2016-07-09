@@ -41,14 +41,20 @@ body {
 
 .core-message {
   position: fixed;
-  z-index: 100;
-  width: 50%;
-  margin-left: 25%;
-  box-shadow: 2px 2px 11px rgba(0, 0, 0, 0.3);
-}
+  z-index: 101;
+  top: 100px;
+  left: 10%;
+  right: 10%;
+  color: #fff;
+  text-align: center;
+  font-size: 30px;
 
-.config-checkbox {
-  width: 40px;
+  .message {
+    background: rgba(0,0,0, 0.5);
+    border: rgba(0,0,0, 0.4) 1px solid;
+    border-radius: 5px;
+    padding: 5px;
+  }
 }
 
 
@@ -178,6 +184,24 @@ body {
   }
 }
 
+.delete-button {
+  .sexy-button;
+  width: auto;
+  color: #fff;
+  .glyphicon {
+    color: #ff765f;
+  }
+}
+
+.action-button {
+  .delete-button;
+  float: right;
+  .glyphicon {
+    color: #84bd00;
+  }
+}
+
+
 .form-control {
   box-shadow: 0px 0px 8px rgba(0,0,0, 0.9);
   border-color: #222326;
@@ -202,4 +226,22 @@ body {
 .btn-danger,
 .btn-danger.active, .btn-danger:active, .btn-danger:hover, .open>.dropdown-toggle.btn-danger {
   background-color: #ff765f;
+}
+
+.day-row {
+  padding: 5px 0;
+
+  .badge {
+    background-color: #27282d;
+    box-shadow: 0px 0px 8px rgba(0,0,0, 0.9);
+  }
+  .active-day {
+    color: #84bd00;
+  }
+}
+
+
+.action-button-row {
+  padding: 10px 0 0 0;
+  text-align: center;
 }

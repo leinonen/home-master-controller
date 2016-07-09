@@ -1,37 +1,36 @@
 <div>
 
-  <div class="col-xs-12 hmc-button-row">
-    <button ui-sref="root.scheduler.create" class="btn btn-default pull-right">
-    <span class="glyphicon glyphicon-plus"></span> Create schedule</button>
-  </div>
-
   <div ng-repeat="schedule in $ctrl.schedules">
     <div class="col-xs-12">
       <div class="schedule-card animated fadeIn">
 
         <div class="row">
-          <div class="col-sm-6 device-name">
-            <a ui-sref="root.scheduler.edit({id:schedule._id})"><span class="glyphicon glyphicon-pencil"></span> {{schedule.name}}</a>
+          <div class="col-xs-12 col-sm-6 device-name">
+            <a ui-sref="root.scheduler.edit({id:schedule._id})">
+              <span class="glyphicon glyphicon-pencil hidden-xs"></span>
+              {{schedule.name}}
+            </a>
           </div>
-          <div class="col-sm-3 device-name">
+          <div class="col-xs-6 col-sm-3 device-name">
             <span class="plusminus">Action:</span> {{schedule.action}}
           </div>
-          <div class="col-sm-3 device-name">
+          <div class="col-xs-6 col-sm-3 device-name">
             <span class="pull-right">{{schedule.time}} <span class="plusminus">&plusmn;{{schedule.random || 0}} min</span></span>
           </div>
         </div>
-        <div class="row">
-            <div class="col-xs-2 {{$ctrl.getDayClass('mon', schedule.weekdays)}}">MON</div>
-            <div class="col-xs-2 {{$ctrl.getDayClass('tue', schedule.weekdays)}}">TUE</div>
-            <div class="col-xs-2 {{$ctrl.getDayClass('wed', schedule.weekdays)}}">WED</div>
-            <div class="col-xs-2 {{$ctrl.getDayClass('thu', schedule.weekdays)}}">THU</div>
-            <div class="col-xs-2 {{$ctrl.getDayClass('fri', schedule.weekdays)}}">FRI</div>
-            <div class="col-xs-6 {{$ctrl.getDayClass('sat', schedule.weekdays)}}">SAT</div>
-            <div class="col-xs-6 {{$ctrl.getDayClass('sun', schedule.weekdays)}}">SUN</div>
+
+        <div class="row day-row">
+            <span class="badge {{$ctrl.getDayClass('mon', schedule.weekdays)}}">MON</span>
+            <span class="badge {{$ctrl.getDayClass('tue', schedule.weekdays)}}">TUE</span>
+            <span class="badge {{$ctrl.getDayClass('wed', schedule.weekdays)}}">WED</span>
+            <span class="badge {{$ctrl.getDayClass('thu', schedule.weekdays)}}">THU</span>
+            <span class="badge {{$ctrl.getDayClass('fri', schedule.weekdays)}}">FRI</span>
+            <span class="badge {{$ctrl.getDayClass('sat', schedule.weekdays)}}">SAT</span>
+            <span class="badge {{$ctrl.getDayClass('sun', schedule.weekdays)}}">SUN</span>
         </div>
 
         <div class="row">
-          <div class="col-sm-4" ng-repeat="device in schedule.devices">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="device in schedule.devices">
             <div class="group-card">
               {{device.name}}<br/><span class="badge {{device.type}}">{{device.type}}</span></span>
             </div>
@@ -40,6 +39,14 @@
 
       </div>
     </div>
+  </div>
+
+
+  <div class="col-xs-12 action-button-row">
+    <button ui-sref="root.scheduler.create" class="action-button">
+      <span class="glyphicon glyphicon-plus"></span>
+      Create new schedule
+    </button>
   </div>
 
 

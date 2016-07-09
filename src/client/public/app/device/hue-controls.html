@@ -1,12 +1,8 @@
 <div class="hue-device-controls animated fadeIn">
   <div class="hue-controls">
 
-    <div class="panel panel-hue">
-      <div class="panel-heading">
+
         <h3 class="panel-title"><span class="glyphicon glyphicon-cog"></span> Modify parameters</h3>
-      </div>
-      <!--<div class="panel-heading">{{$ctrl.device.manufacturername}} {{$ctrl.device.modelid}}</div>-->
-      <div class="panel-body">
 
         <div class="row" ng-if="$ctrl.hasLink('set-brightness')">
           <div class="col-sm-4">Brightness: {{$ctrl.device.state.bri}}</div>
@@ -60,9 +56,6 @@
             </button>
           </div>
         </div>
-
-      </div>
-    </div>
 
   </div>
 

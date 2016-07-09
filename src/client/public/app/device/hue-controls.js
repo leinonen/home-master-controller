@@ -10,6 +10,19 @@
       controller: function(Link) {
         var ctrl = this;
 
+        ctrl.colors = [
+          { name: 'Deep Orange', value: 3000 },
+          { name: 'Yellow', value: 12750 },
+          { name: 'Green', value: 25500 },
+          { name: 'Blue', value: 46920 },
+          { name: 'Pink', value: 56100 },
+          { name: 'Red', value: 65280 }
+        ];
+
+        ctrl.updateHue = function(asd) {
+          console.log('update hue', asd);
+        };
+
         ctrl.hasLink = function(rel) {
           return Link.hasLink(ctrl.device, rel);
         };

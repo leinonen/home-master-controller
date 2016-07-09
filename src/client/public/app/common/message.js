@@ -36,7 +36,7 @@
       $timeout(function () {
         $scope.showMessage = false;
         $scope.$apply(); // update gui
-      }, 5000);
+      }, 4000);
     });
 
   });
@@ -46,7 +46,7 @@
       scope: {},
       restrict: 'E',
       replace: 'true',
-      template: '<div ng-show="showMessage" class="alert alert-{{msg.type}} core-message">{{msg.msg}}</div>',
+      template: '<div ng-show="showMessage" class="core-message animated fadeIn"><span class="message">{{msg.msg}}</span></div>',
       controller: 'MessageCtrl',
       controllerAs: 'ctrl'
     };

@@ -19,13 +19,15 @@
 
           <p ng-show="$ctrl.isEmptyGroup()">Empty group</p>
 
-          <div class="hmc-button-row">
-            <button type="button" class="btn btn-lg btn-primary pull-right"
+          <div class="col-sm-12 action-button-row">
+            <button type="button" class="action-button"
                     ng-show="!$ctrl.isEmptyGroup() && $ctrl.group.name.length > 0"
-                    ng-click="$ctrl.save()">Save group</button>
+                    ng-click="$ctrl.save()">
+              <span class="glyphicon glyphicon-save"></span>
+              Save group</button>
             <button type="button"
                     ng-show="$ctrl.isEditMode()"
-                    class="btn btn-lg btn-danger" ng-click="$ctrl.deleteGroup()">
+                    class="delete-button" ng-click="$ctrl.deleteGroup()">
               <span class="glyphicon glyphicon-trash"></span>
               Delete group
             </button>
