@@ -13,7 +13,7 @@
             <p class="form-control-static">Name</p>
             <input type="text" ng-model="$ctrl.schedule.name" class="form-control" placeholder="Name.."/>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-5 col-sm-offset-1">
             <p class="form-control-static">Action</p>
             <sexy-selector items="$ctrl.actions" model="$ctrl.schedule.action"></sexy-selector>
           </div>
@@ -30,7 +30,7 @@
           <div class="col-sm-6">
             <weekday-selector weekdays="$ctrl.weekdays"></weekday-selector>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-5 col-sm-offset-1">
             <p class="form-control-static">Time</p>
             <input type="text"
                    ng-model="$ctrl.schedule.time"
