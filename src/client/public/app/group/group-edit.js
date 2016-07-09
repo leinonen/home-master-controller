@@ -17,11 +17,8 @@
         };
 
         function fetchDevicesAndGroups() {
-          var promises = [];
-          promises.push(MasterApi.getDevices());
-          promises.push(MasterApi.getGroups());
-          return $q.all(promises).then(function(items) {
-            ctrl.devices = items[0].concat(items[1]);
+          return MasterApi.getDevices().then(function(items) {
+            ctrl.devices = items; //.concat(items[1]);
           });
         }
 
