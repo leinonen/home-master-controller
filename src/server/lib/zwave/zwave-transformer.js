@@ -55,7 +55,7 @@ var transformZWaveSensor = (device) => {
 
   item.data = [{
     name: device.metrics.probeTitle || 'unkown',
-    value: device.metrics.level + ' ' + (device.metrics.scaleTitle || '')
+    value: (parseFloat(device.metrics.level).toFixed(2)) + ' ' + (device.metrics.scaleTitle || '')
   }];
 
   return item;
