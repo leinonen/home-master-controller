@@ -49,12 +49,13 @@
 
   });
 
-  app.run(function ($rootScope, $state, $stateParams, $location, Auth, Socket) {
+  app.run(function ($rootScope, $state, $stateParams, $location, Auth, Socket, $interval) {
 
-    Socket.emit('hmc-command', {
-      type: 'get-sensors',
-      data: null
-    });
+    $interval(function() {
+      Socket.getSensors();
+    }, 3000);
+
+    Socket.getDevices();
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {

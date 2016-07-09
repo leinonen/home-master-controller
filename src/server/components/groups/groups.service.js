@@ -125,7 +125,7 @@ exports.controlGroup = (id, data) => {
       console.log('dauta: ', data);
       return DeviceService.controlDevice(device.id, data, 'user');
     })));
-}
+};
 
 
 

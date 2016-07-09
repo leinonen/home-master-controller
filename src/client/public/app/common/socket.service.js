@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('app').service('Socket', function ($http) {
+  angular.module('app').service('Socket', function ($http, Sensor) {
 
     var service = this;
 
@@ -11,22 +11,28 @@
     });
 
     service.io.on('hmc-command-response', function(response) {
-      console.log('hmc-command-response', response);
-
-      if (response.type === 'sensors') {
-        var sensors = response.data;
-        // notify sensor service
-        console.log('got some sensors', sensors);
+      switch (response.type) {
+        case 'sensors':
+          Sensor.update(response.data);
+          break;
+        case 'devices':
+          console.log('update device data',  response.data);
+          break;
+        default:
       }
-
-
     });
 
-    // Sensors
-    this.emit = function (msg, data) {
-      console.log('emit', msg, data);
+    service.emit = function (msg, data) {
       service.io.emit(msg, data);
     };
+
+    service.getSensors = function() {
+      service.emit('hmc-command', { type: 'get-sensors', data: null });
+    };
+
+    service.getDevices = function() {
+      service.emit('hmc-command', { type: 'get-devices', data: null });
+    }
 
   });
 

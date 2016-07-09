@@ -55,25 +55,35 @@ process.on('SIGHUP', function() {
   process.exit();
 });
 
+const sendCommand = function(socket, cmd) {
+  return function(cmd) {
+    socket.emit('hmc-command-response', cmd);
+  };
+};
 
 const socketHandler = (socket) => {
   console.log('Got a socket connection!');
 
+  let sendCommand = cmd => socket.emit('hmc-command-response', cmd);
+
   socket.on('hmc-command', function(cmd) {
 
-    if (cmd.type === 'test') {
-      socket.emit('hmc-command-response', 'thanks for the test!');
+    switch (cmd.type) {
+      case 'get-sensors':
+        SensorService.getSensors().then(
+          sensors => sendCommand({ type: 'sensors', data: sensors })
+        );
+        break;
 
-    } else if (cmd.type === 'get-sensors') {
-      SensorService.getSensors().then(sensors => socket.emit('hmc-command-response', {
-        type: 'sensors',
-        data: sensors
-      }));
+      case 'get-devices':
+        sendCommand({type: 'devices', data: []});
+        break;
+
+      default:
+        sendCommand({type: 'error', data: 'Invalid command'});
 
     }
-    else {
-      socket.emit('hmc-command-response', 'thanks for the fish!');
-    }
+
   });
 };
 
