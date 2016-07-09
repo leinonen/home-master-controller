@@ -5,8 +5,12 @@
       templateUrl: 'app/scheduler/scheduler-edit.html',
       controller: function($rootScope, $state, $stateParams, SchedulerService, Message, ErrorHandler, MasterApi, Weekdays) {
         var ctrl = this;
+        ctrl.actions = [
+          { name: 'Turn device On', value: 'on' },
+          { name: 'Turn device Off', value: 'off' }
+        ];
         ctrl.devices = [];
-        ctrl.selectedDevices = [];
+
         ctrl.schedule = {
           name: '',
           items: [],
@@ -38,8 +42,11 @@
             });
             ctrl.schedule.items.forEach(function(item) {
               MasterApi.getDevice(item.id, item.type).then(function(device) {
-                ctrl.selectedDevices = ctrl.selectedDevices || [];
-                ctrl.selectedDevices.push(device);
+                ctrl.devices.forEach(function(device) {
+                  if (device.id === item.id && device.type === item.type) {
+                    device.selected = true;
+                  }
+                });
               });
             })
           }).catch(ErrorHandler.handle);
@@ -48,12 +55,6 @@
 
         SchedulerService.getSun().then(function(sun) {
           ctrl.sun = sun;
-        });
-
-
-        $rootScope.$on('item.selected', function(event, data) {
-          console.log(data);
-          ctrl.selectedDevices.push(data);
         });
 
         ctrl.validateForm = function() {
@@ -85,32 +86,34 @@
           }).catch(ErrorHandler.handle);
         };
 
+        ctrl.updateInformation = function() {
+          var wd = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+          ctrl.schedule.weekdays = wd.filter(function(w) {
+            return ctrl.weekdays[w];
+          });
+
+          ctrl.schedule.items = ctrl.devices
+            .filter(function(item) {
+              return item.selected === true;
+            })
+            .map(function(item) {
+              return {
+                id: item.id,
+                type: item.type
+              };
+            });
+        };
+
         ctrl.createSchedule = function() {
           if (!ctrl.validateForm()) {
             Message.warning('Form is not valid');
             return;
           }
 
-          ctrl.schedule.weekdays = [];
-          var wd = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-          wd.forEach(function(w) {
-            if (ctrl.weekdays[w]) {
-              ctrl.schedule.weekdays.push(w);
-            }
-          });
-
-          ctrl.schedule.items = ctrl.selectedDevices.map(function(item) {
-            return {
-              id: item.id,
-              type: item.type
-            };
-          });
-
-          console.log(ctrl.schedule);
+          ctrl.updateInformation();
 
           SchedulerService.createSchedule(ctrl.schedule).then(function(schedule) {
             ctrl.schedule = {};
-            console.log('create successful');
             Message.success('Successfully created schedule');
             $state.go('root.scheduler');
           }).catch(ErrorHandler.handle);
@@ -122,26 +125,10 @@
             return;
           }
 
-          ctrl.schedule.weekdays = [];
-          var wd = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-          wd.forEach(function(w) {
-            if (ctrl.weekdays[w]) {
-              ctrl.schedule.weekdays.push(w);
-            }
-          });
-
-          ctrl.schedule.items = ctrl.selectedDevices.map(function(item) {
-            return {
-              id: item.id,
-              type: item.type
-            };
-          });
-
-          console.log(ctrl.schedule);
+          ctrl.updateInformation();
 
           SchedulerService.updateSchedule(ctrl.schedule._id, ctrl.schedule).then(function(schedule) {
             ctrl.schedule = {};
-            console.log('update successful');
             Message.success('Successfully updated schedule');
             $state.go('root.scheduler');
           }).catch(ErrorHandler.handle);

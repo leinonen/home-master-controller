@@ -64,7 +64,7 @@
     };
 
     this.updateGroup = function (id, group) {
-      return $http.post(GROUPS_API + 'groups/' + id, group).then(unwrap);
+      return $http.post(GROUPS_API + 'groups/generic-group/' + id, group).then(unwrap);
     };
 
     this.deleteGroup = function (id) {

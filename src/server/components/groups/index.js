@@ -26,10 +26,10 @@ module.exports = require('express').Router()
       .then(group => res.json(group))
       .catch(err => ErrorHandler(res, err)))
 
-/*  .post('/:type/:id', isAuthenticated(), (req, res) =>
+  .post('/:type/:id', isAuthenticated(), (req, res) =>
     GroupsService.updateGroup(req.params.id, req.body)
       .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err))) */
+      .catch(err => ErrorHandler(res, err)))
 
   .delete('/:id', isAuthenticated(), (req, res) =>
     GroupsService.removeGroup(req.params.id)

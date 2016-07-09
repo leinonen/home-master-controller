@@ -1,5 +1,5 @@
 <div class="row scheduler-form">
-  <div class="col-sm-12">
+  <div class="col-sm-10 col-sm-offset-1">
 
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
@@ -10,23 +10,28 @@
 
         <div class="row">
           <div class="col-sm-6">
-            <p>Name</p>
+            <p class="form-control-static">Name</p>
             <input type="text" ng-model="$ctrl.schedule.name" class="form-control" placeholder="Name.."/>
           </div>
           <div class="col-sm-6">
-            <p>Action</p>
-            <select class="form-control" ng-model="$ctrl.schedule.action">
-              <option value="on">On</option>
-              <option value="off">Off</option>
-            </select>
+            <p class="form-control-static">Action</p>
+            <sexy-selector items="$ctrl.actions" model="$ctrl.schedule.action"></sexy-selector>
           </div>
         </div>
 
-        <weekday-selector weekdays="$ctrl.weekdays"></weekday-selector>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="form-control-static">Select devices</p>
+            <item-selector items="$ctrl.devices" model="$ctrl.selectedDevices"></item-selector>
+          </div>
+        </div>
 
         <div class="row">
-          <div class="col-sm-3">
-            <p>Time</p>
+          <div class="col-sm-6">
+            <weekday-selector weekdays="$ctrl.weekdays"></weekday-selector>
+          </div>
+          <div class="col-sm-6">
+            <p class="form-control-static">Time</p>
             <input type="text"
                    ng-model="$ctrl.schedule.time"
                    class="form-control"
@@ -35,29 +40,34 @@
 
             <sexy-checkbox checked="$ctrl.schedule.sunrise" text="Sunrise ({{$ctrl.sun.sunrise}})"></sexy-checkbox>
             <sexy-checkbox checked="$ctrl.schedule.sunset" text="Sunset ({{$ctrl.sun.sunset}})"></sexy-checkbox>
-          </div>
-          <div class="col-sm-3">
-            <p>Randomize (mins)</p>
-            <input type="text" ng-model="$ctrl.schedule.random" class="form-control" placeholder="0"/>
-          </div>
-          <div class="col-sm-6">
-            <p>Select devices</p>
-            <item-selector items="$ctrl.devices"></item-selector>
+
+            <div class="row">
+              <div class="col-sm-8">
+                <p class="form-control-static">Randomize (mins)</p>
+              </div>
+              <div class="col-sm-4">
+                <input type="text" ng-model="$ctrl.schedule.random" class="form-control" placeholder="0"/>
+              </div>
+
+            </div>
+
+
           </div>
         </div>
 
-        <div class="row group-device-card-container">
-          <device-card device="device" controls="false" ng-repeat="device in $ctrl.selectedDevices track by $index"/>
-        </div>
+
+
 
         <div class="row">
           <div class="col-sm-12 hmc-button-row">
             <button type="button" class="btn btn-lg btn-danger pull"
                     ng-show="$ctrl.isEditMode()"
-                    ng-click="$ctrl.deleteSchedule($ctrl.schedule._id)">Delete Schedule
+                    ng-click="$ctrl.deleteSchedule($ctrl.schedule._id)">
+              <span class="glyphicon glyphicon-trash"></span>
             </button>
             <button type="button" class="btn btn-lg btn-primary pull-right"
-                    ng-click="$ctrl.saveButtonClick()">Save
+                    ng-click="$ctrl.saveButtonClick()">
+              Save Schedule
             </button>
 
           </div>

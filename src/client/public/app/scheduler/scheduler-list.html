@@ -20,19 +20,15 @@
             <span class="pull-right">{{schedule.time}} <span class="plusminus">&plusmn;{{schedule.random || 0}} min</span></span>
           </div>
         </div>
-        <table class="table">
-          <tbody>
-          <tr>
-            <td class="{{$ctrl.getDayClass('mon', schedule.weekdays)}}">MON</td>
-            <td class="{{$ctrl.getDayClass('tue', schedule.weekdays)}}">TUE</td>
-            <td class="{{$ctrl.getDayClass('wed', schedule.weekdays)}}">WED</td>
-            <td class="{{$ctrl.getDayClass('thu', schedule.weekdays)}}">THU</td>
-            <td class="{{$ctrl.getDayClass('fri', schedule.weekdays)}}">FRI</td>
-            <td class="{{$ctrl.getDayClass('sat', schedule.weekdays)}}">SAT</td>
-            <td class="{{$ctrl.getDayClass('sun', schedule.weekdays)}}">SUN</td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="row">
+            <div class="col-xs-2 {{$ctrl.getDayClass('mon', schedule.weekdays)}}">MON</div>
+            <div class="col-xs-2 {{$ctrl.getDayClass('tue', schedule.weekdays)}}">TUE</div>
+            <div class="col-xs-2 {{$ctrl.getDayClass('wed', schedule.weekdays)}}">WED</div>
+            <div class="col-xs-2 {{$ctrl.getDayClass('thu', schedule.weekdays)}}">THU</div>
+            <div class="col-xs-2 {{$ctrl.getDayClass('fri', schedule.weekdays)}}">FRI</div>
+            <div class="col-xs-6 {{$ctrl.getDayClass('sat', schedule.weekdays)}}">SAT</div>
+            <div class="col-xs-6 {{$ctrl.getDayClass('sun', schedule.weekdays)}}">SUN</div>
+        </div>
 
         <div class="row">
           <div class="col-sm-4" ng-repeat="device in schedule.devices">

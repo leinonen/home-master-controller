@@ -1,37 +1,37 @@
 <div class="row">
   <div class="col-sm-12">
-    <p>Weekdays</p>
+    <p class="form-control-static">Weekdays</p>
 
-    <div class="col-md-3">
+    <div class="col-xs-6">
         <sexy-checkbox checked="$ctrl.weekdays.mon" text="MON"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-6">
       <sexy-checkbox checked="$ctrl.weekdays.tue" text="TUE"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-6">
       <sexy-checkbox checked="$ctrl.weekdays.wed" text="WED"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-6">
       <sexy-checkbox checked="$ctrl.weekdays.thu" text="THU"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-6">
       <sexy-checkbox checked="$ctrl.weekdays.fri" text="FRI"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-6">
       <sexy-checkbox checked="$ctrl.weekdays.sat" text="SAT"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
+    <div class="col-xs-6">
       <sexy-checkbox checked="$ctrl.weekdays.sun" text="SUN"></sexy-checkbox>
     </div>
-    <div class="col-md-3">
-      <button type="button" class="btn sexy-button" ng-click="$ctrl.selectWorkdays()">Workdays</button>
+    <div class="col-md-6">
+      <button type="button" class="sexy-button" ng-click="$ctrl.selectFullWeek()">All</button>
     </div>
-    <div class="col-md-3">
-      <button type="button" class="btn sexy-button" ng-click="$ctrl.selectWeekend()">Weekend</button>
+    <div class="col-md-6">
+      <button type="button" class="sexy-button" ng-click="$ctrl.selectWeekend()">Weekend</button>
     </div>
-      <div class="col-md-3">
-      <button type="button" class="btn sexy-button" ng-click="$ctrl.selectFullWeek()">All</button>
-    </div>
+      <div class="col-md-6">
+        <button type="button" class="sexy-button" ng-click="$ctrl.selectWorkdays()">Workdays</button>
+      </div>
     </div>
 
   </div>

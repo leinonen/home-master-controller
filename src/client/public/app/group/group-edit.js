@@ -6,9 +6,7 @@
       templateUrl: 'app/group/group-edit.html',
       controller: function($rootScope, $q, $state, $stateParams, MasterApi, Message) {
         var ctrl = this;
-        ctrl.groupDevices = [];
         ctrl.devices = [];
-        ctrl.selectedItems = [];
         ctrl.group = {
           name: '',
           items: []
@@ -33,15 +31,12 @@
             .then(function(group) {
               ctrl.group = group;
 
-              MasterApi
-                .getGroupDevices(group.id, group.type)
-                .then(function(devices) {
-                  ctrl.groupDevices = devices;
-                  ctrl.groupDevices.forEach(function(device) {
-                    ctrl.selectedItems.push(device);
-                  });
-                }).catch(function(err) {
-                Message.danger(err.data.message);
+              ctrl.devices.forEach(function(device) {
+                group.items.forEach(function(item) {
+                  if (item.id == device.id && item.type === device.type) {
+                    device.selected = true;
+                  }
+                });
               });
 
             }).catch(function(err) {
@@ -55,18 +50,11 @@
           }
         });
 
-        ctrl.removeItem = function(index) {
-          ctrl.selectedItems.splice(index, 1);
-        };
-
-        $rootScope.$on('item.selected', function(event, data) {
-          if (data.id) {
-            ctrl.selectedItems.push(data);
-          }
-        });
 
         ctrl.isEmptyGroup = function() {
-          return ctrl.selectedItems.length === 0;
+          return ctrl.devices.filter(function(device) {
+            return device.selected === true;
+          }).length === 0;
         };
 
         ctrl.isValid = function() {
@@ -83,8 +71,10 @@
         };
 
         var addSelectedItems = function() {
-          ctrl.group.items = ctrl.selectedItems.map(function(item) {
-            return {id: item.id, type: item.type};
+          ctrl.group.items = ctrl.devices.filter(function(device) {
+            return device.selected === true;
+          }).map(function(device) {
+            return {id: device.id, type: device.type};
           });
         };
 
@@ -92,7 +82,7 @@
           Message.success('Success!');
           ctrl.group.name = '';
           ctrl.group.items = [];
-          ctrl.selectedItems = [];
+          //ctrl.selectedItems = [];
           $state.go('root.groups');
         };
 

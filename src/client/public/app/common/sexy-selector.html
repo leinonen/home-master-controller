@@ -1,11 +1,10 @@
-<div class="item-selector">
+<div class="sexy-selector">
   <ul>
     <li ng-repeat="item in $ctrl.items track by $index"
-        ng-class="{selected:item.selected}"
+        ng-class="{selected:item.value === $ctrl.model}"
         ng-click="$ctrl.toggleItem(item)">
       <span class="glyphicon glyphicon-check"></span>
-      <span class="item-name">{{item.name}}</span>
-      <span class="pull-right item-type">{{item.type}}</span>
+      {{item.name}}
     </li>
   </ul>
 </div>
