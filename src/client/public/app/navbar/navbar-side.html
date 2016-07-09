@@ -1,0 +1,13 @@
+<div class="sidebar">
+  <div ng-repeat="item in $ctrl.getLeftItems()" class="col-xs-3 col-sm-12 col-md-12 col-lg-12">
+    <div class="sidebar-item"
+         ui-sref-active="active"
+         ui-sref="{{item.state}}">
+      <a href="#">
+        <span class="{{item.icon}}"></span>
+
+        <h1 class="hidden-xs">{{item.title}}</h1>
+      </a>
+    </div>
+  </div>
+</div>

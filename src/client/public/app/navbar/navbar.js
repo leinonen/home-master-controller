@@ -4,6 +4,7 @@
     var routes = [
       {
         title: 'Devices',
+        icon: 'glyphicon glyphicon-list',
         state: 'root.devices',
         url: '/devices',
         template: '<device-list/>',
@@ -12,6 +13,7 @@
       },
       {
         title: 'Groups',
+        icon: 'glyphicon glyphicon-folder-open',
         state: 'root.groups',
         url: '/groups',
         template: '<group-list/>',
@@ -37,6 +39,7 @@
 
       {
         title: 'Sensors',
+        icon: 'glyphicon glyphicon-eye-open',
         state: 'root.sensors',
         url: '/sensors',
         template: '<sensor-list/>',
@@ -45,6 +48,7 @@
       },
       {
         title: 'Scheduler',
+        icon: 'glyphicon glyphicon-calendar',
         state: 'root.scheduler',
         url: '/scheduler',
         template: '<scheduler-list/>',
@@ -103,6 +107,7 @@
       },
       {
         title: 'Account',
+        icon: 'glyphicon glyphicon-user',
         url: '/settings',
         state: 'root.settings',
         template: '<settings/>',
@@ -131,6 +136,42 @@
     .component('navbar', {
       bindings: {},
       templateUrl: 'app/navbar/navbar.html',
+      controller: function(Routes, Auth, $state) {
+
+        var ctrl = this;
+        ctrl.title = 'Home Master Controller';
+
+        ctrl.items = Routes.routes;
+        ctrl.isLoggedIn = Auth.isLoggedIn;
+        ctrl.logout = function() {
+          Auth.logout();
+          $state.transitionTo('root.devices');
+        };
+
+        function hideLogin(item) {
+          var loggedIn = Auth.isLoggedIn();
+          return !(item.state === 'root.login' && loggedIn)
+        }
+
+        ctrl.getLeftItems = function() {
+          return ctrl.items.filter(function(item) {
+            return item.position === 'left' && hideLogin(item);
+          });
+        };
+
+        ctrl.getRightItems = function() {
+          return ctrl.items.filter(function(item) {
+            return item.position === 'right' && hideLogin(item);
+          });
+        };
+
+      }
+    });
+
+  angular.module('app')
+    .component('navbarSide', {
+      bindings: {},
+      templateUrl: 'app/navbar/navbar-side.html',
       controller: function(Routes, Auth, $state) {
 
         var ctrl = this;
