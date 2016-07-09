@@ -6,20 +6,16 @@
       var model = {};
       var selectedDevice;
 
-      $rootScope.$on('fetchDevices', function(event, message) {
-        $timeout(function() {
-          DevicesResource.query().$promise.then(function(response) {
-              model = response;
-            })
-            .catch(ErrorHandler.handle);
-        }, 200);
-      });
+      DevicesResource.query().$promise.then(function(response) {
+        model = response;
+      })
+      .catch(ErrorHandler.handle);
 
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+   /*   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
         if (toState.name === 'root.devices') {
           $rootScope.$emit('fetchDevices');
         }
-      });
+      }); */
 
       service.getDevices = function() {
         return model.devices || [];

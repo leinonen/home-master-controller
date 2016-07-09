@@ -7,6 +7,7 @@ const
   winston = require('winston'),
   express = require('express'),
   app = express(),
+  http = require('http').Server(app),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
   passport = require('passport'),
@@ -14,7 +15,10 @@ const
   mongoStore = require('connect-mongo')(session),
   mongoose = require('mongoose-q')(),
   User = require('./server/components/user/user.model.js'),
-  Scheduler = require('./server/components/scheduler/rxScheduler');
+  Scheduler = require('./server/components/scheduler/rxScheduler'),
+  SensorService = require('./server/components/sensor/sensor.service');
+
+const io = require('socket.io')(http);
 
 let scheduler = new Scheduler();
 
@@ -50,6 +54,32 @@ process.on('SIGHUP', function() {
   console.log('PROCESS TERMINATED');
   process.exit();
 });
+
+
+const socketHandler = (socket) => {
+  console.log('Got a socket connection!');
+
+  socket.on('hmc-command', function(cmd) {
+
+    if (cmd.type === 'test') {
+      socket.emit('hmc-command-response', 'thanks for the test!');
+
+    } else if (cmd.type === 'get-sensors') {
+      SensorService.getSensors().then(sensors => socket.emit('hmc-command-response', {
+        type: 'sensors',
+        data: sensors
+      }));
+
+    }
+    else {
+      socket.emit('hmc-command-response', 'thanks for the fish!');
+    }
+  });
+};
+
+io.on('connection', socketHandler);
+
+
 
 app
   .use(bodyParser.json())
@@ -100,9 +130,9 @@ app
   .use((err, req, res, next) => {
     winston.info(err.message);
     res.sendStatus(err.status || 500);
-  })
+  });
 
-  .listen(nconf.get('PORT'));
+  http.listen(nconf.get('PORT'));
 
 winston.info('HMC: HTTP Server running on port %d', nconf.get('PORT'));
 

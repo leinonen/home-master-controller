@@ -5,16 +5,8 @@
       var service = this;
       var model = {};
 
-      $rootScope.$on('fetchGroups', function(event, message) {
-        GroupsResource.query().$promise.then(function(group) {
-          model = group;
-        });
-      });
-
-      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-        if (toState.name === 'root.groups') {
-          $rootScope.$emit('fetchGroups');
-        }
+      GroupsResource.query().$promise.then(function(group) {
+        model = group;
       });
 
       service.getGroups = function() {

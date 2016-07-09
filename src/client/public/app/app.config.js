@@ -49,7 +49,12 @@
 
   });
 
-  app.run(function ($rootScope, $state, $stateParams, $location, Auth) {
+  app.run(function ($rootScope, $state, $stateParams, $location, Auth, Socket) {
+
+    Socket.emit('hmc-command', {
+      type: 'get-sensors',
+      data: null
+    });
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
