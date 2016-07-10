@@ -1,6 +1,6 @@
 (function () {
 
-  angular.module('app').service('Socket', function ($http, Sensor) {
+  angular.module('app').service('Socket', function ($http, Sensor, Devices) {
 
     var service = this;
 
@@ -17,6 +17,7 @@
           break;
         case 'devices':
           console.log('update device data',  response.data);
+          Devices.update(response.data);
           break;
         default:
       }

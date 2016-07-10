@@ -6,9 +6,10 @@
       var model = {};
 
       service.getSensors = function() {
-        return MasterApi.getSensors().then(function(sensors) {
+        /*return MasterApi.getSensors().then(function(sensors) {
           model.sensors = sensors;
-        }).catch(ErrorHandler.handle);
+        }).catch(ErrorHandler.handle); */
+        return model.sensors || [];
       };
 
       service.update = function(data) {

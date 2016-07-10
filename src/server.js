@@ -16,7 +16,8 @@ const
   mongoose = require('mongoose-q')(),
   User = require('./server/components/user/user.model.js'),
   Scheduler = require('./server/components/scheduler/rxScheduler'),
-  SensorService = require('./server/components/sensor/sensor.service');
+  SensorService = require('./server/components/sensor/sensor.service'),
+  DeviceService = require('./server/components/device/device.service');
 
 const io = require('socket.io')(http);
 
@@ -76,7 +77,9 @@ const socketHandler = (socket) => {
         break;
 
       case 'get-devices':
-        sendCommand({type: 'devices', data: []});
+        DeviceService.getDevices().then(
+          devices => sendCommand({type: 'devices', data: devices})
+        );
         break;
 
       default:
