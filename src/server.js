@@ -16,12 +16,14 @@ const
   mongoose = require('mongoose-q')(),
   User = require('./server/components/user/user.model.js'),
   Scheduler = require('./server/components/scheduler/rxScheduler'),
+  RxSensor = require('./server/components/sensor/rxSensor'),
   SensorService = require('./server/components/sensor/sensor.service'),
   DeviceService = require('./server/components/device/device.service');
 
 const io = require('socket.io')(http);
 
 let scheduler = new Scheduler();
+let rxSensor = new RxSensor();
 
 winston.info('Connecting to database: %s', nconf.get('MONGO_URL'));
 var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
@@ -150,3 +152,4 @@ app
 winston.info('HMC: HTTP Server running on port %d', nconf.get('PORT'));
 
 scheduler.start();
+rxSensor.start();
