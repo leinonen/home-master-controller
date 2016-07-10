@@ -71,10 +71,7 @@ $ docker-compose up -d
 Also, make sure the time is set correctly on your system for the scheduler to work properly.
 
 ## Author
-Written with love by Peter Leinonen, 2015.
+Written with love by Peter Leinonen, 2015 & 2016
 
 ## Thanks
 Special thanks to my friend Henrik Boquist for providing all the hardware and devices to test on! :)
-
-## Copyright
-None, free to use by everybody! :D
