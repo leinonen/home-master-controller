@@ -28,6 +28,9 @@ Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 * Heavy use of promises (Using q library), for nice and readable code!
 * Bootstrap for responsive design that looks nice on all devices
 
+![](http://www.pharatropic.eu/images/009d11dc8e1b2ccf92ec3739f4c8fec1.png)
+
+
 ## Installation
 
 If you want to use Z-Wave, make sure you have installed your RaZberry z-wave controller first.
