@@ -3,7 +3,7 @@
 Control and automate your home from one place!
 Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 
-![](http://pharatropic.eu/images/20c462ccc7ac8780b321d2543bed03ed.png)
+![](http://www.pharatropic.eu/images/686580e468dee0f280fb0966c9efc1aa.png)
 
 ## Requirements
 * NodeJS 4.2.0 or better
