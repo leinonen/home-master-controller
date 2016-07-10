@@ -1,10 +1,14 @@
 'use strict';
-var express = require('express');
-var controller = require('././configuration.controller');
 var auth = require('../../components/auth/auth.service');
-var router = express.Router();
+var serveJson = require('../../lib/json-controller');
+var Configuration = require('./configuration.model');
 
-router.get('/configuration', controller.readConfiguration);
-router.post('/configuration', auth.isAuthenticated(), controller.saveConfiguration);
+module.exports = require('express').Router()
+  .get('/configuration', (req, res) => serveJson(
+    Configuration.get(), req, res
+  ))
 
-module.exports = router;
+  .post('/configuration', auth.isAuthenticated(), (req, res) => serveJson(
+    Configuration.saveConfig(req.body._id, req.body), req, res
+  ));
+
