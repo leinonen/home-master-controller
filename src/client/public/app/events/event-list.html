@@ -1,10 +1,30 @@
 <div class="event-list">
-    <div class="col-sm-12 hmc-button-row">
-        <button ui-sref="root.events.create" class="btn btn-default pull-right">
-            <span class="glyphicon glyphicon-plus"></span> Create event</button>
+  <div ng-repeat="event in ctrl.events" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="event-card">
+
+      <div class="col-xs-12">
+        <a ui-sref="root.events.edit({id:event._id})">
+          <span class="device-name">{{event.name}}</span> asdasd
+        </a>
+      </div>
+
+      <div class="col-xs-12">
+        {{event.sensorAction}}
+        {{event.sensor.id}} {{event.sensor.type}}
+      </div>
+
+      {{event.deviceAction}}
+      <p ng-repeat="device in event.devices">{{device}}</p>
     </div>
-    <h1>Event list</h1>
-    <div ng-repeat="event in ctrl.events">
-        {{event.name}}
+
+  </div>
+
+  <div class="col-sm-12">
+    <div class="action-button-row">
+      <button ui-sref="root.events.create" class="action-button">
+        <span class="glyphicon glyphicon-plus"></span>
+        Create event
+      </button>
     </div>
+  </div>
 </div>

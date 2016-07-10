@@ -1,54 +1,74 @@
 (function(){
 
   angular.module('app')
-    .directive('createEvent', function() {
-      return {
-        scope: {},
+    .component('createEvent', {
+        bindings: {},
         templateUrl: 'app/events/create-event.html',
-        replace: true,
-        controllerAs: 'ctrl',
-        bindToController: true,
-        controller: function($rootScope, MasterApi) {
+        controller: function($state, $stateParams, $rootScope, MasterApi, Sensor) {
+
           var ctrl = this;
+
+          ctrl.isEditMode = function() {
+            return $stateParams.id !== undefined;
+          };
+
           ctrl.form = {
             eventName: ''
           };
-          ctrl.sensors = [];
+
+          ctrl.sensors = Sensor.getSensors().map(function(sensor) {
+            return {
+              name: sensor.name,
+              type: sensor.type,
+              value: sensor
+            };
+          });
+          ctrl.sensorActions = [
+            {name: 'Sensor ON',  value: 'sensor-on' },
+            {name: 'Sensor OFF', value: 'sensor-off'}
+          ];
+          ctrl.deviceActions = [
+            {name: 'Turn ON',  value: 'device-on' },
+            {name: 'Turn OFF', value: 'device-off'}
+          ];
+
+          ctrl.sensorAction = ctrl.sensorActions[0].value;
+          ctrl.deviceAction = ctrl.deviceActions[0].value;
+
           ctrl.devices = [];
-          ctrl.selectedSensor = {
-            id: 'test'
-          };
+          MasterApi.getDevices().then(function(devices) {
+            ctrl.devices = devices;
+          });
+
+          ctrl.selectedSensor = null;
           ctrl.selectedDevices = [];
 
           ctrl.validate = function() {
-            return /* ctrl.selectedSensor !== undefined &&*/ ctrl.selectedDevices.length > 0;
+            return true; //  /* ctrl.selectedSensor !== undefined &&*/ ctrl.selectedDevices.length > 0;
           };
 
           ctrl.submitForm = function() {
-            console.log('selectedSensor:', ctrl.selectedSensor);
-            console.log('selectedDevices:', ctrl.selectedDevices);
             if (ctrl.validate()) {
-              console.log('Success');
               var message = {
                 name: ctrl.form.eventName,
-                sensor: ctrl.selectedSensor.id,
-                action: String
+                sensor: ctrl.selectedSensor,
+                sensorAction: ctrl.sensorAction,
+                devices: ctrl.selectedDevices,
+                deviceAction: ctrl.deviceAction
               };
-              MasterApi.createEvent(message);
+              if (ctrl.isEditMode()) {
+                MasterApi.updateEvent(message);
+              } else {
+                MasterApi.createEvent(message);
+              }
+
+              $state.go('root.events');
             } else {
               console.log('error. henkes fel')
             }
           };
 
-          MasterApi.getSensors().then(function(sensors) {
-            ctrl.sensors = sensors.filter(function(item) {
-              return item.type === 'zwave-sensor-binary';
-            });
-          });
 
-          MasterApi.getDevices().then(function(devices) {
-            ctrl.devices = devices;
-          });
 
           function isValidDevice(type) {
             return ['telldus-device', 'hue-device', 'zwave-switch-binary'].indexOf(type) !== -1;
@@ -58,17 +78,7 @@
             return type === 'zwave-sensor-binary';
           }
 
-          $rootScope.$on('item.selected', function(event, item) {
-            if(isValidDevice(item.type)) {
-              ctrl.selectedDevices.push(item);
-            } else if (isValidSensor(item.type)) {
-              ctrl.selectedSensor = item;
-              console.log(ctrl.selectedSensor);
-            }
-          });
-
         }
-      };
     });
 
 })();

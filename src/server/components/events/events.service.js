@@ -17,9 +17,10 @@ exports.updateEvent = (id, data) =>
   EventModel.findById(id)
   .then(model => {
     model.name = data.name;
-    model.action = data.action;
+    model.sensorAction = data.sensorAction;
     model.sensor = data.sensor;
-    model.items = data.items;
+    model.devices = data.devices;
+    model.deviceAction = data.deviceAction;
     return model;
   });
 

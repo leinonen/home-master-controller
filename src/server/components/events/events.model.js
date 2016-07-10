@@ -5,8 +5,9 @@ var mongoose = require('mongoose-q')();
 var EventSchema = mongoose.Schema({
   name: String,
   sensor: {type: {type: String}, id: {type: String}},
-  items: [{type: {type: String}, id: {type: String}}],
-  action: String
+  sensorAction: String,
+  devices: [{type: {type: String}, id: {type: String}}],
+  deviceAction: String
 });
 
 EventSchema.statics.findById = function (id) {

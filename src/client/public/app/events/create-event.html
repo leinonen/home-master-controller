@@ -3,48 +3,47 @@
 
         <div class="panel panel-default panel-success">
             <div class="panel-heading">
-                <h3 class="panel-title">Create Event</h3>
+                <h3 class="panel-title" ng-show="!$ctrl.isEditMode()">Create Event</h3>
+                <h3 class="panel-title" ng-show="$ctrl.isEditMode()">Edit Event</h3>
             </div>
             <div class="panel-body">
-                <form ng-submit="ctrl.submitForm()">
+                <form ng-submit="$ctrl.submitForm()">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <p>Name your event</p>
-                            <input type="text" ng-model="ctrl.form.name" class="form-control" placeholder="name"/>
+                        <div class="col-sm-12">
+                            <p class="form-control-static">Name your event</p>
+                            <input type="text" ng-model="$ctrl.form.name" class="form-control" placeholder="name"/>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-8">
-                            <p>Select Sensor</p>
-                            <item-selector items="ctrl.sensors"/>
-                            <p>{{ctrl.selectedSensor.name}}</p>
+                        <div class="col-sm-12">
+                            <p class="form-control-static">Pick Sensor</p>
+                            <sexy-selector items="$ctrl.sensors" model="$ctrl.selectedSensor"/>
                         </div>
-                        <div class="col-sm-4">
-                            <p>Sensor Action:</p>
-                            <select class="form-control" ng-model="ctrl.sensorAction">
-                                <option value="on">On</option>
-                                <option value="off">Off</option>
-                            </select>
+                        <div class="col-sm-12">
+                            <p class="form-control-static">When this occurs</p>
+                            <sexy-selector items="$ctrl.sensorActions" model="$ctrl.sensorAction"></sexy-selector>
+
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-8">
-                            <p>Select devices:</p>
-                            <item-selector items="ctrl.devices"/>
-                            <p ng-repeat="device in ctrl.selectedDevices">{{device.name}}</p>
+                        <div class="col-sm-12">
+                            <p class="form-control-static">Pick devices to perform action on:</p>
+                            <item-selector items="$ctrl.devices" model="$ctrl.selectedDevices"/>
                         </div>
-                        <div class="col-sm-4">
-                            <p>Device Action:</p>
-                            <select class="form-control" ng-model="ctrl.deviceAction">
-                                <option value="on">On</option>
-                                <option value="off">Off</option>
-                            </select>
+                        <div class="col-sm-12">
+                            <p class="form-control-static">Action</p>
+                            <sexy-selector items="$ctrl.deviceActions" model="$ctrl.deviceAction"></sexy-selector>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary pull-right">Save the shit</button>
+                    <div class="action-button-row">
+                        <button type="submit" class="action-button">
+                            <span class="glyphicon glyphicon-save"></span>
+                            Save the shit
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

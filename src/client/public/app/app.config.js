@@ -53,7 +53,7 @@
 
     $interval(function() {
       Socket.getSensors();
-    }, 3000);
+    }, 10 * 1000);
 
     Socket.getDevices();
 
