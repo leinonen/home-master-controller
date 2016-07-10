@@ -13,14 +13,15 @@ exports.createEvent = (data) => {
   return Promise.resolve(model);
 };
 
-exports.updateEvent = (id, data) =>
+exports.updateEvent = (id, update) =>
   EventModel.findById(id)
   .then(model => {
-    model.name = data.name;
-    model.sensorAction = data.sensorAction;
-    model.sensor = data.sensor;
-    model.devices = data.devices;
-    model.deviceAction = data.deviceAction;
+    model.name = update.name;
+    model.sensorAction = update.sensorAction;
+    model.sensor = update.sensor;
+    model.devices = update.devices;
+    model.deviceAction = update.deviceAction;
+    console.log('update event', model);
     return model;
   });
 

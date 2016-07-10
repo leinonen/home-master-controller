@@ -1,13 +1,24 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./events.controller');
-var auth = require('../../components/auth/auth.service');
-var router = express.Router();
+var isAuthenticated = require('../../components/auth/auth.service').isAuthenticated;
+var EventsService = require('./events.service');
+var serveJson = require('../../lib/json-controller');
 
-router.get('/', auth.isAuthenticated(), controller.events);
-router.get('/:id', auth.isAuthenticated(), controller.getEvent);
-router.post('/', auth.isAuthenticated(), controller.createEvent);
-router.post('/:id', auth.isAuthenticated(), controller.updateEvent);
+module.exports = express.Router()
+  .get('/', isAuthenticated(), (req, res) =>
+    serveJson(EventsService.getEvents(), req, res)
+  )
+  .get('/:id', isAuthenticated(), (req, res) =>
+    serveJson(EventsService.getEvent(req.params.id), req, res)
+  )
+  .delete('/:id', isAuthenticated(), (req, res) =>
+    serveJson(EventsService.removeEvent(req.params.id), req, res)
+  )
+  .post('/', isAuthenticated(), (req, res) =>
+    serveJson(EventsService.createEvent(req.body), req, res)
+  )
+  .post('/:id', isAuthenticated(), (req, res) =>
+    serveJson(EventsService.updateEvent(req.params.id, req.body), req, res)
+  );
 
-module.exports = router;
