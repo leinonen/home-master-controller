@@ -11,18 +11,18 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="form-control-static">Name your event</p>
-                            <input type="text" ng-model="$ctrl.form.name" class="form-control" placeholder="name"/>
+                            <input type="text" ng-model="$ctrl.event.name" class="form-control" placeholder="name"/>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="form-control-static">Pick Sensor</p>
-                            <sexy-selector items="$ctrl.sensors" model="$ctrl.selectedSensor"/>
+                            <sexy-selector items="$ctrl.sensors" model="$ctrl.event.selectedSensor"/>
                         </div>
                         <div class="col-sm-12">
                             <p class="form-control-static">When this occurs</p>
-                            <sexy-selector items="$ctrl.sensorActions" model="$ctrl.sensorAction"></sexy-selector>
+                            <sexy-selector items="$ctrl.sensorActions" model="$ctrl.event.sensorAction"></sexy-selector>
 
                         </div>
                     </div>
@@ -30,11 +30,11 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="form-control-static">Pick devices to perform action on:</p>
-                            <item-selector items="$ctrl.devices" model="$ctrl.selectedDevices"/>
+                            <item-selector items="$ctrl.devices" model="$ctrl.event.selectedDevices"/>
                         </div>
                         <div class="col-sm-12">
                             <p class="form-control-static">Action</p>
-                            <sexy-selector items="$ctrl.deviceActions" model="$ctrl.deviceAction"></sexy-selector>
+                            <sexy-selector items="$ctrl.deviceActions" model="$ctrl.event.deviceAction"></sexy-selector>
                         </div>
                     </div>
 

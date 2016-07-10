@@ -75,8 +75,20 @@
       return $http.get(EVENTS_API + 'events').then(unwrap);
     };
 
+    this.getEvent = function(id) {
+      return $http.get(EVENTS_API + 'events/' + id).then(unwrap);
+    };
+
     this.createEvent = function(event) {
       return $http.post(EVENTS_API + 'events', event).then(unwrap);
+    };
+
+    this.updateEvent = function(event) {
+      return $http.post(EVENTS_API + 'events/' + event._id, event).then(unwrap);
+    };
+
+    this.deleteEvent = function(id) {
+      return $http.delete(EVENTS_API + 'events/'+ id).then(unwrap);
     };
 
   });

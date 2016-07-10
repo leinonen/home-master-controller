@@ -1,8 +1,9 @@
 'use strict';
+var ServiceHandler = require('../../lib/service.handler');
 var DeviceTypes = require('../../lib/device-types');
 var Telldus = require('../../lib/telldus/telldus');
 var ZWave = require('../../lib/zwave/zwave');
-var ServiceHandler = require('../../lib/service.handler');
+
 
 let SENSOR = (cb, xform, id) => cb(id).then(xform)
     .catch(!!id ? ServiceHandler.noService :
@@ -15,7 +16,9 @@ var TELLDUS_SENSORS = ()   => SENSOR(Telldus.sensors, Telldus.transformSensors);
 
 exports.getSensors = () => {
   let promises = [TELLDUS_SENSORS(), ZWAVE_SENSORS()];
-  return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
+  return Promise.all(promises).then(arr =>
+    arr.reduce((a, b) => a.concat(b))
+  );
 };
 
 exports.getSensor = (id, type) => {

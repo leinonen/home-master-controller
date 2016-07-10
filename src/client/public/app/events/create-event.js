@@ -12,9 +12,14 @@
             return $stateParams.id !== undefined;
           };
 
-          ctrl.form = {
-            eventName: ''
-          };
+          ctrl.event = {};
+
+          if (ctrl.isEditMode()) {
+            MasterApi.getEvent($stateParams.id).then(function(event) {
+              console.log('got event data', event);
+              ctrl.event = event;
+            });
+          }
 
           ctrl.sensors = Sensor.getSensors().map(function(sensor) {
             return {
@@ -23,10 +28,12 @@
               value: sensor
             };
           });
+
           ctrl.sensorActions = [
             {name: 'Sensor ON',  value: 'sensor-on' },
             {name: 'Sensor OFF', value: 'sensor-off'}
           ];
+
           ctrl.deviceActions = [
             {name: 'Turn ON',  value: 'device-on' },
             {name: 'Turn OFF', value: 'device-off'}
@@ -50,17 +57,19 @@
           ctrl.submitForm = function() {
             if (ctrl.validate()) {
               var message = {
-                name: ctrl.form.eventName,
-                sensor: ctrl.selectedSensor,
-                sensorAction: ctrl.sensorAction,
-                devices: ctrl.selectedDevices,
-                deviceAction: ctrl.deviceAction
+                _id:    ctrl.event._id,
+                name:   ctrl.event.name,
+                sensor: ctrl.event.selectedSensor,
+                sensorAction: ctrl.event.sensorAction,
+                devices:      ctrl.event.selectedDevices,
+                deviceAction: ctrl.event.deviceAction
               };
               if (ctrl.isEditMode()) {
                 MasterApi.updateEvent(message);
               } else {
                 MasterApi.createEvent(message);
               }
+              console.log(message);
 
               $state.go('root.events');
             } else {
@@ -69,6 +78,10 @@
           };
 
 
+          ctrl.deleteEvent = function() {
+            MasterApi.deleteEvent(ctrl.event);
+            $state.go('root.events');
+          };
 
           function isValidDevice(type) {
             return ['telldus-device', 'hue-device', 'zwave-switch-binary'].indexOf(type) !== -1;
