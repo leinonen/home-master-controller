@@ -1,51 +1,52 @@
 <div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
+  <div class="col-sm-10 col-sm-offset-1">
 
-        <div class="panel panel-default panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title" ng-show="!$ctrl.isEditMode()">Create Event</h3>
-                <h3 class="panel-title" ng-show="$ctrl.isEditMode()">Edit Event</h3>
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title" ng-show="!$ctrl.isEditMode()">Create Event</h3>
+
+        <h3 class="panel-title" ng-show="$ctrl.isEditMode()">Edit Event</h3>
+      </div>
+      <div class="panel-body">
+        <form ng-submit="$ctrl.submitForm()">
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="form-control-static">Name your event</p>
+              <input type="text" ng-model="$ctrl.event.name" class="form-control" placeholder="name"/>
             </div>
-            <div class="panel-body">
-                <form ng-submit="$ctrl.submitForm()">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p class="form-control-static">Name your event</p>
-                            <input type="text" ng-model="$ctrl.event.name" class="form-control" placeholder="name"/>
-                        </div>
-                    </div>
+          </div>
 
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p class="form-control-static">Pick Sensor</p>
-                            <sexy-selector items="$ctrl.sensors" model="$ctrl.event.selectedSensor"/>
-                        </div>
-                        <div class="col-sm-12">
-                            <p class="form-control-static">When this occurs</p>
-                            <sexy-selector items="$ctrl.sensorActions" model="$ctrl.event.sensorAction"></sexy-selector>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p class="form-control-static">Pick devices to perform action on:</p>
-                            <item-selector items="$ctrl.devices" model="$ctrl.event.selectedDevices"/>
-                        </div>
-                        <div class="col-sm-12">
-                            <p class="form-control-static">Action</p>
-                            <sexy-selector items="$ctrl.deviceActions" model="$ctrl.event.deviceAction"></sexy-selector>
-                        </div>
-                    </div>
-
-                    <div class="action-button-row">
-                        <button type="submit" class="action-button">
-                            <span class="glyphicon glyphicon-save"></span>
-                            Save the shit
-                        </button>
-                    </div>
-                </form>
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="form-control-static">Pick Sensor</p>
+              <sexy-selector items="$ctrl.sensors" model="$ctrl.event.sensor"/>
             </div>
-        </div>
+            <div class="col-sm-12">
+              <p class="form-control-static">When this occurs</p>
+              <sexy-selector items="$ctrl.sensorActions" model="$ctrl.event.sensorAction"></sexy-selector>
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="form-control-static">Pick devices to perform action on:</p>
+              <item-selector items="$ctrl.devices"/>
+            </div>
+            <div class="col-sm-12">
+              <p class="form-control-static">Action</p>
+              <sexy-selector items="$ctrl.deviceActions" model="$ctrl.event.deviceAction"></sexy-selector>
+            </div>
+          </div>
+
+          <div class="action-button-row">
+            <button type="submit" class="action-button">
+              <span class="glyphicon glyphicon-save"></span>
+              Save Event
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>

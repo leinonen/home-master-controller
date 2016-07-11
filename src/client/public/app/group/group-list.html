@@ -1,48 +1,48 @@
 <div>
-<div class="group-list">
+  <div class="group-list">
 
-  <div ng-repeat="group in $ctrl.getGroups() | orderBy:'name'" class="group-card">
+    <div ng-repeat="group in $ctrl.getGroups() | orderBy:'name'" class="group-card">
 
-    <div class="row-separator">
-      <div class="row">
-        <div class="col-xs-9 col-sm-9 device-name">
-          <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}<br/>
-            <span class="badge {{group.type}}">{{group.type}}</span>
-          </a>
-        </div>
-        <div class="col-xs-3 col-sm-3">
-          <button ng-if="$ctrl.hasLink(group, 'enable')" ng-click="$ctrl.handleLink(group, 'enable')"
-                  type="button" class="btn btn-default pull-right">
-            Turn On
-          </button>
-          <button ng-if="$ctrl.hasLink(group, 'disable')" ng-click="$ctrl.handleLink(group, 'disable')"
-                  type="button" class="btn btn-primary pull-right">
-            Turn Off
-          </button>
+      <div class="row-separator">
+        <div class="row">
+          <div class="col-xs-9 col-sm-9 device-name">
+            <a ui-sref="root.groups.edit({id:group.id, type:group.type})">{{group.name}}<br/>
+              <span class="badge {{group.type}}">{{group.type}}</span>
+            </a>
+          </div>
+          <div class="col-xs-3 col-sm-3">
+            <button ng-if="$ctrl.hasLink(group, 'enable')" ng-click="$ctrl.handleLink(group, 'enable')"
+                    type="button" class="btn btn-default pull-right">
+              Turn On
+            </button>
+            <button ng-if="$ctrl.hasLink(group, 'disable')" ng-click="$ctrl.handleLink(group, 'disable')"
+                    type="button" class="btn btn-primary pull-right">
+              Turn Off
+            </button>
 
-        </div>
-      </div>
-
-      <div class="row group-device-card-container">
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3"   ng-if="group.items" ng-repeat="device in group.items">
-          <div class="device-card">
-            <span class="device-name">{{device.name}}</span>
-            <span class="device-name device-level pull-right">{{device.state.on ? 'ON':'OFF'}}</span><br/>
-            <span class="badge {{device.type}}">{{device.type}}</span>
           </div>
         </div>
+
+        <div class="row group-device-card-container">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-if="group.items" ng-repeat="device in group.items">
+            <div class="device-card">
+              <span class="device-name">{{device.name}}</span>
+              <span class="device-name device-level pull-right">{{device.state.on ? 'ON':'OFF'}}</span><br/>
+              <span class="badge {{device.type}}">{{device.type}}</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
     </div>
 
-  </div>
+    <div class="col-sm-12 action-button-row">
+      <button ui-sref="root.groups.create" class="action-button">
+        <span class="glyphicon glyphicon-plus"></span>
+        Create new group
+      </button>
+    </div>
 
-  <div class="col-sm-12 action-button-row">
-    <button ui-sref="root.groups.create" class="action-button">
-      <span class="glyphicon glyphicon-plus"></span>
-      Create new group
-    </button>
   </div>
-
-</div>
 </div>

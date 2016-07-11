@@ -7,9 +7,14 @@
         sensors: []
       };
 
-      MasterApi.getSensors().then(function(sensors) {
-        model.sensors = sensors;
-      }).catch(ErrorHandler.handle);
+      service.getAsync = function() {
+        return MasterApi.getSensors().then(function(sensors) {
+          model.sensors = sensors;
+          return model.sensors;
+        }).catch(ErrorHandler.handle);
+      };
+
+      service.getAsync();
 
       service.getSensors = function() {
         return model.sensors;

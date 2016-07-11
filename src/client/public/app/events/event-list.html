@@ -14,7 +14,10 @@
       </div>
 
       {{event.deviceAction}}
-      <p ng-repeat="device in event.devices">{{device}}</p>
+      <p ng-repeat="device in event.devices">
+        {{device.id}}
+        {{device.type}}
+      </p>
     </div>
 
   </div>
