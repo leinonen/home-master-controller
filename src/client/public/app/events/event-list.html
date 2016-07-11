@@ -1,23 +1,30 @@
 <div class="event-list">
-  <div ng-repeat="event in $ctrl.events" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+  <div ng-repeat="event in $ctrl.events" class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
     <div class="event-card">
 
-      <div class="col-xs-12">
+      <div class="col-xs-5">
         <a ui-sref="root.events.edit({id:event._id})">
-          <span class="device-name">{{event.name}}</span> asdasd
+          <span class="device-name">{{event.name}}</span>
         </a>
       </div>
 
-      <div class="col-xs-12">
-        {{event.sensorAction}}
-        {{event.sensor.id}} {{event.sensor.type}}
+      <div class="col-xs-5">
+        {{event.sensor.id}} <span class="badge">{{event.sensor.type}}</span>
       </div>
 
-      {{event.deviceAction}}
-      <p ng-repeat="device in event.devices">
-        {{device.id}}
-        {{device.type}}
-      </p>
+      <div class="col-xs-2">
+        {{event.sensorAction}}/{{event.deviceAction}}
+      </div>
+
+
+      <div class="col-xs-12">
+
+        <div ng-repeat="device in event.devices" class="group-card">
+          {{device.id}}
+          {{device.type}}
+        </div>
+      </div>
+
     </div>
 
   </div>

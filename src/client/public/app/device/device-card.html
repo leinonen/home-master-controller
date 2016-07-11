@@ -1,43 +1,40 @@
-<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-  <div class="device-card">
-    <div class="row device-row">
-      <div class="col-sm-12 device-name">
-        {{$ctrl.device.name}}
-        <button ng-if="$ctrl.controlsEnabled() && $ctrl.isHueDevice()"
-                ng-click="$ctrl.toggleShowControls()"
-                type="button"
-                class="btn-link pull-right"
-                ng-class="{'btn-default':$ctrl.showControls}">
-          <span class="glyphicon glyphicon-cog"></span>
-        </button>
-      </div>
-      <div class="col-sm-6"><span class="badge {{$ctrl.device.type}}">{{$ctrl.device.type}}</span></div>
-      <div class="col-sm-6">
+<div class="device-card">
+  <div class="row device-row">
+    <div class="col-sm-12 device-name">
+      {{$ctrl.device.name}}
+      <button ng-if="$ctrl.controlsEnabled() && $ctrl.isHueDevice()"
+              ng-click="$ctrl.toggleShowControls()"
+              type="button"
+              class="btn-link pull-right"
+              ng-class="{'btn-default':$ctrl.showControls}">
+        <span class="glyphicon glyphicon-cog"></span>
+      </button>
+    </div>
+    <div class="col-sm-6"><span class="badge {{$ctrl.device.type}}">{{$ctrl.device.type}}</span></div>
+    <div class="col-sm-6">
         <span class="device-name device-level"
               ng-show="$ctrl.showDeviceLevel()">{{$ctrl.device.state.level}}</span>
 
         <span class="device-name device-level pull-right"
               ng-if="!$ctrl.controlsEnabled()">{{$ctrl.device.state.on ? 'ON':'OFF'}}</span><br/>
 
-        <div class="btn-group pull-right">
+      <div class="btn-group pull-right">
 
-          <button type="button" class="btn sexy-button"
-                  ng-if="$ctrl.hasLink('enable')"
-                  ng-click="$ctrl.handleLink('enable')">
-            Enable
-          </button>
+        <button type="button" class="btn sexy-button"
+                ng-if="$ctrl.hasLink('enable')"
+                ng-click="$ctrl.handleLink('enable')">
+          Enable
+        </button>
 
-          <button type="button" class="btn sexy-button"
-                  ng-class="{'active': $ctrl.device.state.on === true}"
-                  ng-if="$ctrl.hasLink('disable')"
-                  ng-click="$ctrl.handleLink('disable')">
-            Disable
-          </button>
+        <button type="button" class="btn sexy-button"
+                ng-class="{'active': $ctrl.device.state.on === true}"
+                ng-if="$ctrl.hasLink('disable')"
+                ng-click="$ctrl.handleLink('disable')">
+          Disable
+        </button>
 
-        </div>
       </div>
     </div>
-    <hue-controls device="$ctrl.device" ng-if="$ctrl.isHueDevice() && $ctrl.showControls()"/>
   </div>
-
+  <hue-controls device="$ctrl.device" ng-if="$ctrl.isHueDevice() && $ctrl.showControls()"/>
 </div>
