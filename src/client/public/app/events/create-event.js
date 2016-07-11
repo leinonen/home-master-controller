@@ -53,20 +53,17 @@
           var updateEvent = function(event) {
             ctrl.event = event;
             console.log('EVENT', ctrl.event);
+            // Update selected sensor
             ctrl.sensors
               .filter(isSelectedSensor)
               .forEach(function(sensor) {
                 ctrl.event.sensor = sensor.value;
               });
 
+            // Update selected devices
             ctrl.devices.forEach(function(device) {
-              console.log('device', device);
-              console.log('event.devices', ctrl.event.devices);
               ctrl.event.devices.forEach(function(item) {
-                console.log('item', item);
-
                 if (item.id == device.id && item.type === device.type) {
-                  console.log('lol');
                   device.selected = true;
                 }
               });
