@@ -2,7 +2,6 @@
 
 const
   GroupsService = require('./groups.service'),
-  ErrorHandler = require('../../util/errorhandler'),
   Links = require('../../lib/links'),
   serveJson = require('../../lib/json-controller'),
   isAuthenticated = require('../../components/auth/auth.service').isAuthenticated;
