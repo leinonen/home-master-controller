@@ -78,6 +78,7 @@ function HomeMasterController() {
             .catch(ServiceHandler.noServices)
         )))
         .flatMap(x => x)
+        .tap(devices => winston.info('HMC.getDevices'))
         .toPromise();
     },
 
@@ -100,6 +101,7 @@ function HomeMasterController() {
         ))
         )
         .flatMap(x => x)
+        .tap(devices => winston.info('HMC.getDevice'))
         .toPromise();
     },
 
@@ -121,6 +123,7 @@ function HomeMasterController() {
           ))
         )
         .flatMap(x => x)
+        .tap(devices => winston.info('HMC.control'))
         .toPromise();
     },
     getSensors: () => {
@@ -135,12 +138,13 @@ function HomeMasterController() {
           .filter(integration => integration.type === 'group')
           .map(integration => Rx.Observable.fromPromise(
             integration
-              .deviceHandler()
-              .then(integration.deviceTransformer)
+              .listHandler()
+              .then(integration.listTransformer)
               .catch(ServiceHandler.noService)
           ))
         )
         .flatMap(x => x)
+        .tap(devices => winston.info('HMC.getGroups'))
         .toPromise();
     },
     getGroup: (id, type) => {
