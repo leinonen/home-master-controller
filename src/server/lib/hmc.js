@@ -7,8 +7,6 @@ const
   Telldus = require('../lib/telldus/telldus'),
   DeviceTypes = require('../lib/device-types'),
   ServiceHandler = require('../lib/service.handler'),
-  Group = require('../components/groups/group.model'),
-  GroupTransformer = require('../components/groups/group-transformer'),
   winston = require('winston');
 
 
@@ -47,17 +45,6 @@ function HomeMasterController(customIntegrations) {
       listHandler:       Telldus.devices,
       listTransformer:   Telldus.transformDevices,
       controlHandler:    Telldus.control
-    },
-    {
-      name:              'Generic Groups',
-      type:              'group',
-      types: [
-                         DeviceTypes.GENERIC_GROUP
-      ],
-      deviceHandler:     Group.findById,
-      deviceTransformer: GroupTransformer.GenericGroup,
-      listHandler:       Group.findAll,
-      listTransformer:   GroupTransformer.GenericGroup
     }
   ];
 
@@ -78,7 +65,7 @@ function HomeMasterController(customIntegrations) {
             .catch(ServiceHandler.noServices)
         )))
         .flatMap(x => x)
-        .tap(devices => winston.info('HMC.getDevices'))
+        .tap(devices => winston.info('HMC.getDevices', devices.length))
         .toPromise();
     },
 
@@ -101,7 +88,7 @@ function HomeMasterController(customIntegrations) {
         ))
         )
         .flatMap(x => x)
-        .tap(devices => winston.info('HMC.getDevice'))
+        .tap(device => winston.info('HMC.getDevice', device.id, device.type))
         .toPromise();
     },
 
@@ -123,56 +110,11 @@ function HomeMasterController(customIntegrations) {
           ))
         )
         .flatMap(x => x)
-        .tap(devices => winston.info('HMC.control'))
-        .toPromise();
-    },
-
-    getSensors: () => {
-      return Promise.reject('getSensors: Not implemented');
-    },
-
-    getSensor: (id, type) => {
-      return Promise.reject('getSensor: Not implemented for ' + id + ', ' + type);
-    },
-
-    /**
-     * Get all groups (generic only)
-     * @returns Promise for groups
-     */
-    getGroups: () => {
-      return Rx.Observable.from(
-        integrations
-          .filter(integration => integration.type === 'group')
-          .map(integration => Rx.Observable.fromPromise(
-            integration
-              .listHandler()
-              .then(integration.listTransformer)
-              .catch(ServiceHandler.noService)
-          ))
-        )
-        .flatMap(x => x)
-        .tap(devices => winston.info('HMC.getGroups'))
-        .toPromise();
-    },
-
-    getGroup: (id , type) => {
-      return Rx.Observable.from(
-        integrations
-          .filter(integration => integration.type === 'group')
-          .map(integration => Rx.Observable.fromPromise(
-            integration
-              .deviceHandler(id)
-              .then(integration.deviceTransformer)
-              .catch(ServiceHandler.noService)
-          ))
-        )
-        .flatMap(x => x)
-        .tap(devices => winston.info('HMC.getGroup'))
+        .tap(device => winston.info('HMC.control', id, params))
         .toPromise();
     }
+
   }
 }
-
-exports.mock = (integrations) => new HomeMasterController(integrations);
 
 module.exports = new HomeMasterController();
