@@ -4,52 +4,43 @@ const
   GroupsService = require('./groups.service'),
   ErrorHandler = require('../../util/errorhandler'),
   Links = require('../../lib/links'),
+  serveJson = require('../../lib/json-controller'),
   isAuthenticated = require('../../components/auth/auth.service').isAuthenticated;
 
 module.exports = require('express').Router()
 
   .get('/', (req, res) =>
-    GroupsService.getGroups()
-      .then(groups => Links.apply(req, 'groups', groups))
-      .then(data => res.json(data))
-      .catch(e => ErrorHandler(res, e)))
+    serveJson(GroupsService
+      .getGroups()
+      .then(groups => Links.apply(req, 'groups', groups)), req, res))
 
   .post('/', isAuthenticated(), (req, res) =>
-    GroupsService.createGroup(req.body)
-      .then(group => Links.apply(req, 'group', group))
-      .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(GroupsService
+      .createGroup(req.body)
+      .then(group => Links.apply(req, 'group', group)), req, res))
 
   .get('/:type/:id', (req, res) =>
-    GroupsService.getGroup(req.params.id, req.params.type)
-      .then(group => Links.apply(req, 'group', group))
-      .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(GroupsService
+      .getGroup(req.params.id, req.params.type)
+      .then(group => Links.apply(req, 'group', group)), req, res))
 
   .post('/:type/:id', isAuthenticated(), (req, res) =>
-    GroupsService.updateGroup(req.params.id, req.body)
-      .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(GroupsService
+      .updateGroup(req.params.id, req.body), req, res))
 
   .delete('/:id', isAuthenticated(), (req, res) =>
-    GroupsService.removeGroup(req.params.id)
-      .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(GroupsService
+      .removeGroup(req.params.id), req, res))
 
   .get('/:type/:id/state', (req, res) =>
-    GroupsService.groupState(req.params.id)
-      .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(GroupsService
+      .groupState(req.params.id), req, res))
 
   .get('/:type/:id/devices', (req, res) =>
-    GroupsService.groupDevices(req.params.id, req.query.type)
-      .then(devices => Links.apply(req, 'devices', devices))
-      .then(devices => res.json(devices))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(GroupsService
+      .groupDevices(req.params.id, req.query.type)
+      .then(devices => Links.apply(req, 'devices', devices)), req, res))
 
-  .post('/:type/:id/control', isAuthenticated(), (req, res) => {
-    console.log('body: ', req.body);
-    return GroupsService.controlGroup(req.params.id, req.body)
-      .then(group => res.json(group))
-      .catch(err => ErrorHandler(res, err))
-  });
+  .post('/:type/:id/control', isAuthenticated(), (req, res) =>
+    serveJson(GroupsService
+      .controlGroup(req.params.id, req.body), req, res));

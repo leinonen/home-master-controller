@@ -12,8 +12,8 @@ const
   winston = require('winston');
 
 
-function HomeMasterController() {
-  let integrations = [
+function HomeMasterController(customIntegrations) {
+  let integrations = customIntegrations || [
     {
       name:              'ZWave',
       type:              'device',
@@ -126,12 +126,19 @@ function HomeMasterController() {
         .tap(devices => winston.info('HMC.control'))
         .toPromise();
     },
+
     getSensors: () => {
       return Promise.reject('getSensors: Not implemented');
     },
+
     getSensor: (id, type) => {
       return Promise.reject('getSensor: Not implemented for ' + id + ', ' + type);
     },
+
+    /**
+     * Get all groups (generic only)
+     * @returns Promise for groups
+     */
     getGroups: () => {
       return Rx.Observable.from(
         integrations
@@ -147,10 +154,25 @@ function HomeMasterController() {
         .tap(devices => winston.info('HMC.getGroups'))
         .toPromise();
     },
-    getGroup: (id, type) => {
-      return Promise.reject('getGroup: Not implemented for ');
+
+    getGroup: (id , type) => {
+      return Rx.Observable.from(
+        integrations
+          .filter(integration => integration.type === 'group')
+          .map(integration => Rx.Observable.fromPromise(
+            integration
+              .deviceHandler(id)
+              .then(integration.deviceTransformer)
+              .catch(ServiceHandler.noService)
+          ))
+        )
+        .flatMap(x => x)
+        .tap(devices => winston.info('HMC.getGroup'))
+        .toPromise();
     }
   }
 }
+
+exports.mock = (integrations) => new HomeMasterController(integrations);
 
 module.exports = new HomeMasterController();
