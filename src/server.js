@@ -17,8 +17,7 @@ const
   User = require('./server/components/user/user.model.js'),
   Scheduler = require('./server/components/scheduler/rxScheduler'),
   RxSensor = require('./server/components/sensor/rxSensor'),
-  SensorService = require('./server/components/sensor/sensor.service'),
-  DeviceService = require('./server/components/device/device.service');
+  Protocol = require('./server/lib/protocol');
 
 const io = require('socket.io')(http);
 
@@ -26,7 +25,6 @@ let scheduler = new Scheduler();
 let rxSensor = new RxSensor();
 
 winston.add(winston.transports.File, { filename: 'server.log' });
-
 
 winston.info('Connecting to database: %s', nconf.get('MONGO_URL'));
 var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
@@ -61,43 +59,9 @@ process.on('SIGHUP', function() {
   process.exit();
 });
 
-const sendCommand = function(socket, cmd) {
-  return function(cmd) {
-    socket.emit('hmc-command-response', cmd);
-  };
-};
-
-const socketHandler = (socket) => {
-  console.log('Got a socket connection!');
-
-  let sendCommand = cmd => socket.emit('hmc-command-response', cmd);
-
-  socket.on('hmc-command', function(cmd) {
-
-    switch (cmd.type) {
-      case 'get-sensors':
-        SensorService.getSensors().then(
-          sensors => sendCommand({ type: 'sensors', data: sensors })
-        );
-        break;
-
-      case 'get-devices':
-        DeviceService.getDevices().then(
-          devices => sendCommand({type: 'devices', data: devices})
-        );
-        break;
-
-      default:
-        sendCommand({type: 'error', data: 'Invalid command'});
-
-    }
-
-  });
-};
-
-io.on('connection', socketHandler);
 
 
+io.on('connection', socket => Protocol.socketProtocolHandler(socket));
 
 app
   .use(bodyParser.json())
