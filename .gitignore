@@ -2,3 +2,4 @@ node_modules
 .idea
 src/client/public/lib
 *.log
+src/*.log

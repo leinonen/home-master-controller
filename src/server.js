@@ -25,6 +25,9 @@ const io = require('socket.io')(http);
 let scheduler = new Scheduler();
 let rxSensor = new RxSensor();
 
+winston.add(winston.transports.File, { filename: 'server.log' });
+
+
 winston.info('Connecting to database: %s', nconf.get('MONGO_URL'));
 var mongoOpts = {server: {socketOptions: { keepAlive: 1 }}};
 mongoose.connect(nconf.get('MONGO_URL'), mongoOpts);
