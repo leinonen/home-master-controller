@@ -2,6 +2,7 @@
 
 const
   DeviceService = require('./device.service'),
+  HMC = require('../../lib/hmc'),
   Links = require('../../lib/links'),
   isAuthenticated = require('../../components/auth/auth.service').isAuthenticated,
   serveJson = require('../../lib/json-controller');
@@ -10,7 +11,7 @@ module.exports = require('express').Router()
 
   .get('/', (req, res) =>
     serveJson(
-      DeviceService.getDevices()
+      HMC.getDevices()
         .then(data => Links.apply(req, 'devices', data)),
       req, res
     )

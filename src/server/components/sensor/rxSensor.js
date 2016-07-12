@@ -40,7 +40,7 @@ function RxSensor() {
 
       sensorChangeStream.subscribe(
         value => {
-          console.log('Sensor changed: ', value.name);
+          //console.log('Sensor changed: ', value.name);
         },
         error => console.log(error)
       );

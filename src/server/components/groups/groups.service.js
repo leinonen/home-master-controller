@@ -116,7 +116,6 @@ exports.groupState = (id) =>
   }));
 
 exports.controlGroup = (id, data) => {
-  console.log('service: ', data);
   return groupDevices(id)
     .then(devices => Promise.all(devices.map(device => {
 
