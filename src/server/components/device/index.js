@@ -3,7 +3,6 @@
 const
   DeviceService = require('./device.service'),
   HMC = require('../../lib/hmc'),
-  Links = require('../../lib/links'),
   isAuthenticated = require('../../components/auth/auth.service').isAuthenticated,
   serveJson = require('../../lib/json-controller');
 
