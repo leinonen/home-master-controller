@@ -1,29 +1,21 @@
 (function() {
 
   angular.module('app')
-    .service('Groups', function($rootScope, GroupsResource, ErrorHandler, Link) {
+    .service('Groups', function($rootScope, GroupsResource) {
       var service = this;
-      var model = {};
+      var model = {
+        groups: []
+      };
 
       GroupsResource.query().$promise.then(function(group) {
-        model = group;
+
+        model.groups = group;
       });
 
       service.getGroups = function() {
-        return model.groups || [];
+        return model.groups;
       };
 
-      service.getLinks = function() {
-        return model.links || [];
-      };
-
-      service.hasLink = function(rel) {
-        return Link.hasLink(model, rel);
-      };
-
-      service.getLink = function(rel) {
-        return Link.getLink(model, rel);
-      };
 
     });
 

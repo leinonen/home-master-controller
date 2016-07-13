@@ -9,17 +9,10 @@ const
 
 module.exports = require('express').Router()
 
-  .get('/', (req, res) =>
-    serveJson(
-      HMC.getDevices()
-        .then(data => Links.apply(req, 'devices', data)),
-      req, res
-    )
-  )
+  .get('/', (req, res) => serveJson(HMC.getDevices(), req, res ))
 
   .get('/:type/:id', (req, res) => serveJson(
-    DeviceService.getDevice(req.params.id, req.params.type)
-      .then(data => Links.apply(req, 'device', data)), req, res
+    DeviceService.getDevice(req.params.id, req.params.type), req, res
   ))
 
   .post('/:type/:id/control', isAuthenticated(), (req, res) => serveJson(

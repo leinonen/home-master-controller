@@ -4,6 +4,7 @@ const
   bus = require('../util/bus'),
   SensorService = require('../components/sensor/sensor.service'),
   DeviceService = require('../components/device/device.service'),
+  GroupService = require('../components/groups/groups.service'),
   DeviceActions = require('../lib/device-actions'),
   Events = require('../components/scheduler/events');
 
@@ -22,6 +23,7 @@ const socketProtocolHandler = (socket) => {
   socket.on('hmc-command', function(cmd) {
 
     switch (cmd.type) {
+
       case 'get-sensors':
         SensorService.getSensors().then(
           sensors => sendCommand({ type: 'sensors', data: sensors })
@@ -43,6 +45,21 @@ const socketProtocolHandler = (socket) => {
 
       case 'device-off':
         DeviceService.controlDevice(cmd.data.id, {
+          type: cmd.data.type,
+          action: DeviceActions.ACTION_OFF
+        });
+        break;
+
+
+      case 'group-on':
+        GroupService.controlGroup(cmd.data.id, {
+          type: cmd.data.type,
+          action: DeviceActions.ACTION_ON
+        });
+        break;
+
+      case 'group-off':
+        GroupService.controlGroup(cmd.data.id, {
           type: cmd.data.type,
           action: DeviceActions.ACTION_OFF
         });

@@ -3,11 +3,13 @@
   angular.module('app')
     .service('Devices', function($rootScope, $http, $timeout, ErrorHandler, Link, DevicesResource) {
       var service = this;
-      var model = {};
+      var model = {
+        devices: []
+      };
       var selectedDevice;
 
       DevicesResource.query().$promise.then(function(response) {
-        model = response;
+        model.devices = response;
       })
       .catch(ErrorHandler.handle);
 
@@ -16,7 +18,7 @@
           model.devices
             .filter(device => device.id === id && device.type === type)
             .forEach(d => {
-              d = response.device; // Remove Links, then we can use response directly
+              d = response; // Remove Links, then we can use response directly
               console.log('Synced device: ', d.name, 'state:', d.state.on);
             });
 
@@ -29,7 +31,7 @@
       };
 
       service.getDevices = function() {
-        return model.devices || [];
+        return model.devices;
       };
 
       service.selectDevice = function(device) {

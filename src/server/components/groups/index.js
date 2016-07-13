@@ -10,18 +10,15 @@ module.exports = require('express').Router()
 
   .get('/', (req, res) =>
     serveJson(GroupsService
-      .getGroups()
-      .then(groups => Links.apply(req, 'groups', groups)), req, res))
+      .getGroups(), req, res))
 
   .post('/', isAuthenticated(), (req, res) =>
     serveJson(GroupsService
-      .createGroup(req.body)
-      .then(group => Links.apply(req, 'group', group)), req, res))
+      .createGroup(req.body), req, res))
 
   .get('/:type/:id', (req, res) =>
     serveJson(GroupsService
-      .getGroup(req.params.id, req.params.type)
-      .then(group => Links.apply(req, 'group', group)), req, res))
+      .getGroup(req.params.id, req.params.type), req, res))
 
   .post('/:type/:id', isAuthenticated(), (req, res) =>
     serveJson(GroupsService
@@ -37,8 +34,7 @@ module.exports = require('express').Router()
 
   .get('/:type/:id/devices', (req, res) =>
     serveJson(GroupsService
-      .groupDevices(req.params.id, req.query.type)
-      .then(devices => Links.apply(req, 'devices', devices)), req, res))
+      .groupDevices(req.params.id, req.query.type), req, res))
 
   .post('/:type/:id/control', isAuthenticated(), (req, res) =>
     serveJson(GroupsService

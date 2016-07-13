@@ -5,10 +5,8 @@
       bindings: {},
       templateUrl: 'app/group/group-list.html',
 
-      controller: function($rootScope, Groups, ErrorHandler, Link) {
+      controller: function($rootScope, Groups, ErrorHandler, Socket) {
         var ctrl = this;
-
-        $rootScope.$emit('fetchGroups');
 
         ctrl.hasGroups = function() {
           return Groups.getGroups().length > 0;
@@ -18,20 +16,12 @@
           return Groups.getGroups();
         };
 
-        ctrl.hasLink = function(group, rel) {
-          return Link.hasLink(group, rel);
+        ctrl.turnOn = function(group) {
+          Socket.turnOnGroup(group.id, group.type);
         };
 
-        ctrl.getLink = function(group, rel) {
-          return Link.getLink(group, rel);
-        };
-
-        ctrl.handleLink = function(group, rel, value) {
-          var link = ctrl.getLink(group, rel);
-          Link.linkAction(link, value).then(function(data) {
-            console.log(data);
-            //DeviceManager.refresh();
-          })
+        ctrl.turnOff = function(group) {
+          Socket.turnOffGroup(group.id, group.type);
         };
 
         ctrl.buttonText = function(group) {

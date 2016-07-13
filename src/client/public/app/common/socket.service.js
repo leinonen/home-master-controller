@@ -51,6 +51,15 @@
       service.emit('hmc-command', { type: 'device-off', data: {id: id, type: type} });
     };
 
+
+    service.turnOnGroup = function(id, type) {
+      service.emit('hmc-command', { type: 'group-on', data: {id: id, type: type} });
+    };
+
+    service.turnOffGroup = function(id, type) {
+      service.emit('hmc-command', { type: 'group-off', data: {id: id, type: type} });
+    };
+
   });
 
 })();

@@ -7,7 +7,7 @@
       controller: function($rootScope, Devices) {
         var ctrl = this;
 
-        $rootScope.$emit('fetchDevices');
+        //$rootScope.$emit('fetchDevices');
 
         ctrl.devices = function() {
           return Devices.getDevices();

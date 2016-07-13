@@ -9,7 +9,7 @@ angular.module('app')
       {
         query: {
           method: 'GET',
-          isArray: false
+          isArray: true
         },
         get: {
           method: 'GET'
