@@ -8,7 +8,7 @@ Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 ![](http://www.pharatropic.eu/images/686580e468dee0f280fb0966c9efc1aa.png)
 
 ## Requirements
-* NodeJS 4.2.0 or better
+* NodeJS 4.0.0 or better (Seems to be problems with higher versions)
 * MongoDB (for settings, users etc)
 * A Raspberry Pi (optional but required for z-wave)
 * RaZberry Z-Wave controller (optional)
@@ -22,12 +22,11 @@ Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 * Create custom groups containing any kind of (featured) device.
 * Scheduler for automatic on/off switching
 * Start/stop devices on sunset or sunrise (scheduler)
-* Random offset for scheduler (Broken atm, will be fixed soon)
-* Color looping for Philips Hue lights
+* Random offset for scheduler
+* Color looping for Philips Hue
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
-* Uses some ES6 features like arrow functions (will use more ES6 features later)
-* Heavy use of promises (Using q library), for nice and readable code!
+* ES6, RxJS and promises!
 * Bootstrap for responsive design that looks nice on all devices
 
 ![](http://www.pharatropic.eu/images/009d11dc8e1b2ccf92ec3739f4c8fec1.png)
