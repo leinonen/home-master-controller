@@ -10,15 +10,23 @@
       console.log('connection!', msg);
     });
 
+    service.io.on('hmc-message', function(response) {
+      var device = response.data;
+      if (response.type === 'control-success') {
+        Devices.sync(device.id, device.type);
+      }
+    });
+
     service.io.on('hmc-command-response', function(response) {
       switch (response.type) {
         case 'sensors':
           Sensor.update(response.data);
           break;
         case 'devices':
-          console.log('update device data',  response.data);
+          console.log('Devices updated', response.data);
           Devices.update(response.data);
           break;
+
         default:
       }
     });
@@ -33,7 +41,15 @@
 
     service.getDevices = function() {
       service.emit('hmc-command', { type: 'get-devices', data: null });
-    }
+    };
+
+    service.turnOn = function(id, type) {
+      service.emit('hmc-command', { type: 'device-on', data: {id: id, type: type} });
+    };
+
+    service.turnOff = function(id, type) {
+      service.emit('hmc-command', { type: 'device-off', data: {id: id, type: type} });
+    };
 
   });
 

@@ -3,6 +3,8 @@
 const
   Rx = require('rx'),
   ServiceHandler = require('../lib/service.handler'),
+  Events = require('../components/scheduler/events'),
+  bus = require('../util/bus'),
   winston = require('winston'),
   integrations = require('./integrations');
 
@@ -15,17 +17,21 @@ function HomeMasterController() {
      * @returns Promise for all devices
      */
     getDevices: () => {
-      return Rx.Observable.from(
-        integrations
-          .map(integration => Rx.Observable.fromPromise(
-            integration
-              .listHandler()
-              .then(integration.listTransformer)
-              .catch(ServiceHandler.noServices)
-            )))
+
+      let promises = integrations.map(
+        x => x.listHandler().then(x.listTransformer).catch(ServiceHandler.noServices)
+      );
+
+      return Rx.Observable.from(promises)
         .flatMap(x => x)
-        .tap(devices => winston.info('HMC.getDevices', devices.length))
+        .flatMap(x => x)
+        .tap(x => {
+          winston.info('HMC.getDevices');
+
+        })
+        .toArray()
         .toPromise();
+
     },
 
     /**
@@ -67,7 +73,14 @@ function HomeMasterController() {
           ))
         )
         .flatMap(x => x)
-        .tap(device => winston.info('HMC.control', id, params))
+        .tap(device => {
+          winston.info('HMC.control', id, params);
+          bus.emit(Events.CONTROL_SUCCESS, {
+            id: id,
+            type: params.type,
+            action: params.action
+          });
+        })
         .toPromise();
     }
 

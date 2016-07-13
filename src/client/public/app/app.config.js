@@ -55,7 +55,7 @@
       Socket.getSensors();
     }, 10 * 1000);
 
-    Socket.getDevices();
+    //Socket.getDevices();
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {

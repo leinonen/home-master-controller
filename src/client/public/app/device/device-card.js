@@ -6,8 +6,10 @@
       device: '=',
       controls: '='
     },
-    controller: function($rootScope, Devices, Link) {
+    controller: function($rootScope, Devices, Link, Socket) {
       var ctrl = this;
+
+      console.log(ctrl.device);
 
       ctrl.showControls = function() {
         return Devices.isDeviceSelected(ctrl.device);
@@ -21,18 +23,14 @@
         }
       };
 
-      ctrl.hasLink = function(rel) {
-        return Link.hasLink(ctrl.device, rel);
+      ctrl.turnOn = function() {
+        Socket.turnOn(ctrl.device.id, ctrl.device.type);
       };
 
-      ctrl.getLink = function(rel) {
-        return Link.getLink(ctrl.device, rel);
+      ctrl.turnOff = function() {
+        Socket.turnOff(ctrl.device.id, ctrl.device.type);
       };
 
-      ctrl.handleLink = function(rel, value) {
-        var link = ctrl.getLink(rel);
-        Link.linkAction(link, value);
-      };
 
       ctrl.controlsEnabled = function() {
         return ctrl.controls === true;
