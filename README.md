@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/leinonen/home-master-controller.svg?branch=master)](https://travis-ci.org/leinonen/home-master-controller)
+
 # Home Master Controller
 
 Control and automate your home from one place!
