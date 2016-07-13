@@ -23,13 +23,13 @@
     // Devices
     this.getDevices = function () {
       return $http.get(DEVICE_API + 'devices').then(function(response) {
-        return response.data.devices;
+        return response.data;
       });
     };
 
     this.getDevice = function (id, type) {
       return $http.get(DEVICE_API + 'devices/' + type + '/' + id).then(function(response) {
-        return response.data.device;
+        return response.data;
       });
     };
 
@@ -41,13 +41,13 @@
     // Groups
     this.getGroups = function () {
       return $http.get(GROUPS_API + 'groups').then(function(response) {
-        return response.data.groups;
+        return response.data;
       });
     };
 
     this.getGroup = function (id, type) {
       return $http.get(GROUPS_API + 'groups/' + type + '/' + id).then(function(response) {
-        return response.data.group;
+        return response.data;
       });
     };
 
