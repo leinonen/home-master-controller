@@ -4,7 +4,8 @@
   "description": "Home automation in NodeJS",
   "main": "server.js",
   "scripts": {
-    "test": "jasmine-node server/**/*.spec.js"
+    "test": "jasmine-node server/**/*.spec.js",
+    "start": "gulp start"
   },
   "author": "Peter Leinonen",
   "license": "ISC",

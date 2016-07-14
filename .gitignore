@@ -3,3 +3,4 @@ node_modules
 src/client/public/lib
 *.log
 src/*.log
+src/client/dist
