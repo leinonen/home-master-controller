@@ -5,6 +5,7 @@ nconf.argv().env().file({ file: 'config.json' });
 const
   path = require('path'),
   winston = require('winston'),
+  compression = require('compression'),
   express = require('express'),
   app = express(),
   http = require('http').Server(app),
@@ -64,6 +65,7 @@ process.on('SIGHUP', function() {
 io.on('connection', socket => Protocol.socketProtocolHandler(socket));
 
 app
+  .use(compression())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({extended: false}))
   .use(cookieParser())
@@ -86,15 +88,7 @@ app
     return res.json({
       "api": {
         "description": 'Home Master Controller API'
-      },
-      "links": [
-        {rel: 'self',       href: 'http://localhost:8080/api'},
-        {rel: 'devices',    href: 'http://localhost:8080/api/devices'},
-        {rel: 'groups',     href: 'http://localhost:8080/api/groups'},
-        {rel: 'sensors',    href: 'http://localhost:8080/api/sensors'},
-        {rel: 'events',     href: 'http://localhost:8080/api/events'},
-        {rel: 'schedules',  href: 'http://localhost:8080/api/schedules'}
-      ]
+      }
     });
   })
 
