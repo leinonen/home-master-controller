@@ -20,8 +20,6 @@ const
   RxSensor = require('./server/components/sensor/rxSensor'),
   Protocol = require('./server/lib/protocol');
 
-const io = require('socket.io')(http);
-
 let scheduler = new Scheduler();
 let rxSensor = new RxSensor();
 
@@ -61,8 +59,7 @@ process.on('SIGHUP', function() {
 });
 
 
-
-io.on('connection', socket => Protocol.socketProtocolHandler(socket));
+Protocol.registerSocketProtocolHandler(http);
 
 app
   .use(compression())

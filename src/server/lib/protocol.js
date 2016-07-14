@@ -6,71 +6,87 @@ const
   DeviceService = require('../components/device/device.service'),
   GroupService = require('../components/groups/groups.service'),
   DeviceActions = require('../lib/device-actions'),
-  Events = require('../components/scheduler/events');
+  Events = require('../components/scheduler/events'),
+  winston = require('winston');
 
-const socketProtocolHandler = (socket) => {
-  console.log('Got a socket connection!');
+const registerSocketProtocolHandler = function(http) {
+
+  const io = require('socket.io')(http);
 
   bus.on(Events.CONTROL_SUCCESS, data => {
-    socket.emit('hmc-message', {
+    winston.info('event:', 'control_success');
+    io.emit('hmc-message', {
       type: 'control-success',
       data: data
     });
   });
 
-  let sendCommand = cmd => socket.emit('hmc-command-response', cmd);
+  io.on('connection', socket => {
+    socket.on('disconnect', function(){
+      winston.info('socket:', 'client disconnected');
+    });
 
-  socket.on('hmc-command', function(cmd) {
+    let sendCommand = cmd => {
+      socket.emit('hmc-command-response', cmd);
+      winston.log('socket:', 'sendCommand', cmd.type);
+    };
 
-    switch (cmd.type) {
+    winston.info('socket:', 'client connected');
 
-      case 'get-sensors':
-        SensorService.getSensors().then(
-          sensors => sendCommand({ type: 'sensors', data: sensors })
-        );
-        break;
+    socket.on('hmc-command', function(cmd) {
 
-      case 'get-devices':
-        DeviceService.getDevices().then(
-          devices => sendCommand({type: 'devices', data: devices})
-        );
-        break;
+      winston.info('socket received:', 'hmc-command', cmd.type);
 
-      case 'device-on':
-        DeviceService.controlDevice(cmd.data.id, {
-          type: cmd.data.type,
-          action: DeviceActions.ACTION_ON
-        });
-        break;
+      switch (cmd.type) {
 
-      case 'device-off':
-        DeviceService.controlDevice(cmd.data.id, {
-          type: cmd.data.type,
-          action: DeviceActions.ACTION_OFF
-        });
-        break;
+        case 'get-sensors':
+          SensorService.getSensors().then(
+            sensors => sendCommand({ type: 'sensors', data: sensors })
+          );
+          break;
+
+        case 'get-devices':
+          DeviceService.getDevices().then(
+            devices => sendCommand({type: 'devices', data: devices})
+          );
+          break;
+
+        case 'device-on':
+          DeviceService.controlDevice(cmd.data.id, {
+            type: cmd.data.type,
+            action: DeviceActions.ACTION_ON
+          });
+          break;
+
+        case 'device-off':
+          DeviceService.controlDevice(cmd.data.id, {
+            type: cmd.data.type,
+            action: DeviceActions.ACTION_OFF
+          });
+          break;
 
 
-      case 'group-on':
-        GroupService.controlGroup(cmd.data.id, {
-          type: cmd.data.type,
-          action: DeviceActions.ACTION_ON
-        });
-        break;
+        case 'group-on':
+          GroupService.controlGroup(cmd.data.id, {
+            type: cmd.data.type,
+            action: DeviceActions.ACTION_ON
+          });
+          break;
 
-      case 'group-off':
-        GroupService.controlGroup(cmd.data.id, {
-          type: cmd.data.type,
-          action: DeviceActions.ACTION_OFF
-        });
-        break;
+        case 'group-off':
+          GroupService.controlGroup(cmd.data.id, {
+            type: cmd.data.type,
+            action: DeviceActions.ACTION_OFF
+          });
+          break;
 
-      default:
-        sendCommand({type: 'error', data: 'Invalid command'});
+        default:
+          sendCommand({type: 'error', data: 'Invalid command'});
 
-    }
+      }
 
+    });
   });
 };
 
-exports.socketProtocolHandler = socketProtocolHandler;
+exports.registerSocketProtocolHandler = registerSocketProtocolHandler;
