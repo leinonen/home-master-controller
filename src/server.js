@@ -20,6 +20,8 @@ const
   RxSensor = require('./server/components/sensor/rxSensor'),
   Protocol = require('./server/lib/protocol');
 
+const mode = process.env['NODE_ENV'] || 'development'; // or production
+
 let scheduler = new Scheduler();
 let rxSensor = new RxSensor();
 
@@ -58,7 +60,6 @@ process.on('SIGHUP', function() {
   process.exit();
 });
 
-
 Protocol.registerSocketProtocolHandler(http);
 
 app
@@ -67,7 +68,9 @@ app
   .use(bodyParser.urlencoded({extended: false}))
   .use(cookieParser())
   .use(passport.initialize())
-  .use(express.static(path.join(__dirname, '/client/public')))
+  .use(express.static(
+    path.join(__dirname, (mode === 'production') ? '/client/dist' : '/client/public')
+  ))
 
   // Persist sessions with mongoStore.
   // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
@@ -107,7 +110,7 @@ app
 
   http.listen(nconf.get('PORT'));
 
-winston.info('HMC: HTTP Server running on port %d', nconf.get('PORT'));
+winston.info('HTTP Server: Running on port %d', nconf.get('PORT'));
 
 scheduler.start();
 rxSensor.start();
