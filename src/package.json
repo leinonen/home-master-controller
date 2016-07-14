@@ -1,11 +1,13 @@
 {
   "name": "home-master-controller",
-  "version": "2.1.0",
+  "version": "2.2.0",
+  "private": true,
   "description": "Home automation in NodeJS",
   "main": "server.js",
   "scripts": {
     "test": "jasmine-node server/**/*.spec.js",
-    "start": "gulp start"
+    "start": "gulp start",
+    "postinstall": "bower install"
   },
   "author": "Peter Leinonen",
   "license": "ISC",
