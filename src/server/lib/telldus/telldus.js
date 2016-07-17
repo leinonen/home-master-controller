@@ -19,10 +19,11 @@ var ServiceHandler = require('../../lib/service.handler');
 var METHODS = Methods.TELLSTICK_TURNON | Methods.TELLSTICK_TURNOFF |
   Methods.TELLSTICK_UP | Methods.TELLSTICK_DOWN | Methods.TELLSTICK_STOP;
 
+// jshint ignore:start
 var TELLSTICK_TYPE_DEVICE = 1;
 var TELLSTICK_TYPE_GROUP = 2;
 var TELLSTICK_TYPE_SCENE = 3;
-
+// jshint ignore:end
 var TELLSTICK_TEMPERATURE = 1;
 
 exports.transformDevice = Transformer.TelldusDevice;

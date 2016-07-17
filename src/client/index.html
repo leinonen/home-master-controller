@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home Master Controller</title>
+  <link href='http://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+  <!-- build:css css/core.css -->
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
+  <link rel="stylesheet" href="hmc.css">
+  <!-- endbuild -->
+</head>
+<body ng-app="app">
+
+<div class="container-fluid">
+  <div ui-view="header"></div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+        <navbar-side></navbar-side>
+      </div>
+      <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10" ui-view="container"></div>
+    </div>
+  </div>
+  <div ui-view="footer"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<!-- build:js js/vendor.js -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+<!-- endbuild -->
+
+<!-- build:js js/hmc-core.js -->
+<script src="app/app.js"></script>
+
+<script src="app/configuration/configuration.js"></script>
+<script src="app/configuration/configuration-hue.js"></script>
+<script src="app/configuration/configuration-zwave.js"></script>
+<script src="app/configuration/configuration-telldus.js"></script>
+
+<script src="app/user/auth-interceptor.js"></script>
+<script src="app/user/auth.service.js"></script>
+<script src="app/user/user.service.js"></script>
+<script src="app/user/login.js"></script>
+<script src="app/user/settings.js"></script>
+
+<script src="app/common/socket.service.js"></script>
+<script src="app/common/error-handler.js"></script>
+<script src="app/common/link.service.js"></script>
+<script src="app/common/master-api.js"></script>
+<script src="app/common/message.js"></script>
+<script src="app/common/item-selector.js"></script>
+<script src="app/common/sexyCheckbox.js"></script>
+<script src="app/common/sexy-selector.js"></script>
+
+<script src="app/navbar/navbar.js"></script>
+
+<script src="app/events/event-list.js"></script>
+<script src="app/events/create-event.js"></script>
+
+<script src="app/sensor/sensor.service.js"></script>
+<script src="app/sensor/sensor-card.js"></script>
+<script src="app/sensor/sensor-list.js"></script>
+
+<script src="app/device/devices.resource.js"></script>
+<script src="app/device/devices.service.js"></script>
+<script src="app/device/hue-controls.js"></script>
+<script src="app/device/device-card.js"></script>
+<script src="app/device/device-list.js"></script>
+
+<script src="app/group/groups.resource.js"></script>
+<script src="app/group/groups.service.js"></script>
+<script src="app/group/group-list.js"></script>
+<script src="app/group/group-edit.js"></script>
+
+<script src="app/scheduler/weekday-selector.js"></script>
+<script src="app/scheduler/scheduler.js"></script>
+<script src="app/scheduler/scheduler-list.js"></script>
+<script src="app/scheduler/scheduler-edit.js"></script>
+
+<script src="app/app.config.js"></script>
+
+<!-- endbuild -->
+
+</body>
+</html>

@@ -11,14 +11,14 @@ var
 
 gulp.task('less', function () {
   //return gulp.src('./client/public/app/**/*.less')
-  return gulp.src('./client/public/app/**/*.less')
+  return gulp.src('./client/app/**/*.less')
     .pipe(less({
       paths: ['./client/less']
     }))
 //    .pipe(minifyCSS())
     .pipe(concat('hmc.css'))
     .pipe(cssnano())
-    .pipe(gulp.dest('./client/public'));
+    .pipe(gulp.dest('./client'));
 });
 
 gulp.task('start', function () {

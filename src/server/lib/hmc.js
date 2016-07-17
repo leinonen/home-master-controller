@@ -71,7 +71,7 @@ function HomeMasterController() {
           ))
         )
         .flatMap(x => x)
-        .tap(device => {
+        .tap(() => {
           winston.info('HMC.control', id, params);
           bus.emit(Events.CONTROL_SUCCESS, {
             id: id,
@@ -82,7 +82,7 @@ function HomeMasterController() {
         .toPromise();
     }
 
-  }
+  };
 }
 
 module.exports = new HomeMasterController();

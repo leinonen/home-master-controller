@@ -2,7 +2,7 @@
 
 const
   Group = require('./group.model.js'),
-  Promise = require('../../util/promise'),
+  HPromise = require('../../util/promise'),
   Transformer = require('./group-transformer'),
   DeviceTypes = require('../../lib/device-types'),
   DeviceService = require('../device/device.service'),
@@ -17,8 +17,8 @@ var GENERIC_GROUP  = (id) =>
 var GENERIC_GROUPS = () =>
   Group.findAll()
     .then(Transformer.GenericGroups)
-    .then(groups => Promise.all(groups.map(group =>
-      Promise
+    .then(groups => HPromise.all(groups.map(group =>
+      HPromise
         .all(group.items.map(item => DeviceService.getDevice(item.id, item.type)))
         .then(function(items) {
           group.items = items;
@@ -51,7 +51,7 @@ var TELLDUS_GROUPS = () =>
 exports.createGroup = (group) => {
   var g = new Group(group);
   g.save();
-  return Promise.resolve(g);
+  return HPromise.resolve(g);
 };
 
 exports.updateGroup = (id, group) => Group.findById(id)
@@ -76,7 +76,7 @@ exports.getGroups = () => {
     HUE_GROUPS(),
     GENERIC_GROUPS()
   ];
-  return Promise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
+  return HPromise.all(promises).then(arr => arr.reduce((a, b) => a.concat(b)));
 };
 
 exports.getGroup = (id, type) => {
@@ -88,7 +88,7 @@ exports.getGroup = (id, type) => {
     case DeviceTypes.HUE_GROUP:
       return HUE_GROUP(id);
     default:
-      return Promise.reject('Unsupported group ' + type);
+      return HPromise.reject('Unsupported group ' + type);
   }
 };
 
@@ -98,13 +98,13 @@ let getDevicePromises = (devices) =>
 
 exports.groupDevices = (id, type) =>
   groupDevices(id)
-  .then(devices => Promise.all(getDevicePromises(devices)));
+  .then(devices => HPromise.all(getDevicePromises(devices)));
 
 
 
 exports.groupState = (id) =>
   groupDevices(id)
-  .then(items => Promise.all(getDevicePromises(items)).then(devices => {
+  .then(items => HPromise.all(getDevicePromises(items)).then(devices => {
     return {
       id: id,
       state: {
@@ -112,12 +112,12 @@ exports.groupState = (id) =>
         on: devices.every(device => device.state.on === true)
       },
       devices: devices
-    }
+    };
   }));
 
 exports.controlGroup = (id, data) => {
   return groupDevices(id)
-    .then(devices => Promise.all(devices.map(device => {
+    .then(devices => HPromise.all(devices.map(device => {
 
       data.type = device.type;
       data.id = device.id;

@@ -12,7 +12,7 @@ const getScheduleTime = (schedule) => {
     .minutes(parseInt(time[1]))
     .seconds(0)
     .millisecond(0)
-    .add(offsetMinutes || 0, 'minutes')
+    .add(offsetMinutes || 0, 'minutes');
 };
 
 exports.getScheduleTime = getScheduleTime;

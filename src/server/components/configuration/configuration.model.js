@@ -38,21 +38,22 @@ ConfigSchema.statics.saveConfig = function (id, config) {
         cfg.zwave = config.zwave || {};
         cfg.save();
         return cfg;
-      } else {
+      }/* else {
         var c = new Configuration({
-          hue: config.hue || {},
+         hue: config.hue || {},
           telldus: config.telldus || {},
           zwave: config.zwave || {}
         });
         c.save();
         return c;
-      }
+      }*/
     });
 };
 
 ConfigSchema.statics.findById = function (id) {
   return this.findOne({_id: id}).execQ(); // Return promise!
 };
+
 
 var Configuration = mongoose.model('Configuration', ConfigSchema);
 

@@ -2,17 +2,14 @@
 
 const
   SensorService = require('./sensor.service'),
-  ErrorHandler = require('../../util/errorhandler');
+  serveJson = require('../../lib/json-controller');
 
 module.exports = require('express').Router()
 
   .get('/', (req, res) =>
-    SensorService.getSensors()
-      .then(sensors => res.json(sensors))
-      .catch(err => ErrorHandler(res, err)))
+    serveJson(SensorService
+      .getSensors(), req, res))
 
   .get('/:type/:id', (req, res) =>
-    SensorService.getSensor(req.params.id, req.params.type)
-      .then(sensor => res.json(sensor))
-      .catch(err => ErrorHandler(res, err)));
-
+    serveJson(SensorService
+      .getSensor(req.params.id, req.params.type), req, res));

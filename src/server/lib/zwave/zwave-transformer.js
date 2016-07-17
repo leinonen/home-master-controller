@@ -21,7 +21,7 @@ var transformZWaveDevice = (device) => {
   item.name = device.metrics.title;
   item.state = {};
   if (device.deviceType === 'switchMultilevel') {
-    item.state.level = device.metrics.level
+    item.state.level = device.metrics.level;
   } else {
     item.state.on = device.metrics.level === 'on';
   }

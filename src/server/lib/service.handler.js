@@ -1,3 +1,5 @@
+'use strict';
+
 var Promise = require('../util/promise');
 
 var noService = (err) => Promise.reject(err);

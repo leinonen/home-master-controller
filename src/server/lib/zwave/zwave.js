@@ -12,7 +12,7 @@ const
   Configuration = require('../../components/configuration/configuration.model.js'),
   Transformer = require('./zwave-transformer'),
   DeviceActions = require('../device-actions'),
-  Promise = require('../../util/promise'),
+  HPromise = require('../../util/promise'),
   ServiceHandler = require('../../lib/service.handler'),
   ZWaveConnector = require('./zwave-connector');
 
@@ -36,7 +36,7 @@ const
   },
   errorHandler = (err) => {
     if (isConnectionError(err.code)) {
-      return Promise.reject({
+      return HPromise.reject({
         statusCode: 500,
         message: 'ZWAVE: Unable to connect to Z-Wave endpoint. Check your configuration'
       });
@@ -44,7 +44,7 @@ const
       winston.error(err);
       winston.error('ZWAVE: ' + err.message);
       //return Promise.reject(err);
-      return Promise.resolve({data:{devices:[]}});
+      return HPromise.resolve({data:{devices:[]}});
     }
   },
   doGet = (path) => {
@@ -110,7 +110,7 @@ var controlZWave = (id, params) => {
       return setLevel(id, params.value);
 
     default:
-      return Promise.reject('Invalid action ' + params.action);
+      return HPromise.reject('Invalid action ' + params.action);
   }
 };
 

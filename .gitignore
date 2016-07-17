@@ -1,6 +1,7 @@
-node_modules
 .idea
-src/client/public/lib
 *.log
-src/*.log
-src/client/dist
+src/node_modules
+src/client/bower_components
+src/dist
+src/.tmp
+src/coverage

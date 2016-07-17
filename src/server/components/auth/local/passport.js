@@ -12,7 +12,9 @@ exports.setup = function (User) {
       User.findOne({
         email: email.toLowerCase()
       }, function(err, user) {
-        if (err) return done(err);
+        if (err) {
+          return done(err);
+        }
 
         if (!user) {
           return done(null, false, { message: 'This email is not registered.' });
