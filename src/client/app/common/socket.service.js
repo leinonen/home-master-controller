@@ -61,6 +61,11 @@
       service.emit('hmc-command', { type: 'group-off', data: {id: id, type: type} });
     };
 
+    service.hueCommand = function(cmd) {
+      service.emit('hue-command', cmd);
+      console.log(cmd);
+    };
+
   });
 
 })();

@@ -86,6 +86,38 @@ const registerSocketProtocolHandler = function(http) {
       }
 
     });
+
+
+    socket.on('hue-command', function(cmd) {
+
+      switch (cmd.type) {
+        case 'set-brightness':
+          //console.log('Setting brightness for', cmd.device.id, cmd.device.type, 'to:', cmd.value);
+          DeviceService.controlDevice(cmd.device.id, { type: cmd.device.type, action: 'bri', value: cmd.value }, 'socket');
+          break;
+        case 'set-saturation':
+          // console.log('Setting saturation for', cmd.device.id, cmd.device.type, 'to:', cmd.value);
+          DeviceService.controlDevice(cmd.device.id, { type: cmd.device.type, action: 'sat', value: cmd.value  }, 'socket');
+          break;
+        case 'set-hue':
+          //console.log('Setting hue for', cmd.device.id, cmd.device.type, 'to:', cmd.value);
+          DeviceService.controlDevice(cmd.device.id, { type: cmd.device.type, action: 'hue', value: cmd.value  }, 'socket');
+          break;
+
+        case 'colorloop-enable':
+          DeviceService.controlDevice(cmd.device.id, { type: cmd.device.type, action: 'colorloop-on' }, 'socket');
+          break;
+
+        case 'colorloop-disable':
+        DeviceService.controlDevice(cmd.device.id, { type: cmd.device.type, action: 'colorloop-off' }, 'socket');
+        break;
+
+        default:
+
+      }
+    });
+
+
   });
 };
 

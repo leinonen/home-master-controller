@@ -9,7 +9,7 @@
       },
       templateUrl: 'app/device/hue-controls.html',
 
-      controller: function(Link) {
+      controller: function(Socket) {
         var ctrl = this;
 
         ctrl.colors = [
@@ -21,25 +21,44 @@
           { name: 'Red', value: 65280 }
         ];
 
-        ctrl.updateHue = function(asd) {
-          console.log('update hue', asd);
-        };
-
-        ctrl.hasLink = function(rel) {
-          return Link.hasLink(ctrl.device, rel);
-        };
-
-        ctrl.getLink = function(rel) {
-          return Link.getLink(ctrl.device, rel);
-        };
-
-        ctrl.handleLink = function(rel, value) {
-          var link = ctrl.getLink(rel);
-          Link.linkAction(link, value).then(function(data) {
-            console.log(data);
-            //DeviceManager.refresh();
+        ctrl.setBrightness = function() {
+          Socket.hueCommand({
+            device: {id: ctrl.device.id, type: ctrl.device.type},
+            type: 'set-brightness',
+            value: ctrl.device.state.bri
           });
         };
+
+        ctrl.setSaturation = function() {
+          Socket.hueCommand({
+            device: {id: ctrl.device.id, type: ctrl.device.type},
+            type: 'set-saturation',
+            value: ctrl.device.state.sat
+          });
+        };
+
+        ctrl.setHue = function(value) {
+          Socket.hueCommand({
+            device: {id: ctrl.device.id, type: ctrl.device.type},
+            type: 'set-hue',
+            value: ctrl.device.state.hue
+          });
+        };
+
+        ctrl.enableColorLoop = function() {
+          Socket.hueCommand({
+            device: {id: ctrl.device.id, type: ctrl.device.type},
+            type: 'colorloop-enable'
+          });
+        };
+
+        ctrl.disableColorLoop = function() {
+          Socket.hueCommand({
+            device: {id: ctrl.device.id, type: ctrl.device.type},
+            type: 'colorloop-disable'
+          });
+        };
+
 
         ctrl.colorLoopText = function() {
           return ctrl.device.state.effect === 'none' ? 'Enable' : 'Disable';

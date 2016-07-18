@@ -49,6 +49,7 @@
 
       service.selectDevice = function(device) {
         selectedDevice = device;
+        console.log('selectedDevice', selectedDevice);
       };
 
       service.isDeviceSelected = function(device) {
