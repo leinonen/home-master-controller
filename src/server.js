@@ -69,7 +69,7 @@ app
   .use(cookieParser())
   .use(passport.initialize())
   .use(express.static(
-    path.join(__dirname, (mode === 'production') ? '/dist/public' : '/client')
+    path.join(__dirname, (mode === 'production') ? '/public' : '/client')
   ))
 
   // Persist sessions with mongoStore.

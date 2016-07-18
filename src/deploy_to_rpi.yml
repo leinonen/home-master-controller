@@ -1,0 +1,38 @@
+---
+- hosts: hmc
+  remote_user: pi
+  tasks:
+    - name: Stop application if running
+      shell: /usr/local/bin/forever stop server.js
+      args:
+        chdir: /home/pi/hmc
+      ignore_errors: yes
+
+    - name: Copy files
+      copy: src={{item}} dest=/home/pi/hmc
+      with_items:
+        - hmc-build.zip
+        - config.json
+        - .bowerrc
+
+    - name: unzip archive
+      shell: unzip -o hmc-build.zip
+      args:
+        chdir: /home/pi/hmc
+
+    - name: Install dependencies
+      shell: npm install --production
+      args:
+        chdir: /home/pi/hmc
+
+    - name: Install bower dependencies
+      shell: /usr/local/bin/bower install
+      args:
+        chdir: /home/pi/hmc
+
+    - name: Start webserver application as a forever process
+      shell: /usr/local/bin/forever start server.js
+      args:
+        chdir: /home/pi/hmc
+      environment:
+        NODE_ENV: production

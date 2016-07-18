@@ -317,14 +317,16 @@ module.exports = function (grunt) {
             dest: '<%= yeoman.dist %>/public/assets/images',
             src: ['generated/*']
           },
-          //{
-          //  expand: true,
-          //  dest: '<%= yeoman.dist %>',
-          //  src: [
-          //    'package.json',
-          //    'server/**/*'
-          //  ]
-          //},
+          {
+            expand: true,
+            dest: '<%= yeoman.dist %>',
+            src: [
+              'package.json',
+              'bower.json',
+              'server/**/*',
+              'server.js'
+            ]
+          },
           {
             expand: true,
             cwd: '.tmp/app',
@@ -340,6 +342,21 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
+      }
+    },
+
+    compress: {
+      main: {
+        options: {
+          archive: 'hmc-build.zip'
+        },
+        files: [
+          {
+            expand: true, cwd: './dist', src: [
+            '**/*.*'
+          ]
+          }
+        ]
       }
     },
 
@@ -503,7 +520,8 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'compress'
     //'injector:dist',
     //'replace:imagesInCss'
   ]);
