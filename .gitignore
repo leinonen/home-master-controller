@@ -6,3 +6,4 @@ src/dist
 src/.tmp
 src/coverage
 src/*.zip
+*.retry

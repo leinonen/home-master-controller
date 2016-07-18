@@ -2,13 +2,13 @@
 - hosts: hmc
   remote_user: pi
   tasks:
-    - name: Stop application if running
+    - name: Stop HMC if running
       shell: /usr/local/bin/forever stop server.js
       args:
         chdir: /home/pi/hmc
       ignore_errors: yes
 
-    - name: Copy files
+    - name: Copy files to server
       copy: src={{item}} dest=/home/pi/hmc
       with_items:
         - hmc-build.zip
@@ -16,9 +16,10 @@
         - .bowerrc
 
     - name: unzip archive
-      shell: unzip -o hmc-build.zip
-      args:
-        chdir: /home/pi/hmc
+      unarchive: src=/home/pi/hmc/hmc-build.zip dest=/home/pi/hmc copy=no
+#      shell: unzip -o hmc-build.zip
+#      args:
+#        chdir: /home/pi/hmc
 
     - name: Install dependencies
       shell: npm install --production
@@ -30,7 +31,7 @@
       args:
         chdir: /home/pi/hmc
 
-    - name: Start webserver application as a forever process
+    - name: Start HMC
       shell: /usr/local/bin/forever start server.js
       args:
         chdir: /home/pi/hmc
