@@ -9,14 +9,12 @@
       controller: function($rootScope, Devices) {
         var ctrl = this;
 
-        //$rootScope.$emit('fetchDevices');
-
-        ctrl.devices = function() {
-          return Devices.getDevices();
+        ctrl.getDevices = function() {
+          return Devices.getModel().devices;
         };
 
         ctrl.showDevices = function() {
-          return Devices.getDevices().length > 0;
+          return Devices.getModel().devices.length > 0;
         };
 
       }

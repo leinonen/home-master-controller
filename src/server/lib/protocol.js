@@ -55,14 +55,14 @@ const registerSocketProtocolHandler = function(http) {
           DeviceService.controlDevice(cmd.data.id, {
             type: cmd.data.type,
             action: DeviceActions.ACTION_ON
-          });
+          }, 'socket');
           break;
 
         case 'device-off':
           DeviceService.controlDevice(cmd.data.id, {
             type: cmd.data.type,
             action: DeviceActions.ACTION_OFF
-          });
+          }, 'socket');
           break;
 
 

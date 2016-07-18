@@ -7,4 +7,4 @@ exports.getDevices = () => HMC.getDevices();
 
 exports.getDevice = (id, type) => HMC.getDevice(id, type);
 
-exports.controlDevice = (id, params, initiator) => HMC.control(id, params);
+exports.controlDevice = (id, params, initiator) => HMC.control(id, params, initiator);

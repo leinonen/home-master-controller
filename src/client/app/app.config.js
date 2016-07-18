@@ -51,13 +51,7 @@
     });
 
   angular.module('app')
-    .run(function($rootScope, $state, $stateParams, $location, Auth, Socket, $interval) {
-
-      $interval(function() {
-        Socket.getSensors();
-      }, 10 * 1000);
-
-      //Socket.getDevices();
+    .run(function($rootScope, $state, $stateParams, $location, Auth) {
 
       // Redirect to login if route requires auth and you're not logged in
       $rootScope.$on('$stateChangeStart', function(event, next) {

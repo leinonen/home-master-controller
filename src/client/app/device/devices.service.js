@@ -5,37 +5,46 @@
   angular.module('app')
     .service('Devices', function($rootScope, $http, $timeout, ErrorHandler, Link, DevicesResource) {
       var service = this;
+
+      //var devices = [];
+      var selectedDevice = null;
+
       var model = {
         devices: []
       };
-      var selectedDevice;
 
-      DevicesResource.query().$promise.then(function(response) {
-        model.devices = response;
-      })
-      .catch(ErrorHandler.handle);
-
-      service.sync = function(id, type) {
-        DevicesResource.query({id: id, type: type}).$promise.then(function(response) {
-          model.devices
-            .filter(function(device) {
-              return device.id === id && device.type === type;
-            })
-            .forEach(function(d) {
-              d = response; // Remove Links, then we can use response directly
-              console.log('Synced device: ', d.name, 'state:', d.state.on);
-            });
-
+      service.fetch = function() {
+        DevicesResource.query().$promise.then(function(response) {
+            model.devices = response;
           })
           .catch(ErrorHandler.handle);
       };
+      service.fetch(); // Initial fetch
 
-      service.update = function(data) {
-        model.devices = data;
-      };
 
-      service.getDevices = function() {
-        return model.devices;
+      $rootScope.$on('sync-device', function(event, deviceControlSuccess) {
+
+        var matchDevice = function(dev) {
+          return dev.type === deviceControlSuccess.type && dev.id === deviceControlSuccess.id;
+        };
+
+        var updateDeviceState = function(dev) {
+          if (deviceControlSuccess.action === 'on') {
+            dev.state.on = true;
+          }
+          if (deviceControlSuccess.action === 'off') {
+            dev.state.on = false;
+          }
+        };
+
+        $timeout(function() {
+          model.devices.filter(matchDevice).forEach(updateDeviceState);
+        }, 10);
+
+      });
+
+      service.getModel = function() {
+        return model;
       };
 
       service.selectDevice = function(device) {
@@ -46,17 +55,6 @@
         return selectedDevice && device.id === selectedDevice.id;
       };
 
-      service.getLinks = function() {
-        return model.links || [];
-      };
-
-      service.hasLink = function(rel) {
-        return Link.hasLink(model, rel);
-      };
-
-      service.getLink = function(rel) {
-        return Link.getLink(model, rel);
-      };
 
     });
 

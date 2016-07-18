@@ -11,10 +11,15 @@
             </a>
           </div>
           <div class="col-xs-3 col-sm-3">
-            <button type="button" class="btn btn-default pull-right" ng-click="$ctrl.turnOn(group)">
+            <button type="button"
+                    ng-if="group.state.on === false"
+                    class="btn btn-default pull-right"
+                    ng-click="$ctrl.turnOn(group)">
               Turn On
             </button>
-            <button type="button" class="btn btn-primary pull-right" ng-click="$ctrl.turnOff(group)">
+            <button type="button"
+                    ng-if="group.state.on === true"
+                    class="btn btn-primary pull-right" ng-click="$ctrl.turnOff(group)">
               Turn Off
             </button>
 

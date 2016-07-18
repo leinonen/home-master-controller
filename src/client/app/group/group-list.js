@@ -10,13 +10,30 @@
       controller: function($rootScope, Groups, ErrorHandler, Socket) {
         var ctrl = this;
 
-        ctrl.hasGroups = function() {
-          return Groups.getGroups().length > 0;
+        var groups = [];
+
+        var fetchGroups = function() {
+          Groups.getGroups().then(function(g) {
+            groups = g;
+          });
         };
 
+        fetchGroups();
+
+        $rootScope.$on('device-sync-complete', function() {
+          console.log('got device sync complete message');
+          fetchGroups();
+        });
+
         ctrl.getGroups = function() {
-          return Groups.getGroups();
+          return groups;
         };
+
+        ctrl.hasGroups = function() {
+          return groups.length > 0;
+        };
+
+
 
         ctrl.turnOn = function(group) {
           Socket.turnOnGroup(group.id, group.type);

@@ -11,8 +11,6 @@
     controller: function($rootScope, Devices, Link, Socket) {
       var ctrl = this;
 
-      console.log(ctrl.device);
-
       ctrl.showControls = function() {
         return Devices.isDeviceSelected(ctrl.device);
       };

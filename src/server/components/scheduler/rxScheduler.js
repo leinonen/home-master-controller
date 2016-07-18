@@ -57,7 +57,7 @@ function Scheduler() {
         .fromEvent(bus, Events.CONTROL_DEVICE)
         .tap(x => console.log('Control device'))
         .subscribe(device =>
-          HMC.control(device.id, {action: device.action, type: device.type})
+          HMC.control(device.id, {action: device.action, type: device.type}, 'scheduler')
         );
 
       bus.emit(Events.UPDATE_SCHEDULER);

@@ -2,20 +2,19 @@
 
 (function () {
 
-  angular.module('app').service('Socket', function ($http, Sensor, Devices) {
+  angular.module('app').service('Socket', function ($http, $rootScope, Sensor, Devices) {
 
     var service = this;
 
     service.io = io();
 
-    service.io.on('connection', function(msg) {
-      console.log('connection!', msg);
-    });
-
     service.io.on('hmc-message', function(response) {
       var device = response.data;
       if (response.type === 'control-success') {
-        Devices.sync(device.id, device.type);
+
+        // console.log('control-success', device);
+        $rootScope.$broadcast('sync-device', device);
+
       }
     });
 

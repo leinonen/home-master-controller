@@ -8,10 +8,7 @@
       bindings: {},
       controller: function(MasterApi, ErrorHandler, Sensor) {
         var ctrl = this;
-        //&&ctrl.sensors = Sensor.getSensors();
         ctrl.getSensors = Sensor.getSensors;
-
-
       }
     });
 

@@ -42,12 +42,15 @@ function HomeMasterController() {
       return Rx.Observable.from(
         Integrations
           .filter(integration => integration.types.some(t => t === type))
-          .map(integration => Rx.Observable.fromPromise(
+          .map(integration => {
+            console.log('getDevice', integration.name, id, type);
+            return Rx.Observable.fromPromise(
             integration
               .deviceHandler(id)
               .then(integration.deviceTransformer)
               .catch(ServiceHandler.noService)
-          ))
+          );
+          })
         )
         .flatMap(x => x)
         // .tap(device => winston.info('HMC.getDevice', device.id, device.type))
@@ -60,7 +63,7 @@ function HomeMasterController() {
      * @param params object describing the device and action to perform
      * @returns Promise for the result of the action
      */
-    control: (id, params) => {
+    control: (id, params, initiator) => {
       return Rx.Observable.from(
         Integrations
           .filter(integration => integration.types.some(t => t === params.type))
@@ -72,7 +75,7 @@ function HomeMasterController() {
         )
         .flatMap(x => x)
         .tap(() => {
-          winston.info('HMC.control', id, params);
+          winston.info('HMC.control', id, params, 'initiator: ', initiator);
           bus.emit(Events.CONTROL_SUCCESS, {
             id: id,
             type: params.type,

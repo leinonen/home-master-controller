@@ -67,7 +67,7 @@ exports.removeGroup = (id) => Group.findById(id).then(g => {
   return 'Group removed!';
 });
 
-var groupDevices = (id) => Group.findById(id).then(group => group.items);
+var getDevicesInGenericGroup = (id) => Group.findById(id).then(group => group.items);
 
 
 exports.getGroups = () => {
@@ -97,13 +97,13 @@ let getDevicePromises = (devices) =>
 
 
 exports.groupDevices = (id, type) =>
-  groupDevices(id)
+  getDevicesInGenericGroup(id)
   .then(devices => HPromise.all(getDevicePromises(devices)));
 
 
 
 exports.groupState = (id) =>
-  groupDevices(id)
+  getDevicesInGenericGroup(id)
   .then(items => HPromise.all(getDevicePromises(items)).then(devices => {
     return {
       id: id,
@@ -115,14 +115,16 @@ exports.groupState = (id) =>
     };
   }));
 
-exports.controlGroup = (id, data) => {
-  return groupDevices(id)
+exports.controlGroup = (id, params) => {
+  return getDevicesInGenericGroup(id)
     .then(devices => HPromise.all(devices.map(device => {
 
-      data.type = device.type;
-      data.id = device.id;
+      let deviceParams = {
+        action: params.action,
+        type: device.type
+      };
 
-      return DeviceService.controlDevice(device.id, data, 'user');
+      return DeviceService.controlDevice(device.id, deviceParams, 'user');
     })));
 };
 
