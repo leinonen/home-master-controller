@@ -38,15 +38,16 @@ If you want to use Z-Wave, make sure you have installed your RaZberry z-wave con
 
 Edit config.json to fit your needs, for example default username and password.
 
+Also, make sure you have bower installed.
+
 ```
 $ cd src
-$ sudo npm install
-$ bower install
+$ npm install
 ```
 And now, you run the application:
 
 ```
-$ node server.js
+$ npm start
 ```
 
 You can also pass arguments that will override the values in the config file:
@@ -55,6 +56,21 @@ You can also pass arguments that will override the values in the config file:
 $ node server.js --PORT=8000 --MONGO_URL=mongoserver.myhost:27017/hmc_test
 
 ```
+
+## Deploying to your raspberry pi machine using Ansible
+Add "hmc" entry with ip address to /etc/ansible/hosts.
+
+Copy your ssh key to the rpi.
+
+```
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub pi@rpi_hostname
+```
+
+Run the deploy command:
+```
+$ grunt deploy
+```
+
 
 ## Running with docker-compose on RPI (including MongoDB)
 I prefer using HypriotOS, because docker and docker-compose are pre-installed.
