@@ -361,6 +361,9 @@ module.exports = function (grunt) {
       }
     },
 
+    exec: {
+      deploy: 'ansible-playbook deploy_to_rpi.yml'
+    },
 
 
     // Run some tasks in parallel to speed up the build process
@@ -525,6 +528,12 @@ module.exports = function (grunt) {
     'compress'
     //'injector:dist',
     //'replace:imagesInCss'
+  ]);
+
+  grunt.registerTask('deploy', [
+    'jshint',
+    'build',
+    'exec:deploy'
   ]);
 
   grunt.registerTask('default', [
