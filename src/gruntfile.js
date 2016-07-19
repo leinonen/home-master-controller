@@ -270,15 +270,15 @@ module.exports = function (grunt) {
       options: {
         // This should be the name of your apps angular module
         module: 'app',
-        htmlmin: {
+/*        htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
-          removeAttributeQuotes: true,
+          removeAttributeQuotes: false,
           removeEmptyAttributes: true,
           removeRedundantAttributes: true,
           removeScriptTypeAttributes: true,
           removeStyleLinkTypeAttributes: true
-        },
+        }, */
         usemin: 'js/hmc-core.js'
       },
       main: {
