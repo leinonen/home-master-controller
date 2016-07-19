@@ -61,6 +61,7 @@ function HomeMasterController() {
      * Control a device, turn on or off etc..
      * @param id the device id
      * @param params object describing the device and action to perform
+     * @param initiator string representing the initiator: socket, scheduler etc..
      * @returns Promise for the result of the action
      */
     control: (id, params, initiator) => {
