@@ -407,6 +407,11 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/components'
         ]
       },
+      debug: {
+        files: {
+          '<%= yeoman.client %>/hmc.css' : '<%= yeoman.client %>/app/**/*.less'
+        }
+      },
       server: {
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/**/*.less'
