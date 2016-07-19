@@ -11,7 +11,7 @@
     - name: Copy files to server
       copy: src={{item}} dest=/home/pi/hmc
       with_items:
-        - hmc-build.zip
+        - dist/hmc-build.zip
         - config.json
         - .bowerrc
 

@@ -349,7 +349,7 @@ module.exports = function (grunt) {
     compress: {
       main: {
         options: {
-          archive: 'hmc-build.zip'
+          archive: './dist/hmc-build.zip'
         },
         files: [
           {
