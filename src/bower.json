@@ -15,7 +15,6 @@
   ],
   "dependencies": {
     "angular-loading-bar": "~0.7.1",
-    "bootstrap": "~3.3.4",
     "angular": "^1.5.7",
     "angular-mocks": "^1.5.7",
     "angular-resource": "^1.5.7",
