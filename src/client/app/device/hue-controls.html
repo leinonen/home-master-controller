@@ -35,17 +35,7 @@
         <p class="form-control-static">Hue {{$ctrl.device.state.hue}}</p>
       </div>
       <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-        <select class="form-control"
-                ng-model="$ctrl.device.state.hue"
-                ng-change="$ctrl.setHue()"
-                ng-disabled="$ctrl.deviceDisabled()">
-          <option value="3000">Deep Orange</option>
-          <option value="12750">Yellow</option>
-          <option value="25500">Green</option>
-          <option value="46920">Blue</option>
-          <option value="56100">Pink</option>
-          <option value="65280">Red</option>
-        </select>
+        <sexy-selector items="$ctrl.colors" model="$ctrl.device.state.hue"></sexy-selector>
       </div>
     </div>
 
@@ -57,12 +47,12 @@
         <button ng-click="$ctrl.enableColorLoop()"
                 type="button"
                 class="btn btn-default">
-          Enable color looping
+          Enable
         </button>
         <button ng-click="$ctrl.disableColorLoop()"
                 type="button"
                 class="btn btn-default">
-          Disable color looping
+          Disable
         </button>
       </div>
     </div>

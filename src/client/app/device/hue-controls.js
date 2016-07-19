@@ -9,7 +9,7 @@
       },
       templateUrl: 'app/device/hue-controls.html',
 
-      controller: function(Socket) {
+      controller: function($scope, Socket) {
         var ctrl = this;
 
         ctrl.colors = [
@@ -20,6 +20,16 @@
           { name: 'Pink', value: 56100 },
           { name: 'Red', value: 65280 }
         ];
+
+        // Watch for hue changes, send socket command
+        $scope.$watch(
+          function() {
+            return this.device.state.hue;
+          }.bind(this),
+          function() {
+            ctrl.setHue();
+          }.bind(this)
+        );
 
         ctrl.setBrightness = function() {
           Socket.hueCommand({
@@ -37,7 +47,7 @@
           });
         };
 
-        ctrl.setHue = function(value) {
+        ctrl.setHue = function() {
           Socket.hueCommand({
             device: {id: ctrl.device.id, type: ctrl.device.type},
             type: 'set-hue',
@@ -59,26 +69,9 @@
           });
         };
 
-
         ctrl.colorLoopText = function() {
           return ctrl.device.state.effect === 'none' ? 'Enable' : 'Disable';
         };
-
-        /*        ctrl.toggleColorLoop = function () {
-         DeviceManager.toggleColorLoop(ctrl.device);
-         };
-
-         ctrl.setBrightness = function () {
-         DeviceManager.setBrightness(ctrl.device);
-         };
-
-         ctrl.setSaturation = function () {
-         DeviceManager.setSaturation(ctrl.device);
-         };
-
-         ctrl.setHue = function () {
-         DeviceManager.setHue(ctrl.device);
-         };*/
 
       }
     });
