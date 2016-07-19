@@ -27,6 +27,7 @@ Supports Tellstick Net, Philips Hue and Z-Wave (RaZberry) devices.
 * Custom API that can easily be extended to support other devices!
 * 100% NodeJS and AngularJS
 * ES6, RxJS and promises!
+* Websockets for fast communication
 * Bootstrap for responsive design that looks nice on all devices
 
 ![](http://www.pharatropic.eu/images/009d11dc8e1b2ccf92ec3739f4c8fec1.png)
@@ -57,7 +58,7 @@ $ node server.js --PORT=8000 --MONGO_URL=mongoserver.myhost:27017/hmc_test
 
 ```
 
-## Deploying to your raspberry pi machine using Ansible
+## Deploying to your Raspberry Pi machine using Ansible
 Add "hmc" entry with ip address to /etc/ansible/hosts.
 
 Copy your ssh key to the rpi.
