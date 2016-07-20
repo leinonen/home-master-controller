@@ -516,6 +516,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('build', [
+    'jshint',
     'clean:dist',
     'concurrent:dist',
     'injector',

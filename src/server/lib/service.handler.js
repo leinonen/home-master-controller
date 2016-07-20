@@ -1,21 +1,21 @@
 'use strict';
 
-const Promise = require('../util/promise');
+const HPromise = require('../util/promise');
 
-const noService = (err) => Promise.reject(err);
+const noService = (err) => HPromise.reject(err);
 
 const noServices = (err) => {
   if (err.serviceDisabled && err.serviceDisabled === true) {
     return [];
   } else {
-    return Promise.reject(err);
+    return HPromise.reject(err);
   }
 };
 
 exports.noService = noService;
 exports.noServices = noServices;
 
-exports.serviceDisabled = (message) => Promise.reject({
+exports.serviceDisabled = (message) => HPromise.reject({
   serviceDisabled: true,
   message: message
 });
