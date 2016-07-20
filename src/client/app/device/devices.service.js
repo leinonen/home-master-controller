@@ -3,7 +3,7 @@
 (function() {
 
   angular.module('app')
-    .service('Devices', function($rootScope, $http, $timeout, ErrorHandler, Link, DevicesResource) {
+    .service('Devices', function($rootScope, $http, $timeout, ErrorHandler, DevicesResource) {
       var service = this;
 
       //var devices = [];

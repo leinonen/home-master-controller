@@ -8,7 +8,7 @@
       device: '=',
       controls: '='
     },
-    controller: function($rootScope, Devices, Link, Socket) {
+    controller: function($rootScope, Devices, Socket) {
       var ctrl = this;
 
       ctrl.showControls = function() {
