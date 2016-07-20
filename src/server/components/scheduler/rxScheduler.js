@@ -4,7 +4,7 @@ const
   Rx = require('rx'),
   bus = require('../../util/bus'),
   HMC = require('../../lib/hmc'),
-  Events = require('./events'),
+  Events = require('./../../lib/events'),
   moment = require('moment'),
   SchedulerModel = require('./schedule.model'),
   SchedulerHelper = require('./SchedulerHelper'),

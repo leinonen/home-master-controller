@@ -5,7 +5,7 @@ const
   bus = require('../util/bus'),
   DeviceService = require('../components/device/device.service'),
   GroupService = require('../components/groups/groups.service'),
-  Events = require('../components/scheduler/events'),
+  Events = require('events'),
   winston = require('winston');
 
 const validHueActions = ['bri', 'sat', 'hue', 'colorloop-on', 'colorloop-off' ];
@@ -50,7 +50,7 @@ const registerSocketProtocolHandler = function(http) {
     });
   });
 
-  bus.on('sensor_change', sensor => {
+  bus.on(Events.SENSOR_CHANGE , sensor => {
     io.emit('sensor-change', sensor);
   });
 

@@ -2,7 +2,7 @@
 var auth = require('../../components/auth/auth.service');
 var serveJson = require('../../lib/json-controller');
 var Schedule = require('./schedule.model');
-var Events = require('./events');
+var Events = require('./../../lib/events');
 var Bus = require('../../util/bus');
 var Sun = require('./sun');
 

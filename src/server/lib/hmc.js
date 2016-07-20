@@ -3,7 +3,7 @@
 const
   Rx = require('rx'),
   bus = require('../util/bus'),
-  Events = require('../components/scheduler/events'),
+  Events = require('events'),
   winston = require('winston'),
   ServiceHandler = require('../lib/service.handler'),
   Integrations = require('./integrations');

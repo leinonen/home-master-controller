@@ -4,7 +4,8 @@ const
   Rx = require('rx'),
   bus = require('../../util/bus'),
   SensorService = require('./sensor.service'),
-  EventsService = require('../events/events.service');
+  EventsService = require('../events/events.service'),
+  Events = require('../../lib/events');
 
 function RxSensor() {
 
@@ -13,7 +14,7 @@ function RxSensor() {
 
       let timerStream = Rx.Observable.interval(5000);
 
-      let sensorChangeStream = Rx.Observable.fromEvent(bus, 'sensor_change');
+      let sensorChangeStream = Rx.Observable.fromEvent(bus, Events.SENSOR_CHANGE);
 
       let sensorStream = timerStream
         .flatMap(() => Rx.Observable.fromPromise(
@@ -34,7 +35,7 @@ function RxSensor() {
       );
 
       sensorStream.subscribe(
-        sensor => bus.emit('sensor_change', sensor),
+        sensor => bus.emit(Events.SENSOR_CHANGE, sensor),
         error => console.log(error)
       );
 
