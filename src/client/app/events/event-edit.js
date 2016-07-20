@@ -5,7 +5,7 @@
   angular.module('app')
     .component('createEvent', {
       bindings: {},
-      templateUrl: 'app/events/create-event.html',
+      templateUrl: 'app/events/event-edit.html',
       controller: function($state, $stateParams, $rootScope, MasterApi, Sensor, Message) {
 
         var ctrl = this;
