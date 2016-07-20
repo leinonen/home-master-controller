@@ -24,7 +24,7 @@
         <input type='range' class="form-control"
                min='0'
                max='254'
-               ng-model="device.state.sat"
+               ng-model="$ctrl.device.state.sat"
                ng-change="$ctrl.setSaturation()"
                ng-disabled="$ctrl.deviceDisabled()"/>
       </div>
