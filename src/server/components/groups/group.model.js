@@ -11,7 +11,7 @@ GroupSchema.statics.findById = function (id) {
   return this.findOne({_id: id}).execQ(); // Return promise!
 };
 
-GroupSchema.statics.findAll = function (id) {
+GroupSchema.statics.findAll = function () {
   return this.find().execQ(); // Return promise!
 };
 

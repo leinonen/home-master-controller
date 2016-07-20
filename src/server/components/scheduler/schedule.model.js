@@ -17,7 +17,7 @@ ScheduleSchema.statics.findById = function (id) {
   return this.findOne({_id: id}).execQ(); // Return promise!
 };
 
-ScheduleSchema.statics.findAll = function (id) {
+ScheduleSchema.statics.findAll = function () {
   return this.find().execQ(); // Return promise!
 };
 
