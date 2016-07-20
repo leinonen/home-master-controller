@@ -1,13 +1,14 @@
 'use strict';
 
-var DeviceTypes = require('./../device-types');
+const DeviceTypes = require('./../device-types');
+
 /**
  * Transform a zwave device to custom format.
  * @param device
  * @returns {{}}
  */
-var transformZWaveDevice = (device) => {
-  var item = {};
+const transformZWaveDevice = (device) => {
+  let item = {};
   item.id = device.id;
 
   if (device.deviceType === 'switchBinary') {
@@ -30,7 +31,7 @@ var transformZWaveDevice = (device) => {
 };
 exports.ZWaveDevice = transformZWaveDevice;
 
-var transformZWaveDevices = (devices)  => devices.map(transformZWaveDevice);
+const transformZWaveDevices = (devices)  => devices.map(transformZWaveDevice);
 
 exports.ZWaveDevices = transformZWaveDevices;
 
@@ -40,8 +41,8 @@ exports.ZWaveDevices = transformZWaveDevices;
  * @param device
  * @returns {{}}
  */
-var transformZWaveSensor = (device) => {
-  var item = {};
+const transformZWaveSensor = (device) => {
+  let item = {};
   item.id = device.id;
 
   if (device.deviceType === 'sensorBinary') {
@@ -69,6 +70,6 @@ exports.ZWaveSensor = transformZWaveSensor;
  * @param devices
  * @returns {*}
  */
-var transformZWaveSensors = (devices) => devices.map(transformZWaveSensor);
+const transformZWaveSensors = (devices) => devices.map(transformZWaveSensor);
 
 exports.ZWaveSensors = transformZWaveSensors;

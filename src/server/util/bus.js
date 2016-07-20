@@ -1,4 +1,4 @@
 // Minimalistic Event Bus
-var events = require('events');
-var eventEmitter = new events.EventEmitter();
+const events = require('events');
+const eventEmitter = new events.EventEmitter();
 module.exports = eventEmitter;
