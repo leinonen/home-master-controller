@@ -1,6 +1,6 @@
 language: node_js
 node_js:
   - 4.0.0
-script: cd src && npm install -g bower && npm install
+script: cd src && npm install -g bower grunt-cli && npm install && grunt build --force --verbose
 notifications:
   slack: pharatropic:AmG0ylUb8MwYhmCx30IMChkE
