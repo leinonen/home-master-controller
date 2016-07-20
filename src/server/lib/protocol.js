@@ -1,13 +1,42 @@
 'use strict';
 
 const
+  Rx = require('rx'),
   bus = require('../util/bus'),
-  SensorService = require('../components/sensor/sensor.service'),
   DeviceService = require('../components/device/device.service'),
   GroupService = require('../components/groups/groups.service'),
-  DeviceActions = require('../lib/device-actions'),
   Events = require('../components/scheduler/events'),
   winston = require('winston');
+
+const validHueActions = ['bri', 'sat', 'hue', 'colorloop-on', 'colorloop-off' ];
+
+const executeCommand = (cmd) => {
+
+  let action = cmd.type.split('-')[1];
+
+  switch (cmd.type) {
+
+    case 'device-on':
+    case 'device-off':
+      DeviceService.controlDevice(cmd.data.id, {
+        type: cmd.data.type,
+        action: action
+      }, 'socket');
+      break;
+
+    case 'group-on':
+    case 'group-off':
+      GroupService.controlGroup(cmd.data.id, {
+        type: cmd.data.type,
+        action: action
+      });
+      break;
+
+    default:
+      //sendCommand({type: 'error', data: 'Invalid command'});
+      winston.info('executeCommand', 'invalid command', cmd);
+  }
+};
 
 const registerSocketProtocolHandler = function(http) {
 
@@ -22,119 +51,22 @@ const registerSocketProtocolHandler = function(http) {
   });
 
   io.on('connection', socket => {
-    socket.on('disconnect', function(){
-      winston.info('socket:', 'client disconnected');
-    });
-
-    let sendCommand = cmd => {
-      socket.emit('hmc-command-response', cmd);
-      winston.log('socket:', 'sendCommand', cmd.type);
-    };
 
     winston.info('socket:', 'client connected');
 
-    socket.on('hmc-command', function(cmd) {
+    let hmcCommandSubscription = Rx.Observable
+      .fromEvent(socket, 'hmc-command')
+      .subscribe(cmd => executeCommand(cmd));
 
-      winston.info('socket received:', 'hmc-command', cmd.type);
+    let hueCommandSubscription = Rx.Observable
+      .fromEvent(socket, 'hue-command')
+      .filter(cmd => validHueActions.indexOf(cmd.params.action) !== -1)
+      .subscribe(cmd => DeviceService.controlDevice(cmd.id, cmd.params, 'socket'));
 
-      switch (cmd.type) {
-
-        case 'get-sensors':
-          SensorService.getSensors().then(
-            sensors => sendCommand({ type: 'sensors', data: sensors })
-          );
-          break;
-
-        case 'get-devices':
-          DeviceService.getDevices().then(
-            devices => sendCommand({type: 'devices', data: devices})
-          );
-          break;
-
-        case 'device-on':
-          DeviceService.controlDevice(cmd.data.id, {
-            type: cmd.data.type,
-            action: DeviceActions.ACTION_ON
-          }, 'socket');
-          break;
-
-        case 'device-off':
-          DeviceService.controlDevice(cmd.data.id, {
-            type: cmd.data.type,
-            action: DeviceActions.ACTION_OFF
-          }, 'socket');
-          break;
-
-
-        case 'group-on':
-          GroupService.controlGroup(cmd.data.id, {
-            type: cmd.data.type,
-            action: DeviceActions.ACTION_ON
-          });
-          break;
-
-        case 'group-off':
-          GroupService.controlGroup(cmd.data.id, {
-            type: cmd.data.type,
-            action: DeviceActions.ACTION_OFF
-          });
-          break;
-
-        default:
-          sendCommand({type: 'error', data: 'Invalid command'});
-
-      }
-
-    });
-
-
-    socket.on('hue-command', function(cmd) {
-
-      switch (cmd.type) {
-        case 'set-brightness':
-          //console.log('Setting brightness for', cmd.device.id, cmd.device.type, 'to:', cmd.value);
-          DeviceService.controlDevice(cmd.device.id, {
-            type: cmd.device.type,
-            action: 'bri',
-            value: cmd.value
-          }, 'socket');
-          break;
-
-        case 'set-saturation':
-          // console.log('Setting saturation for', cmd.device.id, cmd.device.type, 'to:', cmd.value);
-          DeviceService.controlDevice(cmd.device.id, {
-            type: cmd.device.type,
-            action: 'sat',
-            value: cmd.value
-          }, 'socket');
-          break;
-
-        case 'set-hue':
-          //console.log('Setting hue for', cmd.device.id, cmd.device.type, 'to:', cmd.value);
-          DeviceService.controlDevice(cmd.device.id, {
-            type: cmd.device.type,
-            action: 'hue',
-            value: cmd.value
-          }, 'socket');
-          break;
-
-        case 'colorloop-enable':
-          DeviceService.controlDevice(cmd.device.id, {
-            type: cmd.device.type,
-            action: 'colorloop-on'
-          }, 'socket');
-          break;
-
-        case 'colorloop-disable':
-          DeviceService.controlDevice(cmd.device.id, {
-            type: cmd.device.type,
-            action: 'colorloop-off'
-          }, 'socket');
-          break;
-
-        default:
-
-      }
+    socket.on('disconnect', function(){
+      winston.info('socket:', 'client disconnected', 'disposing');
+      hmcCommandSubscription.dispose();
+      hueCommandSubscription.dispose();
     });
 
   });

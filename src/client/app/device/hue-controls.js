@@ -33,39 +33,54 @@
 
         ctrl.setBrightness = function() {
           Socket.hueCommand({
-            device: {id: ctrl.device.id, type: ctrl.device.type},
-            type: 'set-brightness',
-            value: ctrl.device.state.bri
+            id: ctrl.device.id,
+            params: {
+              type: ctrl.device.type,
+              action: 'bri',
+              value: ctrl.device.state.bri
+            }
           });
         };
 
         ctrl.setSaturation = function() {
           Socket.hueCommand({
-            device: {id: ctrl.device.id, type: ctrl.device.type},
-            type: 'set-saturation',
-            value: ctrl.device.state.sat
+            id: ctrl.device.id,
+            params: {
+              type: ctrl.device.type,
+              action: 'sat',
+              value: ctrl.device.state.sat
+            }
           });
         };
 
         ctrl.setHue = function() {
           Socket.hueCommand({
-            device: {id: ctrl.device.id, type: ctrl.device.type},
-            type: 'set-hue',
-            value: ctrl.device.state.hue
+            id: ctrl.device.id,
+            params: {
+              type: ctrl.device.type,
+              action: 'hue',
+              value: ctrl.device.state.hue
+            }
           });
         };
 
         ctrl.enableColorLoop = function() {
           Socket.hueCommand({
-            device: {id: ctrl.device.id, type: ctrl.device.type},
-            type: 'colorloop-enable'
+            id: ctrl.device.id,
+            params: {
+              type: ctrl.device.type,
+              action: 'colorloop-on'
+            }
           });
         };
 
         ctrl.disableColorLoop = function() {
           Socket.hueCommand({
-            device: {id: ctrl.device.id, type: ctrl.device.type},
-            type: 'colorloop-disable'
+            id: ctrl.device.id,
+            params: {
+              type: ctrl.device.type,
+              action: 'colorloop-off'
+            }
           });
         };
 

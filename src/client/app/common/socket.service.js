@@ -2,7 +2,7 @@
 
 (function () {
 
-  angular.module('app').service('Socket', function ($http, $rootScope, Sensor, Devices) {
+  angular.module('app').service('Socket', function ($rootScope) {
 
     var service = this;
 
@@ -11,24 +11,8 @@
     service.io.on('hmc-message', function(response) {
       var device = response.data;
       if (response.type === 'control-success') {
-
         // console.log('control-success', device);
         $rootScope.$broadcast('sync-device', device);
-
-      }
-    });
-
-    service.io.on('hmc-command-response', function(response) {
-      switch (response.type) {
-        case 'sensors':
-          Sensor.update(response.data);
-          break;
-        case 'devices':
-          console.log('Devices updated', response.data);
-          Devices.update(response.data);
-          break;
-
-        default:
       }
     });
 
@@ -36,29 +20,32 @@
       service.io.emit(msg, data);
     };
 
+    var sendCommand = function(type, data) {
+      service.emit('hmc-command', { type: type, data: data || null });
+    };
+
     service.getSensors = function() {
-      service.emit('hmc-command', { type: 'get-sensors', data: null });
+      sendCommand('get-sensors');
     };
 
     service.getDevices = function() {
-      service.emit('hmc-command', { type: 'get-devices', data: null });
+      sendCommand('get-devices');
     };
 
     service.turnOn = function(id, type) {
-      service.emit('hmc-command', { type: 'device-on', data: {id: id, type: type} });
+      sendCommand('device-on', {id: id, type: type});
     };
 
     service.turnOff = function(id, type) {
-      service.emit('hmc-command', { type: 'device-off', data: {id: id, type: type} });
+      sendCommand('device-off', {id: id, type: type});
     };
 
-
     service.turnOnGroup = function(id, type) {
-      service.emit('hmc-command', { type: 'group-on', data: {id: id, type: type} });
+      sendCommand('group-on', {id: id, type: type});
     };
 
     service.turnOffGroup = function(id, type) {
-      service.emit('hmc-command', { type: 'group-off', data: {id: id, type: type} });
+      sendCommand('group-off', {id: id, type: type});
     };
 
     service.hueCommand = function(cmd) {
