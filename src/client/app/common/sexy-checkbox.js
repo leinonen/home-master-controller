@@ -8,7 +8,7 @@
         text: '@',
         checked: '='
       },
-      templateUrl: 'app/common/sexyCheckbox.html',
+      templateUrl: 'app/common/sexy-checkbox.html',
       controller: function () {
         var ctrl = this;
         ctrl.toggle = function() {
