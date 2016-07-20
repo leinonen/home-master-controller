@@ -8,13 +8,23 @@
 
     service.io = io();
 
-    service.io.on('hmc-message', function(response) {
-      var device = response.data;
-      if (response.type === 'control-success') {
-        // console.log('control-success', device);
-        $rootScope.$broadcast('sync-device', device);
-      }
-    });
+    service.initialize = function() {
+
+      service.io.on('hmc-message', function(response) {
+        if (response.type === 'control-success') {
+          var device = response.data;
+          // console.log('control-success', device);
+          $rootScope.$broadcast('sync-device', device);
+        }
+      });
+
+      service.io.on('sensor-change', function(sensor) {
+        $rootScope.$broadcast('sensor-change', sensor);
+      });
+
+    };
+
+
 
     service.emit = function (msg, data) {
       service.io.emit(msg, data);

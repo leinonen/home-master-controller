@@ -51,7 +51,7 @@
     });
 
   angular.module('app')
-    .run(function($rootScope, $state, $stateParams, $location, Auth) {
+    .run(function($rootScope, $state, $stateParams, $location, Auth, Socket) {
 
       // Redirect to login if route requires auth and you're not logged in
       $rootScope.$on('$stateChangeStart', function(event, next) {
@@ -66,6 +66,8 @@
       $rootScope.$state = $state;
       $rootScope.$stateParams = $stateParams;
       $state.transitionTo('root.devices');
+
+      Socket.initialize();
     });
 
 })();

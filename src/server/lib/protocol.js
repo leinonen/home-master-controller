@@ -50,6 +50,10 @@ const registerSocketProtocolHandler = function(http) {
     });
   });
 
+  bus.on('sensor_change', sensor => {
+    io.emit('sensor-change', sensor);
+  });
+
   io.on('connection', socket => {
 
     winston.info('socket:', 'client connected');
