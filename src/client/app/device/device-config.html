@@ -1,0 +1,17 @@
+<div class="device-config-wrapper" ng-if="$ctrl.isVisible()">
+<div class="device-config">
+  <div class="row">
+    <div class="col-sm-10">
+      Device config
+    </div>
+    <div class="col-sm-2">
+      <button ng-click="$ctrl.close()" class="sexy-button pull-right">Close</button>
+    </div>
+
+    <div class="col-sm-12">
+      <p>name: {{$ctrl.selectedDevice.name}}</p>
+      <hue-controls device="$ctrl.selectedDevice" ng-if="$ctrl.isHueDevice()"></hue-controls>
+    </div>
+  </div>
+</div>
+</div>

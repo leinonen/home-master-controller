@@ -16,11 +16,12 @@
       };
 
       ctrl.toggleShowControls = function() {
-        if (Devices.isDeviceSelected(ctrl.device)) {
+        /*if (Devices.isDeviceSelected(ctrl.device)) {
           Devices.selectDevice(null);
         } else {
           Devices.selectDevice(ctrl.device);
-        }
+        }*/
+        $rootScope.$emit('show-device-config', ctrl.device);
       };
 
       ctrl.turnOn = function() {

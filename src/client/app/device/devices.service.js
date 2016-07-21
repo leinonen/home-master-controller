@@ -56,6 +56,9 @@
         return selectedDevice && device.id === selectedDevice.id;
       };
 
+      service.getSelectedDevice = function() {
+        return selectedDevice;
+      };
 
     });
 
