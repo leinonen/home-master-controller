@@ -80,12 +80,14 @@ var telldusParam = (item, params) => {
   };
   if (item.motorized) {
     if (params.action === DeviceActions.ACTION_ON) {
-      winston.debug('Motorized device: ON -> UP');
+      winston.info('Motorized device: ON -> UP');
       telldusParams.action = DeviceActions.ACTION_UP;
     } else if (params.action === DeviceActions.ACTION_OFF) {
-      winston.debug('Motorized device: OFF -> DOWN');
+      winston.info('Motorized device: OFF -> DOWN');
       telldusParams.action = DeviceActions.ACTION_DOWN;
     }
+  } else {
+    winston.info('Device is not motorized');
   }
   return telldusParams;
 };
