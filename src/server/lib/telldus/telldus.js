@@ -80,6 +80,7 @@ var telldusParam = (item, params) => {
     type: params.type
   };
   if (telldusHelper.isMotorized(item)) {
+    winston.info('Device is motorized!');
     if (params.action === DeviceActions.ACTION_ON) {
       winston.info('Motorized device: ON -> UP');
       telldusParams.action = DeviceActions.ACTION_UP;
@@ -96,8 +97,9 @@ var telldusParam = (item, params) => {
 // TODO: Get device before calling control, because we need to check if it is motorized
 exports.control = function(id, params) {
   return getDevice(id).then(function(device) {
-    winston.info(device);
     var par = telldusParam(device, params);
+    winston.info('device', device);
+    winston.info('params', params);
     winston.info('TELLDUS: Control device -> ' + id + ', action: ' + par.action);
     switch (par.action) {
       case DeviceActions.ACTION_ON:
