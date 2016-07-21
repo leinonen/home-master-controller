@@ -95,6 +95,7 @@ var telldusParam = (item, params) => {
 // TODO: Get device before calling control, because we need to check if it is motorized
 exports.control = function(id, params) {
   return getDevice(id).then(function(device) {
+    winston.info(device);
     var par = telldusParam(device, params);
     winston.info('TELLDUS: Control device -> ' + id + ', action: ' + par.action);
     switch (par.action) {
