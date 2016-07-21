@@ -13,6 +13,7 @@ var Configuration = require('../../components/configuration/configuration.model.
 var Transformer = require('./telldus-transformer');
 var DeviceActions = require('../../lib/device-actions');
 var Methods = require('./telldus-methods');
+var TelldusHelper = require('./telldus-helper');
 var TelldusConnector = require('./telldus-connector');
 var ServiceHandler = require('../../lib/service.handler');
 
@@ -78,7 +79,7 @@ var telldusParam = (item, params) => {
     action: params.action,
     type: params.type
   };
-  if (item.motorized) {
+  if (telldusHelper.isMotorized(item)) {
     if (params.action === DeviceActions.ACTION_ON) {
       winston.info('Motorized device: ON -> UP');
       telldusParams.action = DeviceActions.ACTION_UP;
