@@ -25,8 +25,6 @@ describe('Component: device-card', function() {
     scope = $rootScope.$new();
     http = $injector.get('$httpBackend');
     http.whenGET('/api/devices').respond([{}]);
-//    http.whenGET('app/views/footer.html').respond('');
-//    http.flush();
 
     scope.device = {
       name: 'test',
