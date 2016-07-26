@@ -69,7 +69,7 @@ module.exports = function (config) {
 
     coverageReporter: {
       type: 'html',
-      dir: './coverage/',
+      dir: './coverage/client',
       subdir: 'html'
     },
     // to avoid DISCONNECTED messages
