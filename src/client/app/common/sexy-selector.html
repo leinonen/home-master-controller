@@ -2,7 +2,7 @@
   <ul>
     <li ng-repeat="item in $ctrl.items track by $index"
         ng-class="{selected:item.value === $ctrl.model}"
-        ng-click="$ctrl.toggleItem(item)">
+        ng-click="$ctrl.selectItem(item)">
       <span class="glyphicon glyphicon-check"></span>
       {{item.name}}
     </li>

@@ -12,10 +12,7 @@
       controller: function () {
         var ctrl = this;
 
-        //ctrl.selectedItem = {};
-
-        ctrl.toggleItem = function(item) {
-          //item.selected = !item.selected;
+        ctrl.selectItem = function(item) {
           ctrl.model = item.value;
         };
 

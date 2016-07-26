@@ -65,7 +65,7 @@ module.exports = function (config) {
     singleRun: false,
 
     // Better reporting of executed tests
-    reporters: ['spec'/*, 'coverage'*/],
+    reporters: ['spec', 'coverage'],
 
     coverageReporter: {
       type: 'html',
