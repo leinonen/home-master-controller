@@ -11,24 +11,17 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'client/bower_components/jquery/dist/jquery.js',
       'client/bower_components/angular/angular.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       'client/bower_components/angular-resource/angular-resource.js',
       'client/bower_components/angular-cookies/angular-cookies.js',
-      'client/bower_components/angular-sanitize/angular-sanitize.js',
-      'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-      'client/bower_components/lodash/lodash.js',
       'client/bower_components/angular-ui-router/release/angular-ui-router.js',
-      'client/bower_components/ngstorage/ngStorage.js',
-      'client/bower_components/angular-translate/angular-translate.js',
-      'client/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
-      'client/bower_components/moment/moment.js',
+      'client/bower_components/angular-loading-bar/build/loading-bar.js',
+      'client/bower_components/socket.io-client/socket.io.js',
       'client/app/app.js',
+      'client/app/app.config.js',
       'client/app/**/*.js',
-      'client/components/**/*.js',
-      'client/app/**/*.html',
-      'client/components/**/*.html'
+      'client/app/**/*.html'
     ],
 
     preprocessors: {
@@ -72,7 +65,7 @@ module.exports = function (config) {
     singleRun: false,
 
     // Better reporting of executed tests
-    reporters: ['spec', 'coverage'],
+    reporters: ['spec'/*, 'coverage'*/],
 
     coverageReporter: {
       type: 'html',

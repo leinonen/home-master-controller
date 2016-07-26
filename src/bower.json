@@ -21,7 +21,8 @@
     "angular-cookies": "^1.5.7",
     "angular-animate": "^1.5.7",
     "angular-ui-router": "^0.3.1",
-    "animate.css": "animate-css#^3.5.1"
+    "animate.css": "animate-css#^3.5.1",
+    "socket.io-client": "^1.4.8"
   },
   "resolutions": {
     "angular": "1.5.7"
