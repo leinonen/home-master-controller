@@ -517,6 +517,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jshint',
+    'karma:unit',
     'clean:dist',
     'concurrent:dist',
     'injector',
@@ -537,16 +538,11 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('deploy', [
-    'jshint',
     'build',
     'exec:deploy'
   ]);
 
   grunt.registerTask('default', [
-    'newer:jshint',
-    //'jscs:verify',
-    //'jsonlint',
-    //'test:client',
     'build'
   ]);
 };
