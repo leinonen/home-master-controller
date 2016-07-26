@@ -1,9 +1,9 @@
 'use strict';
 
-(function () {
+(function() {
 
   angular.module('app')
-    .directive('configurationZwave', function () {
+    .directive('configurationZwave', function() {
     return {
       scope: {
         zwave: '='

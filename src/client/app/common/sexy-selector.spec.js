@@ -14,10 +14,10 @@ describe('Component: sexy-selector', function() {
     compile = $injector.get('$compile');
     $rootScope = $injector.get('$rootScope');
     scope = $rootScope.$new();
-//    http = $injector.get('$httpBackend');
-//    http.whenGET('app/views/header.html').respond('');
-//    http.whenGET('app/views/footer.html').respond('');
-//    http.flush();
+    //    http = $injector.get('$httpBackend');
+    //    http.whenGET('app/views/header.html').respond('');
+    //    http.whenGET('app/views/footer.html').respond('');
+    //    http.flush();
 
     scope.items = [{name: 'test', value: 123}];
     scope.model = {};

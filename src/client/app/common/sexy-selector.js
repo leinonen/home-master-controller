@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function() {
 
   angular.module('app')
     .component('sexySelector', {
@@ -9,7 +9,7 @@
         model: '='
       },
       templateUrl: 'app/common/sexy-selector.html',
-      controller: function () {
+      controller: function() {
         var ctrl = this;
 
         ctrl.selectItem = function(item) {
@@ -17,6 +17,6 @@
         };
 
       }
-  });
+    });
 
 })();

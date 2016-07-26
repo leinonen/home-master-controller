@@ -4,19 +4,19 @@ angular.module('app')
   .component('settings', {
       bindings: {},
       templateUrl: 'app/user/settings.html',
-      controller: function ($scope, User, Auth, Message) {
+      controller: function($scope, User, Auth, Message) {
         var ctrl = this;
         ctrl.errors = {};
 
         ctrl.changePassword = function(form) {
           ctrl.submitted = true;
-          if(form.$valid) {
-            Auth.changePassword(ctrl.user.oldPassword, ctrl.user.newPassword )
-              .then( function() {
+          if (form.$valid) {
+            Auth.changePassword(ctrl.user.oldPassword, ctrl.user.newPassword)
+              .then(function() {
                 //ctrl.message = 'Password successfully changed.';
                 Message.info('Password successfully changed');
               })
-              .catch( function() {
+              .catch(function() {
                 form.password.$setValidity('mongoose', false);
                 Message.error('Incorrect password');
                 //ctrl.errors.other = 'Incorrect password';
@@ -24,5 +24,5 @@ angular.module('app')
               });
           }
         };
-    }
-  });
+      }
+    });

@@ -1,8 +1,8 @@
 'use strict';
 
-(function () {
+(function() {
 
-  angular.module('app').service('Socket', function ($rootScope) {
+  angular.module('app').service('Socket', function($rootScope) {
 
     var service = this;
 
@@ -24,14 +24,12 @@
 
     };
 
-
-
-    service.emit = function (msg, data) {
+    service.emit = function(msg, data) {
       service.io.emit(msg, data);
     };
 
     var sendCommand = function(type, data) {
-      service.emit('hmc-command', { type: type, data: data || null });
+      service.emit('hmc-command', {type: type, data: data || null});
     };
 
     service.getSensors = function() {

@@ -1,6 +1,6 @@
 'use strict';
 
-(function(){
+(function() {
 
   angular.module('app')
   .component('eventList', {
@@ -14,6 +14,6 @@
           ctrl.events = events;
         });
       }
-  });
+    });
 
 })();

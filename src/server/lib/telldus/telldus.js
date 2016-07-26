@@ -79,7 +79,7 @@ var telldusParam = (item, params) => {
     action: params.action,
     type: params.type
   };
-  if (telldusHelper.isMotorized(item)) {
+  if (TelldusHelper.isMotorized(item)) {
     winston.info('Device is motorized!');
     if (params.action === DeviceActions.ACTION_ON) {
       winston.info('Motorized device: ON -> UP');

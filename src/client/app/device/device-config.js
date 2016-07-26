@@ -6,7 +6,7 @@
     templateUrl: 'app/device/device-config.html',
     bindings: {
     },
-    controller: function($rootScope, Devices, Socket) {
+    controller: function($rootScope) {
       var ctrl = this;
 
       var visible = false;
@@ -24,7 +24,7 @@
 
       ctrl.isVisible = function() {
         return visible;
-      }
+      };
 
       ctrl.close = function() {
         visible = false;

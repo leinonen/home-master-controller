@@ -5,11 +5,12 @@
   angular.module('app')
     .component('schedulerEdit', {
       templateUrl: 'app/scheduler/scheduler-edit.html',
-      controller: function($rootScope, $state, $stateParams, SchedulerService, Message, ErrorHandler, MasterApi, Weekdays) {
+      controller: function($rootScope, $state, $stateParams,
+                           SchedulerService, Message, ErrorHandler, MasterApi, Weekdays) {
         var ctrl = this;
         ctrl.actions = [
-          { name: 'Turn device On', value: 'on' },
-          { name: 'Turn device Off', value: 'off' }
+          {name: 'Turn device On', value: 'on'},
+          {name: 'Turn device Off', value: 'off'}
         ];
         ctrl.devices = [];
 
@@ -56,7 +57,6 @@
           }).catch(ErrorHandler.handle);
         }
 
-
         SchedulerService.getSun().then(function(sun) {
           ctrl.sun = sun;
         });
@@ -65,7 +65,6 @@
           // TODO: Validate the form
           return true;
         };
-
 
         ctrl.selectWorkdays = function() {
           ctrl.weekdays = Weekdays.getWorkdays();

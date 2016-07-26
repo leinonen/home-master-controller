@@ -33,8 +33,6 @@
           return groups.length > 0;
         };
 
-
-
         ctrl.turnOn = function(group) {
           Socket.turnOnGroup(group.id, group.type);
         };

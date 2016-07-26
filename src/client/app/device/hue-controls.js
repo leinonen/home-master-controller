@@ -13,12 +13,12 @@
         var ctrl = this;
 
         ctrl.colors = [
-          { name: 'Deep Orange', value: 3000 },
-          { name: 'Yellow', value: 12750 },
-          { name: 'Green', value: 25500 },
-          { name: 'Blue', value: 46920 },
-          { name: 'Pink', value: 56100 },
-          { name: 'Red', value: 65280 }
+          {name: 'Deep Orange', value: 3000},
+          {name: 'Yellow', value: 12750},
+          {name: 'Green', value: 25500},
+          {name: 'Blue', value: 46920},
+          {name: 'Pink', value: 56100},
+          {name: 'Red', value: 65280}
         ];
 
         // Watch for hue changes, send socket command

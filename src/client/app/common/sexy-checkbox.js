@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function() {
 
   angular.module('app')
     .component('sexyCheckbox', {
@@ -9,7 +9,7 @@
         checked: '='
       },
       templateUrl: 'app/common/sexy-checkbox.html',
-      controller: function () {
+      controller: function() {
         var ctrl = this;
         ctrl.toggle = function() {
           ctrl.checked = !ctrl.checked;

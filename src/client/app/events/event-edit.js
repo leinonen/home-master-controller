@@ -125,20 +125,19 @@
           }
         };
 
-
         ctrl.deleteEvent = function() {
           MasterApi.deleteEvent(ctrl.event);
           $state.go('root.events');
         };
 
-/*        function isValidDevice(type) {
-          return ['telldus-device', 'hue-device', 'zwave-switch-binary'].indexOf(type) !== -1;
-        }
+        /*        function isValidDevice(type) {
+                  return ['telldus-device', 'hue-device', 'zwave-switch-binary'].indexOf(type) !== -1;
+                }
 
-        function isValidSensor(type) {
-          return type === 'zwave-sensor-binary';
-        }
-*/
+                function isValidSensor(type) {
+                  return type === 'zwave-sensor-binary';
+                }
+        */
       }
     });
 

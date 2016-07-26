@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-  .factory('User', function ($resource) {
+  .factory('User', function($resource) {
     return $resource('/api/users/:id/:controller', {
       id: '@_id'
     },
@@ -9,14 +9,14 @@ angular.module('app')
       changePassword: {
         method: 'PUT',
         params: {
-          controller:'password'
+          controller: 'password'
         }
       },
       get: {
         method: 'GET',
         params: {
-          id:'me'
+          id: 'me'
         }
       }
-	  });
+    });
   });

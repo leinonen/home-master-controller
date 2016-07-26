@@ -49,7 +49,6 @@
           }
         });
 
-
         ctrl.isEmptyGroup = function() {
           return ctrl.devices.filter(function(device) {
             return device.selected === true;

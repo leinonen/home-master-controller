@@ -32,7 +32,6 @@
         Socket.turnOff(ctrl.device.id, ctrl.device.type);
       };
 
-
       ctrl.controlsEnabled = function() {
         return ctrl.controls === true;
       };

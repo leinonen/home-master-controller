@@ -1,9 +1,9 @@
 'use strict';
 
-(function () {
+(function() {
 
   angular.module('app')
-    .directive('configurationTelldus', function () {
+    .directive('configurationTelldus', function() {
       return {
         scope: {
           telldus: '='

@@ -1,10 +1,10 @@
 'use strict';
 
-(function () {
+(function() {
 
-  angular.module('app').service('ErrorHandler', function ($log, Message) {
+  angular.module('app').service('ErrorHandler', function($log, Message) {
 
-    this.handle = function (error) {
+    this.handle = function(error) {
       var msg;
       if (error.data) {
         msg = error.data.statusCode + ' : ' + error.data.message;

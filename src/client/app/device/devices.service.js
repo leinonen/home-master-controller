@@ -21,7 +21,6 @@
       };
       service.fetch(); // Initial fetch
 
-
       $rootScope.$on('sync-device', function(event, deviceControlSuccess) {
 
         var matchDevice = function(dev) {

@@ -8,7 +8,7 @@
 
       var groupList = [];
 
-      service.getGroups = function(){
+      service.getGroups = function() {
         return GroupsResource.query().$promise.then(function(response) {
           console.log('got groups', response);
           groupList = response;
@@ -41,8 +41,6 @@
 
         }, 10);
       });
-
-
 
     });
 

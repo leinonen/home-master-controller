@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function() {
 
   angular.module('app')
     .component('itemSelector', {
@@ -8,9 +8,8 @@
         items: '='
       },
       templateUrl: 'app/common/item-selector.html',
-      controller: function () {
+      controller: function() {
         var ctrl = this;
-
 
         ctrl.toggleItem = function(item) {
 
@@ -19,6 +18,6 @@
         };
 
       }
-  });
+    });
 
 })();

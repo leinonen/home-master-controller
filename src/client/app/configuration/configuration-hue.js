@@ -1,9 +1,9 @@
 'use strict';
 
-(function () {
+(function() {
 
   angular.module('app')
-    .directive('configurationHue', function () {
+    .directive('configurationHue', function() {
       return {
         scope: {
           hue: '='

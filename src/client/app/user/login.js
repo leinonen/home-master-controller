@@ -8,7 +8,7 @@ angular.module('app')
       replace: true,
       controllerAs: 'ctrl',
       bindToController: true,
-      controller: function (Auth, $location) {
+      controller: function(Auth, $location) {
         var ctrl = this;
         ctrl.user = {};
         ctrl.errors = {};
@@ -17,18 +17,18 @@ angular.module('app')
         ctrl.login = function(form) {
           ctrl.submitted = true;
 
-          if(form.$valid) {
+          if (form.$valid) {
             console.log('form is valid');
             Auth.login({
                 email: ctrl.user.email,
                 password: ctrl.user.password
               })
-              .then( function() {
+              .then(function() {
                 console.log('login successful');
                 // Logged in, redirect to home
                 $location.path('/devices');
               })
-              .catch( function(err) {
+              .catch(function(err) {
                 console.log(err);
                 ctrl.errors.other = err.message;
               });
