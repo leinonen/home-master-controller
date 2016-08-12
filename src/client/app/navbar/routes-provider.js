@@ -82,7 +82,7 @@
         icon: 'glyphicon glyphicon-cog',
         authenticate: true
       },
-      {
+/*      {
         title: 'Events',
         icon: 'glyphicon glyphicon-bullhorn',
         state: 'root.events',
@@ -108,7 +108,7 @@
             hidden: true,
             authenticate: true
           }]
-      },
+      },*/
       {
         title: 'Login',
         url: '/login',

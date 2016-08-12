@@ -5850,6 +5850,9 @@ body {
   padding-bottom: 70px;
   font-size: 200%;
 }
+input[type="range"] {
+  box-shadow: none;
+}
 .about-image {
   border: rgba(0, 0, 0, 0.8) 5px solid;
   border-radius: 20% 50% 20% 10%;
@@ -6203,9 +6206,10 @@ fieldset[disabled] .form-control {
 }
 
 .device-config-wrapper {
-  position: fixed;
+  position: absolute;
   z-index: 5;
-  margin: 0 20%;
+  left: 0;
+  right: 0;
 }
 .device-config {
   width: 100%;
@@ -6219,6 +6223,8 @@ fieldset[disabled] .form-control {
 }
 
 .hue-device-controls {
+  float: left;
+  width: 100%;
   margin-bottom: 5px;
   margin-top: 5px;
 }
