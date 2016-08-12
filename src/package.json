@@ -70,6 +70,7 @@
     "grunt-open": "~0.2.3",
     "grunt-plato": "^1.2.1",
     "grunt-rev": "~0.1.0",
+    "grunt-slack-notifier": "^0.1.0",
     "grunt-text-replace": "^0.4.0",
     "grunt-usemin": "^3.1.1",
     "grunt-wiredep": "^3.0.1",

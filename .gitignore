@@ -7,3 +7,4 @@ src/.tmp
 src/coverage
 src/*.zip
 *.retry
+src/slack.conf.js

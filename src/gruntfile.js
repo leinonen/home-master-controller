@@ -2,6 +2,7 @@
 
 module.exports = function (grunt) {
   var localConfig = {};
+  var slackConfig = require('./slack.conf');
 
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
@@ -460,7 +461,36 @@ module.exports = function (grunt) {
           }
         ]
       }
+    },
+
+    slack_notifier: {
+      deploy_begin: {
+        options: {
+          token: slackConfig.token,
+          channel: '#hmc',
+          text: 'Deploying latest version of HMC',
+          username: 'Grunt',
+          as_user: false,
+          parse: 'full',
+          link_names: true,
+          attachments: []
+        }
+      },
+      deploy_complete: {
+        options: {
+          token: slackConfig.token,
+          channel: '#hmc',
+          text: 'Deploy successful!',
+          username: 'Grunt',
+          as_user: false,
+          parse: 'full',
+          link_names: true,
+          attachments: []
+        }
+      }
     }
+
+    //
 
   });
 
@@ -540,7 +570,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('deploy', [
     'build',
-    'exec:deploy'
+    'slack_notifier:deploy_begin',
+    'exec:deploy',
+    'slack_notifier:deploy_complete'
   ]);
 
   grunt.registerTask('default', [
